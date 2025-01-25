@@ -1,0 +1,116 @@
+#ifndef EGUI_HPP
+#define EGUI_HPP
+
+#include "flock.hpp"
+#include "statistics.hpp"
+#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <TGUI/Backend/SFML-Graphics.hpp>
+#include <TGUI/TGUI.hpp>
+#include <TGUI/Vector2.hpp>
+#include <TGUI/Widgets/Button.hpp>
+#include <TGUI/Widgets/Label.hpp>
+#include <cstddef>
+#include <vector>
+
+class Egui {
+public:
+  ////////////////////////////////////////////////////////////////////////////////
+
+  Egui();       // Constructor
+  void setup(); // Sets up the application
+  void run();   // Runs the application
+
+  ////////////////////////////////////////////////////////////////////////////////
+
+private:
+  ////////////////////////////////////////////////////////////////////////////////
+  // WINDOW
+
+  sf::RenderWindow window;
+  tgui::Gui gui;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // keep track of FLOCKS and their GRAPHICS
+
+  std::vector<Flock> flockStack_;
+  std::vector<std::vector<sf::CircleShape>> bodyStack_;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // THREE WAY SWITCH
+
+  tgui::Button::Ptr option1;
+  tgui::Button::Ptr option2;
+  tgui::Button::Ptr option3;
+  tgui::Button::Ptr activeButton = nullptr; // Track the active button
+
+  void createThreeWaySwitch();
+  void toggleButtons(tgui::Button::Ptr pressedButton);
+  void selectedOption();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // SLIDERS for OPTION 1
+
+  std::vector<tgui::Button::Ptr> dynamicButtons;
+
+  void createDeleteFlockButton(size_t index);
+  void deleteDeleteFlockButton(size_t index);
+  void repositionButtons();
+  void drawStatistics();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // SLIDERS for OPTION 2
+
+  tgui::Slider::Ptr boidsNumberSlider;
+  tgui::Slider::Ptr centerXSlider;
+  tgui::Slider::Ptr centerYSlider;
+  tgui::Slider::Ptr redSlider;
+  tgui::Slider::Ptr greenSlider;
+  tgui::Slider::Ptr blueSlider;
+  tgui::Button::Ptr addFlockButton;
+
+  tgui::Label::Ptr boidsNumberSliderLabel;
+  tgui::Label::Ptr centerXSliderLabel;
+  tgui::Label::Ptr centerYSliderLabel;
+  tgui::Label::Ptr redSliderLabel;
+  tgui::Label::Ptr greenSliderLabel;
+  tgui::Label::Ptr blueSliderLabel;
+  tgui::Label::Ptr addFlockButtonLabel;
+
+  void createSlider(float posX, float posY, float width, int min, int max,
+                    int initialValue);
+  void createBoidsNumberSlider();
+  void createCenterXSlider();
+  void createCenterYSlider();
+  void createRedSlider();
+  void createGreenSlider();
+  void createBlueSlider();
+  void createAddFlockButton();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // SLIDERS for CHANGING PARAMETERS
+
+  tgui::Slider::Ptr separationSlider;
+  tgui::Slider::Ptr separationRangeSlider;
+  tgui::Slider::Ptr alignmentSlider;
+  tgui::Slider::Ptr cohersionSlider;
+  tgui::Slider::Ptr interactionSlider;
+  tgui::Slider::Ptr repelSlider;
+  tgui::Slider::Ptr repelRangeSlide;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // INTERFACE
+
+  void drawInterface();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // FLOCKS and DRAWING
+
+  void addFlock(size_t n = 20, sf::Vector2f center = {360, 360},
+                sf::Color color = sf::Color::Black);
+  void deleteFlock(size_t i);
+  void evolveFlock();
+};
+
+#endif
