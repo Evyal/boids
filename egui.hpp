@@ -2,7 +2,6 @@
 #define EGUI_HPP
 
 #include "flock.hpp"
-#include "statistics.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -38,6 +37,15 @@ private:
   std::vector<std::vector<sf::CircleShape>> bodyStack_;
 
   ////////////////////////////////////////////////////////////////////////////////
+  // ON OFF BUTTON
+
+  tgui::Button::Ptr switchButton;
+  bool isSwitchOn = false;
+
+  void createSwitchButton();
+  void toggleSwitch();
+
+  ////////////////////////////////////////////////////////////////////////////////
   // THREE WAY SWITCH
 
   tgui::Button::Ptr option1;
@@ -49,8 +57,12 @@ private:
   void toggleButtons(tgui::Button::Ptr pressedButton);
   void selectedOption();
 
+  void selectedOption1();
+  void selectedOption2();
+  void selectedOption3();
+
   ////////////////////////////////////////////////////////////////////////////////
-  // SLIDERS for OPTION 1
+  // OPTION 1
 
   std::vector<tgui::Button::Ptr> dynamicButtons;
 
@@ -60,7 +72,7 @@ private:
   void drawStatistics();
 
   ////////////////////////////////////////////////////////////////////////////////
-  // SLIDERS for OPTION 2
+  // OPTION 2
 
   tgui::Slider::Ptr boidsNumberSlider;
   tgui::Slider::Ptr centerXSlider;
@@ -70,6 +82,7 @@ private:
   tgui::Slider::Ptr blueSlider;
   tgui::Button::Ptr addFlockButton;
 
+  tgui::Label::Ptr maxBoidsNumberLabel;
   tgui::Label::Ptr boidsNumberSliderLabel;
   tgui::Label::Ptr centerXSliderLabel;
   tgui::Label::Ptr centerYSliderLabel;
@@ -87,17 +100,28 @@ private:
   void createGreenSlider();
   void createBlueSlider();
   void createAddFlockButton();
+  void enableCreateFlockButton();
 
   ////////////////////////////////////////////////////////////////////////////////
-  // SLIDERS for CHANGING PARAMETERS
+  // OPTION 3
 
   tgui::Slider::Ptr separationSlider;
   tgui::Slider::Ptr separationRangeSlider;
   tgui::Slider::Ptr alignmentSlider;
-  tgui::Slider::Ptr cohersionSlider;
+  tgui::Slider::Ptr cohesionSlider;
   tgui::Slider::Ptr interactionSlider;
   tgui::Slider::Ptr repelSlider;
-  tgui::Slider::Ptr repelRangeSlide;
+  tgui::Slider::Ptr repelRangeSlider;
+
+  tgui::Label::Ptr separationSliderLabel;
+  tgui::Label::Ptr separationRangeSliderLabel;
+  tgui::Label::Ptr alignmentSliderLabel;
+  tgui::Label::Ptr cohesionSliderLabel;
+  tgui::Label::Ptr interactionSliderLabel;
+  tgui::Label::Ptr repelSliderLabel;
+  tgui::Label::Ptr repelRangeSliderLabel;
+
+  void createParametersSliders();
 
   ////////////////////////////////////////////////////////////////////////////////
   // INTERFACE
@@ -111,6 +135,11 @@ private:
                 sf::Color color = sf::Color::Black);
   void deleteFlock(size_t i);
   void evolveFlock();
+  void drawFlocks();
+  void printFlock(size_t center);
+
+  ////////////////////////////////////////////////////////////////////////////////
+  size_t getActiveBoids();
 };
 
 #endif

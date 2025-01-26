@@ -4,11 +4,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 
-const float minimumSpeed{150};
-const float maximumSpeed{300};
-extern float windowX;
-extern float windowY;
-
 // COSTRUTTORI di DEFAULT
 
 Boid::Boid(sf::Vector2f position, sf::Vector2f speed)
@@ -45,15 +40,15 @@ void Boid::setVelocityY(float v_y) { speed_.y = v_y; }
 // CHECK SPEED
 
 void checkMinimumSpeed(Boid &boid) {
-  if (boid.getSpeed() < minimumSpeed) {
-    boid.setVelocity({boid.getVelocityX() * minimumSpeed / boid.getSpeed(),
-                   boid.getVelocityY() * minimumSpeed / boid.getSpeed()});
+  if (boid.getSpeed() < constants::minBoidSpeed) {
+    boid.setVelocity({boid.getVelocityX() * constants::minBoidSpeed / boid.getSpeed(),
+                      boid.getVelocityY() * constants::minBoidSpeed / boid.getSpeed()});
   }
 }
 void checkMaximumSpeed(Boid &boid) {
-  if (boid.getSpeed() > maximumSpeed) {
-    boid.setVelocity({boid.getVelocityX() * maximumSpeed / boid.getSpeed(),
-                   boid.getVelocityY() * maximumSpeed / boid.getSpeed()});
+  if (boid.getSpeed() > constants::maxBoidSpeed) {
+    boid.setVelocity({boid.getVelocityX() * constants::maxBoidSpeed / boid.getSpeed(),
+                      boid.getVelocityY() * constants::maxBoidSpeed / boid.getSpeed()});
   }
 }
 void Boid::operator+=(const sf::Vector2f &speed) { speed_ += speed; }
@@ -74,28 +69,30 @@ float deltaY(const Boid &boid1, const Boid &boid2) {
 // BORDERS
 
 void toroidalBorders(Boid &boid) {
-  if (boid.getPositionX() > windowX + constants::marginSize) {
-    boid.setPositionX(boid.getPositionX() - windowX);
+  if (boid.getPositionX() > constants::fieldSide + constants::marginSize) {
+    boid.setPositionX(boid.getPositionX() - constants::fieldSide);
   } else if (boid.getPositionX() < constants::marginSize) {
-    boid.setPositionX(boid.getPositionX() + windowX);
+    boid.setPositionX(boid.getPositionX() + constants::fieldSide);
   }
 
-  if (boid.getPositionY() > windowY+ constants::marginSize) {
-    boid.setPositionY(boid.getPositionY() - windowY);
+  if (boid.getPositionY() > constants::fieldSide + constants::marginSize) {
+    boid.setPositionY(boid.getPositionY() - constants::fieldSide);
   } else if (boid.getPositionY() < constants::marginSize) {
-    boid.setPositionY(boid.getPositionY() + windowY);
+    boid.setPositionY(boid.getPositionY() + constants::fieldSide);
   }
 }
 
 void mirrorBorders(Boid &boid) {
   if (boid.getPositionX() < constants::marginSize) {
     boid.setVelocityX(std::abs(boid.getVelocityX()) + 15.f);
-  } else if (boid.getPositionX() > windowX + constants::marginSize) {
+  } else if (boid.getPositionX() >
+             constants::fieldSide + constants::marginSize) {
     boid.setVelocityX(-std::abs(boid.getVelocityX()) - 15.f);
   }
   if (boid.getPositionY() < constants::marginSize) {
     boid.setVelocityY(std::abs(boid.getVelocityY()) + 15.f);
-  } else if (boid.getPositionY() > windowY + constants::marginSize) {
+  } else if (boid.getPositionY() >
+             constants::fieldSide + constants::marginSize) {
     boid.setVelocityY(-std::abs(boid.getVelocityY()) - 15.f);
   }
 }

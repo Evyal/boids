@@ -1,11 +1,7 @@
 #include "statistics.hpp"
-#include "boid.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
-#include <iostream>
-#include <iterator>
 #include <numeric>
-#include <utility>
 #include <vector>
 
 // Function to calculate Euclidean distance between two points
