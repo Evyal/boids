@@ -80,7 +80,9 @@ void Egui::setup() {
   repelRangeSlider->setVisible(false);
   repelRangeSliderLabel->setVisible(false);
 
-  addFlock();
+  addFlock(20, {360, 240}, sf::Color::Yellow);
+  addFlock(30, {240, 480}, sf::Color::Red);
+  addFlock(50, {480, 480}, sf::Color::Cyan);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +110,7 @@ void Egui::run() {
     window.clear(sf::Color::White);
 
     drawFlocks();
+
     enableCreateFlockButton();
     drawInterface();
     selectedOption();
@@ -625,8 +628,9 @@ void Egui::createRedSlider() {
   redSlider->setPosition(775, 410);
   redSlider->setSize(250, 20);
   redSlider->setMinimum(0);
-  redSlider->setMaximum(255);
+  redSlider->setMaximum(constants::colorSliderMax);
   redSlider->setValue(0);
+  redSlider->onValueChange([&]() { handleSliderChange(redSlider); });
   gui.add(redSlider);
 
   redSliderLabel = tgui::Label::create();
@@ -650,8 +654,9 @@ void Egui::createGreenSlider() {
   greenSlider->setPosition(775, 470);
   greenSlider->setSize(250, 20);
   greenSlider->setMinimum(0);
-  greenSlider->setMaximum(255);
+  greenSlider->setMaximum(constants::colorSliderMax);
   greenSlider->setValue(0);
+  greenSlider->onValueChange([&]() { handleSliderChange(greenSlider); });
   gui.add(greenSlider);
 
   greenSliderLabel = tgui::Label::create();
@@ -675,8 +680,10 @@ void Egui::createBlueSlider() {
   blueSlider->setPosition(775, 530);
   blueSlider->setSize(250, 20);
   blueSlider->setMinimum(0);
-  blueSlider->setMaximum(255);
+  blueSlider->setMaximum(constants::colorSliderMax);
+  blueSlider->onValueChange([&]() { handleSliderChange(blueSlider); });
   blueSlider->setValue(0);
+
   gui.add(blueSlider);
 
   blueSliderLabel = tgui::Label::create();
@@ -690,6 +697,20 @@ void Egui::createBlueSlider() {
     blueSliderLabel->setText(
         "Blue: " + std::to_string(static_cast<int>(blueSlider->getValue())));
   });
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::handleSliderChange(tgui::Slider::Ptr changedSlider) {
+  int newTotal = static_cast<int>(
+      redSlider->getValue() + greenSlider->getValue() + blueSlider->getValue());
+
+  // If the new total exceeds the cap of 510, adjust the current slider's value
+  if (newTotal > 510) {
+    // Restore the slider's value to prevent exceeding the total cap
+    changedSlider->setValue(changedSlider->getValue() -
+                            static_cast<float>((newTotal - 510)));
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -776,6 +797,7 @@ void Egui::createParametersSliders() {
   separationSlider->setMinimum(0);
   separationSlider->setMaximum(constants::maxSeparationStrength * 100);
   separationSlider->setValue(constants::defaultSeparationStrenght * 100);
+  separationSlider->setStep(0.1f);
   gui.add(separationSlider);
 
   separationSliderLabel = tgui::Label::create();

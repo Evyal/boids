@@ -1,0 +1,17 @@
+LIST OF THINGS TO DO:
+
+    SMALL CORRECTIONS
+- introduce algorithms  
+
+    GENERAL
+- preserve class invariants (cassert)
+- fix parameters sliders
+
+    TESTING
+-
+
+
+    MAYBE
+    
+- make predator class
+- eventually make obstacles

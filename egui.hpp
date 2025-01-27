@@ -99,6 +99,7 @@ private:
   void createRedSlider();
   void createGreenSlider();
   void createBlueSlider();
+  void handleSliderChange(tgui::Slider::Ptr changedSlider);
   void createAddFlockButton();
   void enableCreateFlockButton();
 
