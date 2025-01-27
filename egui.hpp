@@ -10,6 +10,7 @@
 #include <TGUI/Vector2.hpp>
 #include <TGUI/Widgets/Button.hpp>
 #include <TGUI/Widgets/Label.hpp>
+#include <array>
 #include <cstddef>
 #include <vector>
 
@@ -65,6 +66,7 @@ private:
   // OPTION 1
 
   std::vector<tgui::Button::Ptr> dynamicButtons;
+  std::vector<std::array<tgui::Label::Ptr, 4>> dynamicLabels;
 
   void createDeleteFlockButton(size_t index);
   void deleteDeleteFlockButton(size_t index);

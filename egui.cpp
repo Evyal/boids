@@ -6,9 +6,12 @@
 #include <SFML/Graphics/Color.hpp>
 #include <TGUI/Widget.hpp>
 #include <TGUI/Widgets/Button.hpp>
+#include <TGUI/Widgets/Label.hpp>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <iostream>
 #include <string>
 
 bool toroidal{false};
@@ -83,6 +86,16 @@ void Egui::setup() {
   addFlock(20, {360, 240}, sf::Color::Yellow);
   addFlock(30, {240, 480}, sf::Color::Red);
   addFlock(50, {480, 480}, sf::Color::Cyan);
+
+  for (auto &labels : dynamicLabels) {
+    for (size_t i{0}; i < 4; i++) {
+      labels[i]->setVisible(true);
+    }
+  }
+
+  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
+    dynamicButtons[i]->setVisible(true);
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +203,7 @@ void Egui::createThreeWaySwitch() {
   gui.add(option1);
 
   // Button 2
-  option2 = tgui::Button::create("Edit flocks");
+  option2 = tgui::Button::create("Create flock");
   option2->setPosition(860, 20);
   option2->setSize(80, 50);
   option2->getRenderer()->setBackgroundColor(
@@ -207,7 +220,8 @@ void Egui::createThreeWaySwitch() {
   gui.add(option2);
 
   // Button 3
-  option3 = tgui::Button::create("Set \nparameters");
+  option3 = tgui::Button::create("Set\n"
+                                 "parameters");
   option3->setPosition(950, 20);
   option3->setSize(80, 50);
   option3->getRenderer()->setBackgroundColor(
@@ -252,17 +266,10 @@ void Egui::toggleButtons(tgui::Button::Ptr pressedButton) {
 void Egui::selectedOption() {
   if (activeButton == option1) {
     drawStatistics();
-    for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-      dynamicButtons[i]->setVisible(true);
-    }
+
   } else if (activeButton == option2) {
-    for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-      dynamicButtons[i]->setVisible(false);
-    }
+
   } else if (activeButton == option3) {
-    for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-      dynamicButtons[i]->setVisible(false);
-    }
   }
 }
 
@@ -272,6 +279,16 @@ void Egui::selectedOption1() {
   // OPTION 1 TRUE
 
   switchButton->setVisible(true);
+
+  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
+    dynamicButtons[i]->setVisible(true);
+  }
+
+  for (auto &labels : dynamicLabels) {
+    for (size_t i{0}; i < 4; i++) {
+      labels[i]->setVisible(true);
+    }
+  }
 
   // OPTION 2 FALSE
 
@@ -327,6 +344,16 @@ void Egui::selectedOption2() {
   // OPTION 1 FALSE
   switchButton->setVisible(false);
 
+  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
+    dynamicButtons[i]->setVisible(false);
+  }
+
+  for (auto &labels : dynamicLabels) {
+    for (size_t i{0}; i < 4; i++) {
+      labels[i]->setVisible(false);
+    }
+  }
+
   // OPTION 2 TRUE
   boidsNumberSlider->setVisible(true);
   boidsNumberSliderLabel->setVisible(true);
@@ -379,6 +406,16 @@ void Egui::selectedOption2() {
 void Egui::selectedOption3() {
   // OPTION 1 FALSE
   switchButton->setVisible(false);
+
+  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
+    dynamicButtons[i]->setVisible(false);
+  }
+
+  for (auto &labels : dynamicLabels) {
+    for (size_t i{0}; i < 4; i++) {
+      labels[i]->setVisible(false);
+    }
+  }
 
   // OPTION 2 FALSE
 
@@ -465,8 +502,38 @@ void Egui::createDeleteFlockButton(size_t index) {
     deleteDeleteFlockButton(index);
   });
 
-  gui.add(button);                  // Add button to GUI
-  dynamicButtons.push_back(button); // Store button in the map
+  gui.add(button);
+  dynamicButtons.push_back(button);
+
+  auto label0 = tgui::Label::create("Mean Distance: ");
+  label0->setTextSize(15);
+  label0->setPosition(
+      {800,
+       150 + index * 120}); // Position the label above the buttonor::Black);
+  gui.add(label0);
+
+  auto label1 = tgui::Label::create("Distance std dev: ");
+  label1->setTextSize(15);
+  label1->setPosition(
+      {800,
+       170 + index * 120}); // Position the label above the buttonor::Black);
+  gui.add(label1);
+
+  auto label2 = tgui::Label::create("Mean Speed: ");
+  label2->setTextSize(15);
+  label2->setPosition(
+      {800,
+       195 + index * 120}); // Position the label above the buttonor::Black);
+  gui.add(label2);
+
+  auto label3 = tgui::Label::create("Speed std dev: ");
+  label3->setTextSize(15);
+  label3->setPosition(
+      {800,
+       215 + index * 120}); // Position the label above the buttonor::Black);
+  gui.add(label3);
+
+  dynamicLabels.push_back({label0, label1, label2, label3});
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -481,12 +548,17 @@ void Egui::deleteDeleteFlockButton(size_t index) {
   gui.remove(dynamicButtons[index]);
   dynamicButtons.erase(dynamicButtons.begin() + static_cast<long>(index));
 
+  for (size_t i{0}; i < 4; i++) {
+    gui.remove(dynamicLabels[index][i]);
+  }
+  dynamicLabels.erase(dynamicLabels.begin() + static_cast<long>(index));
+
   // Reposition the remaining buttons
   if (dynamicButtons.size() > 0) {
     repositionButtons();
   }
 
-  std::cout << "Button " << index + 1 << " removed successfully.\n";
+  // std::cout << "Button " << index + 1 << " removed successfully.\n";
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -497,10 +569,15 @@ void Egui::repositionButtons() {
     dynamicButtons[i]->setPosition(1015, 185 + i * 120);
     dynamicButtons[i]->onPress.disconnectAll();
     dynamicButtons[i]->onPress([this, index = i]() {
-      std::cout << "Button " << index + 1 << " pressed!\n";
+      // std::cout << "Button " << index + 1 << " pressed!\n";
       deleteFlock(index);
       deleteDeleteFlockButton(index);
     });
+
+    dynamicLabels[i][0]->setPosition({800, 150 + i * 120});
+    dynamicLabels[i][1]->setPosition({800, 170 + i * 120});
+    dynamicLabels[i][2]->setPosition({800, 195 + i * 120});
+    dynamicLabels[i][3]->setPosition({800, 215 + i * 120});
   }
 }
 
@@ -786,7 +863,6 @@ void Egui::enableCreateFlockButton() {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 3
 
@@ -970,12 +1046,9 @@ void Egui::createParametersSliders() {
         "Repel range: " +
         std::to_string(static_cast<int>(repelRangeSlider->getValue())));
   });
-
-  //////////////////////////////////////////////////////////////////////////////////////////
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // Draw Interface
 
@@ -1026,6 +1099,17 @@ void Egui::addFlock(size_t n, sf::Vector2f center, sf::Color color) {
     createDeleteFlockButton(flockStack_.size() - 1);
     addFlockButtonLabel->setText(
         "Number of flocks: " + std::to_string(flockStack_.size()) + "/5");
+
+    for (auto &labels : dynamicLabels) {
+      for (size_t i{0}; i < 4; i++) {
+        labels[i]->setVisible(false);
+      }
+    }
+
+    for (size_t i = 0; i < dynamicButtons.size(); ++i) {
+      dynamicButtons[i]->setVisible(false);
+    }
+
   } else {
     std::cout << "There are already 5 flocks!\n";
   }
@@ -1051,7 +1135,7 @@ void Egui::evolveFlock() {
                                  interactionSlider->getValue()),
         flockStack_[i].Cohesion(cohesionSlider->getValue() / 100,
                                 interactionSlider->getValue()),
-        Repel(flockStack_, i, repelSlider->getValue() * 100,
+        Repel(flockStack_, i, repelSlider->getValue() / 100,
               repelRangeSlider->getValue()));
   }
 }
@@ -1078,43 +1162,41 @@ void Egui::printFlock(size_t i) {
 
   float meanDistanceValue{
       calculateMean(calculateDistances(flockStack_[i].getFlockPositions()))};
-  meanDistance.setString("mx = " +
-                         std::to_string(static_cast<int>(meanDistanceValue)));
+  meanDistance.setString(std::to_string(static_cast<int>(meanDistanceValue)));
   meanDistance.setFont(sans);
   meanDistance.setCharacterSize(20);
   meanDistance.setFillColor(sf::Color::Black);
-  meanDistance.setPosition(790, 160.f + static_cast<float>(i) * 120);
+  meanDistance.setPosition(960, 147.f + static_cast<float>(i) * 120);
 
   sf::Text standardDeviation;
 
   standardDeviation.setString(
-      "sx = " + std::to_string(static_cast<int>(calculateStandardDeviation(
-                    calculateDistances(flockStack_[i].getFlockPositions()),
-                    meanDistanceValue))));
+      std::to_string(static_cast<int>(calculateStandardDeviation(
+          calculateDistances(flockStack_[i].getFlockPositions()),
+          meanDistanceValue))));
   standardDeviation.setFont(sans);
   standardDeviation.setCharacterSize(20);
   standardDeviation.setFillColor(sf::Color::Black);
-  standardDeviation.setPosition(790, 190.f + static_cast<float>(i) * 120);
+  standardDeviation.setPosition(960, 167.f + static_cast<float>(i) * 120);
 
   sf::Text meanSpeed;
 
   float meanSpeedValue{flockStack_[i].getMeanSpeed()};
-  meanSpeed.setString("mv = " +
-                      std::to_string(static_cast<int>(meanSpeedValue)));
+  meanSpeed.setString(std::to_string(static_cast<int>(meanSpeedValue)));
   meanSpeed.setFont(sans);
   meanSpeed.setCharacterSize(20);
   meanSpeed.setFillColor(sf::Color::Black);
-  meanSpeed.setPosition(870, 160.f + static_cast<float>(i) * 120);
+  meanSpeed.setPosition(960, 192.f + static_cast<float>(i) * 120);
 
   sf::Text SpeedStandardDeviation;
 
   SpeedStandardDeviation.setString(
-      "sv = " + std::to_string(static_cast<int>(calculateStandardDeviation(
-                    flockStack_[i].getSpeedVector(), meanSpeedValue))));
+      std::to_string(static_cast<int>(calculateStandardDeviation(
+          flockStack_[i].getSpeedVector(), meanSpeedValue))));
   SpeedStandardDeviation.setFont(sans);
   SpeedStandardDeviation.setCharacterSize(20);
   SpeedStandardDeviation.setFillColor(sf::Color::Black);
-  SpeedStandardDeviation.setPosition(870, 190.f + static_cast<float>(i) * 120);
+  SpeedStandardDeviation.setPosition(960, 212.f + static_cast<float>(i) * 120);
 
   window.draw(meanDistance);
   window.draw(standardDeviation);

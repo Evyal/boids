@@ -8,8 +8,8 @@ LIST OF THINGS TO DO:
 - fix parameters sliders
 
     TESTING
--
-
+- test all methods
+- test all functions
 
     MAYBE
     
