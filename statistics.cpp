@@ -2,6 +2,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <numeric>
+#include <execution>
 #include <vector>
 
 // Function to calculate Euclidean distance between two points
@@ -39,10 +40,11 @@ float calculateStandardDeviation(const std::vector<float> &distances,
     return 0.0; // No distances, return 0
   }
   float variance =
-      std::accumulate(distances.begin(), distances.end(), 0.0f,
+      std::reduce(std::execution::par, distances.begin(), distances.end(), 0.0f,
                       [mean](float acc, float distance) {
                         return acc + (distance - mean) * (distance - mean);
                       }) /
       static_cast<float>(distances.size());
   return std::sqrt(variance);
 }
+  

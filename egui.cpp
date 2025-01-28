@@ -83,9 +83,11 @@ void Egui::setup() {
   repelRangeSlider->setVisible(false);
   repelRangeSliderLabel->setVisible(false);
 
-  addFlock(20, {360, 240}, sf::Color::Yellow);
-  addFlock(30, {240, 480}, sf::Color::Red);
-  addFlock(50, {480, 480}, sf::Color::Cyan);
+  addFlock(30, {480, 480}, sf::Color{255, 0, 127});  // PINK
+  addFlock(30, {240, 480}, sf::Color{255, 0, 0});    // RED
+  addFlock(30, {360, 240}, sf::Color{255, 204, 0});  // YELLOW
+  addFlock(30, {480, 480}, sf::Color{153, 255, 51}); // GREEN
+  addFlock(30, {480, 480}, sf::Color{0, 204, 204});  // CYAN
 
   for (auto &labels : dynamicLabels) {
     for (size_t i{0}; i < 4; i++) {
