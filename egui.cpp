@@ -24,6 +24,9 @@ Egui::Egui() : window(sf::VideoMode(1050, 750), "Egui"), gui(window) {}
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::setup() {
+
+  sans.loadFromFile("../OpenSans-Regular.ttf");
+
   createSwitchButton();
 
   // OPTION 2
@@ -83,9 +86,11 @@ void Egui::setup() {
   repelRangeSlider->setVisible(false);
   repelRangeSliderLabel->setVisible(false);
 
-  addFlock(20, {360, 240}, sf::Color::Yellow);
-  addFlock(30, {240, 480}, sf::Color::Red);
-  addFlock(50, {480, 480}, sf::Color::Cyan);
+  addFlock(30, {480, 480}, sf::Color{255, 0, 127});  // PINK
+  addFlock(30, {240, 480}, sf::Color{255, 0, 0});    // RED
+  addFlock(30, {360, 240}, sf::Color{255, 204, 0});  // YELLOW
+  addFlock(30, {480, 480}, sf::Color{153, 255, 51}); // GREEN
+  addFlock(30, {480, 480}, sf::Color{0, 204, 204});  // CYAN
 
   for (auto &labels : dynamicLabels) {
     for (size_t i{0}; i < 4; i++) {
@@ -1093,29 +1098,32 @@ void Egui::drawFlocks() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::printFlock(size_t i) {
-  sf::Font sans;
-  sans.loadFromFile("../OpenSans-Regular.ttf");
 
-  sf::Text meanDistance;
+  if (!toroidal) {
+    sf::Text meanDistance;
 
-  float meanDistanceValue{
-      calculateMean(calculateDistances(flockStack_[i].getFlockPositions()))};
-  meanDistance.setString(std::to_string(static_cast<int>(meanDistanceValue)));
-  meanDistance.setFont(sans);
-  meanDistance.setCharacterSize(20);
-  meanDistance.setFillColor(sf::Color::Black);
-  meanDistance.setPosition(960, 147.f + static_cast<float>(i) * 120);
+    float meanDistanceValue{
+        calculateMean(calculateDistances(flockStack_[i].getFlockPositions()))};
+    meanDistance.setString(std::to_string(static_cast<int>(meanDistanceValue)));
+    meanDistance.setFont(sans);
+    meanDistance.setCharacterSize(20);
+    meanDistance.setFillColor(sf::Color::Black);
+    meanDistance.setPosition(960, 147.f + static_cast<float>(i) * 120);
 
-  sf::Text standardDeviation;
+    sf::Text standardDeviation;
 
-  standardDeviation.setString(
-      std::to_string(static_cast<int>(calculateStandardDeviation(
-          calculateDistances(flockStack_[i].getFlockPositions()),
-          meanDistanceValue))));
-  standardDeviation.setFont(sans);
-  standardDeviation.setCharacterSize(20);
-  standardDeviation.setFillColor(sf::Color::Black);
-  standardDeviation.setPosition(960, 167.f + static_cast<float>(i) * 120);
+    standardDeviation.setString(
+        std::to_string(static_cast<int>(calculateStandardDeviation(
+            calculateDistances(flockStack_[i].getFlockPositions()),
+            meanDistanceValue))));
+    standardDeviation.setFont(sans);
+    standardDeviation.setCharacterSize(20);
+    standardDeviation.setFillColor(sf::Color::Black);
+    standardDeviation.setPosition(960, 167.f + static_cast<float>(i) * 120);
+
+    window.draw(meanDistance);
+    window.draw(standardDeviation);
+  }
 
   sf::Text meanSpeed;
 
@@ -1136,8 +1144,6 @@ void Egui::printFlock(size_t i) {
   SpeedStandardDeviation.setFillColor(sf::Color::Black);
   SpeedStandardDeviation.setPosition(960, 212.f + static_cast<float>(i) * 120);
 
-  window.draw(meanDistance);
-  window.draw(standardDeviation);
   window.draw(meanSpeed);
   window.draw(SpeedStandardDeviation);
 }

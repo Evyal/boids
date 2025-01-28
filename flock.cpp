@@ -259,7 +259,7 @@ void Flock::updateFlock(const std::vector<sf::Vector2f> &separationSpeed,
                         const std::vector<sf::Vector2f> &repelSpeed) {
   for (size_t i{0}; i < flock_.size(); ++i) {
     flock_[i].setPosition(flock_[i].getPosition() +
-                          flock_[i].getVelocity() / 160.f);
+                          flock_[i].getVelocity() / 150.f);
     flock_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i] +
                   repelSpeed[i]);
     if (toroidal) {
