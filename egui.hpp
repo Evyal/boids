@@ -9,6 +9,7 @@
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Vector2.hpp>
 #include <TGUI/Widgets/Button.hpp>
+#include <TGUI/Widgets/EditBoxSlider.hpp>
 #include <TGUI/Widgets/Label.hpp>
 #include <array>
 #include <cstddef>
@@ -108,13 +109,13 @@ private:
   ////////////////////////////////////////////////////////////////////////////////
   // OPTION 3
 
-  tgui::Slider::Ptr separationSlider;
-  tgui::Slider::Ptr separationRangeSlider;
-  tgui::Slider::Ptr alignmentSlider;
-  tgui::Slider::Ptr cohesionSlider;
-  tgui::Slider::Ptr interactionSlider;
-  tgui::Slider::Ptr repelSlider;
-  tgui::Slider::Ptr repelRangeSlider;
+  tgui::EditBoxSlider::Ptr separationSlider;
+  tgui::EditBoxSlider::Ptr separationRangeSlider;
+  tgui::EditBoxSlider::Ptr alignmentSlider;
+  tgui::EditBoxSlider::Ptr cohesionSlider;
+  tgui::EditBoxSlider::Ptr interactionSlider;
+  tgui::EditBoxSlider::Ptr repelSlider;
+  tgui::EditBoxSlider::Ptr repelRangeSlider;
 
   tgui::Label::Ptr separationSliderLabel;
   tgui::Label::Ptr separationRangeSliderLabel;

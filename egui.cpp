@@ -867,34 +867,25 @@ void Egui::enableCreateFlockButton() {
 // OPTION 3
 
 void Egui::createParametersSliders() {
-  separationSlider = tgui::Slider::create();
+  separationSlider = tgui::EditBoxSlider::create();
   separationSlider->setPosition(775, 150);
   separationSlider->setSize(250, 20);
   separationSlider->setMinimum(0);
-  separationSlider->setMaximum(constants::maxSeparationStrength * 100);
-  separationSlider->setValue(constants::defaultSeparationStrenght * 100);
+  separationSlider->setMaximum(constants::maxSeparationStrength * 1000);
+  separationSlider->setValue(constants::defaultSeparationStrenght * 1000);
   separationSlider->setStep(0.1f);
   gui.add(separationSlider);
 
   separationSliderLabel = tgui::Label::create();
   separationSliderLabel->setPosition(775, 120);
-  separationSliderLabel->setText(
-      "Separation Strenght: " +
-      std::to_string(
-          static_cast<int>(constants::defaultSeparationStrenght * 100)));
+  separationSliderLabel->setText("Separation Strenght");
   separationSliderLabel->setTextSize(15);
   separationSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
   gui.add(separationSliderLabel);
 
-  separationSlider->onValueChange([this]() {
-    separationSliderLabel->setText(
-        "Separation Strenght: " +
-        std::to_string(static_cast<int>(separationSlider->getValue())));
-  });
-
   //////////////////////////////////////////////////////////////////////////////////////////
 
-  separationRangeSlider = tgui::Slider::create();
+  separationRangeSlider = tgui::EditBoxSlider::create();
   separationRangeSlider->setPosition(775, 210);
   separationRangeSlider->setSize(250, 20);
   separationRangeSlider->setMinimum(0);
@@ -904,76 +895,48 @@ void Egui::createParametersSliders() {
 
   separationRangeSliderLabel = tgui::Label::create();
   separationRangeSliderLabel->setPosition(775, 180);
-  separationRangeSliderLabel->setText(
-      "Separation Range: " +
-      std::to_string(static_cast<int>(constants::defaultSeparationRange)));
+  separationRangeSliderLabel->setText("Separation Range");
   separationRangeSliderLabel->setTextSize(15);
   separationRangeSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
   gui.add(separationRangeSliderLabel);
 
-  separationRangeSlider->onValueChange([this]() {
-    separationRangeSliderLabel->setText(
-        "Separation Range: " +
-        std::to_string(static_cast<int>(separationRangeSlider->getValue())));
-  });
-
   //////////////////////////////////////////////////////////////////////////////////////////
 
-  alignmentSlider = tgui::Slider::create();
+  alignmentSlider = tgui::EditBoxSlider::create();
   alignmentSlider->setPosition(775, 270);
   alignmentSlider->setSize(250, 20);
   alignmentSlider->setMinimum(0);
-  alignmentSlider->setMaximum(constants::maxAlignmentStrength * 100);
-  alignmentSlider->setValue(constants::defaultAlignmentStrenght * 100);
+  alignmentSlider->setMaximum(constants::maxAlignmentStrength * 1000);
+  alignmentSlider->setValue(constants::defaultAlignmentStrenght * 1000);
   gui.add(alignmentSlider);
 
   alignmentSliderLabel = tgui::Label::create();
   alignmentSliderLabel->setPosition(775, 240);
-  alignmentSliderLabel->setText(
-      "Alignment Strenght: " + std::to_string(static_cast<int>(
-                                   constants::defaultAlignmentStrenght * 100)));
+  alignmentSliderLabel->setText("Alignment Strenght");
   alignmentSliderLabel->setTextSize(15);
   alignmentSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
   gui.add(alignmentSliderLabel);
 
-  alignmentSlider->onValueChange([this]() {
-    alignmentSliderLabel->setText(
-        "Alignment Strenght: " +
-        std::to_string(static_cast<int>(alignmentSlider->getValue())));
-  });
-
   //////////////////////////////////////////////////////////////////////////////////////////
 
-  cohesionSlider = tgui::Slider::create();
+  cohesionSlider = tgui::EditBoxSlider::create();
   cohesionSlider->setPosition(775, 330);
   cohesionSlider->setSize(250, 20);
   cohesionSlider->setMinimum(0);
-  cohesionSlider->setMaximum(constants::maxCohesionStrength * 100);
-  cohesionSlider->setValue(constants::defaultCohesionStrenght * 100);
+  cohesionSlider->setMaximum(constants::maxCohesionStrength * 1000);
+  cohesionSlider->setValue(constants::defaultCohesionStrenght * 1000);
   gui.add(cohesionSlider);
 
   cohesionSliderLabel = tgui::Label::create();
   cohesionSliderLabel->setPosition(775, 300);
-  cohesionSliderLabel->setText("Cohesion Strenght: " +
-                               std::to_string(static_cast<int>(
-                                   constants::defaultCohesionStrenght * 100)));
+  cohesionSliderLabel->setText("Cohesion Strenght");
   cohesionSliderLabel->setTextSize(15);
   cohesionSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
   gui.add(cohesionSliderLabel);
 
-  cohesionSlider->onValueChange([this]() {
-    float normalizedValue = cohesionSlider->getValue() / 100.0f;
-    std::stringstream stream;
-    stream.precision(2);
-    stream << std::fixed << normalizedValue;
-    cohesionSliderLabel->setText(
-        "Cohesion Strenght: " +
-        std::to_string(static_cast<int>(cohesionSlider->getValue())));
-  });
-
   //////////////////////////////////////////////////////////////////////////////////////////
 
-  interactionSlider = tgui::Slider::create();
+  interactionSlider = tgui::EditBoxSlider::create();
   interactionSlider->setPosition(775, 390);
   interactionSlider->setSize(250, 20);
   interactionSlider->setMinimum(0);
@@ -983,48 +946,31 @@ void Egui::createParametersSliders() {
 
   interactionSliderLabel = tgui::Label::create();
   interactionSliderLabel->setPosition(775, 360);
-  interactionSliderLabel->setText(
-      "Interaction Range: " +
-      std::to_string(static_cast<int>(constants::defaultInteractionRange)));
+  interactionSliderLabel->setText("Interaction Range");
   interactionSliderLabel->setTextSize(15);
   interactionSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
   gui.add(interactionSliderLabel);
 
-  interactionSlider->onValueChange([this]() {
-    interactionSliderLabel->setText(
-        "Interaction Range: " +
-        std::to_string(static_cast<int>(interactionSlider->getValue())));
-  });
-
   //////////////////////////////////////////////////////////////////////////////////////////
 
-  repelSlider = tgui::Slider::create();
+  repelSlider = tgui::EditBoxSlider::create();
   repelSlider->setPosition(775, 450);
   repelSlider->setSize(250, 20);
   repelSlider->setMinimum(0);
-  repelSlider->setMaximum(constants::maxRepelStrenght * 100);
-  repelSlider->setValue(constants::defaultRepelStrenght * 100);
+  repelSlider->setMaximum(constants::maxRepelStrenght * 1000);
+  repelSlider->setValue(constants::defaultRepelStrenght * 1000);
   gui.add(repelSlider);
 
   repelSliderLabel = tgui::Label::create();
   repelSliderLabel->setPosition(775, 420);
-
-  repelSliderLabel->setText(
-      "Repel Strenght: " +
-      std::to_string(static_cast<int>(constants::defaultRepelStrenght * 100)));
+  repelSliderLabel->setText("Repel Strenght");
   repelSliderLabel->setTextSize(15);
   repelSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
   gui.add(repelSliderLabel);
 
-  repelSlider->onValueChange([this]() {
-    repelSliderLabel->setText(
-        "Repel Strenght: " +
-        std::to_string(static_cast<int>(repelSlider->getValue())));
-  });
-
   //////////////////////////////////////////////////////////////////////////////////////////
 
-  repelRangeSlider = tgui::Slider::create();
+  repelRangeSlider = tgui::EditBoxSlider::create();
   repelRangeSlider->setPosition(775, 510);
   repelRangeSlider->setSize(250, 20);
   repelRangeSlider->setMinimum(0);
@@ -1034,18 +980,10 @@ void Egui::createParametersSliders() {
 
   repelRangeSliderLabel = tgui::Label::create();
   repelRangeSliderLabel->setPosition(775, 480);
-  repelRangeSliderLabel->setText(
-      "Repel range: " +
-      std::to_string(static_cast<int>(constants::defaultRepelRange)));
+  repelRangeSliderLabel->setText("Repel range");
   repelRangeSliderLabel->setTextSize(15);
   repelRangeSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
   gui.add(repelRangeSliderLabel);
-
-  repelRangeSlider->onValueChange([this]() {
-    repelRangeSliderLabel->setText(
-        "Repel range: " +
-        std::to_string(static_cast<int>(repelRangeSlider->getValue())));
-  });
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1129,13 +1067,13 @@ void Egui::evolveFlock() {
   bodyStack_.resize(flockStack_.size());
   for (size_t i{0}; i < flockStack_.size(); i++) {
     flockStack_[i].updateFlock(
-        flockStack_[i].Separation(separationSlider->getValue() / 100,
+        flockStack_[i].Separation(separationSlider->getValue() / 1000,
                                   separationRangeSlider->getValue()),
-        flockStack_[i].Alignment(alignmentSlider->getValue() / 100,
+        flockStack_[i].Alignment(alignmentSlider->getValue() / 1000,
                                  interactionSlider->getValue()),
-        flockStack_[i].Cohesion(cohesionSlider->getValue() / 100,
+        flockStack_[i].Cohesion(cohesionSlider->getValue() / 1000,
                                 interactionSlider->getValue()),
-        Repel(flockStack_, i, repelSlider->getValue() / 100,
+        Repel(flockStack_, i, repelSlider->getValue() / 1000,
               repelRangeSlider->getValue()));
   }
 }
