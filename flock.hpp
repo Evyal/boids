@@ -28,7 +28,7 @@ public:
   size_t getSize() const;
   sf::Color getFlockColor() const;
 
-  sf::Vector2f getMassCenter() const;
+  sf::Vector2f getMeanPosition() const;
   sf::Vector2f getMeanVelocity() const;
   float getMeanSpeed() const;
 

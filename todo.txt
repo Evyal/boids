@@ -11,7 +11,9 @@ LIST OF THINGS TO DO:
 - test all methods
 - test all functions
 
-    MAYBE
-    
+    MAYBE    
 - make predator class
 - eventually make obstacles
+
+    CONCLUDE
+- write report

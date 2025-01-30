@@ -48,6 +48,9 @@ inline constexpr float maxBoidSpeed{300.f};
 inline constexpr float minRandomSpeed{150.f};
 inline constexpr float maxRandomSpeed{300.f};
 
+// speed boost on mirror mode
+inline constexpr float speedBoostMirror{15.f};
+
 // size of the boid
 inline constexpr float boidSize{3.6f};
 

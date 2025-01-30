@@ -4,13 +4,15 @@
 #include <numeric>
 #include <vector>
 
-// Function to calculate Euclidean distance between two points
+//////////////////////////////////////////////////////////////////////////////////////////
+// Function to calculate Euclidean distance between two points in a 2D space
 float calculateDistance(const sf::Vector2f &p1, const sf::Vector2f &p2) {
   sf::Vector2f diff = p1 - p2;
   return std::sqrt(diff.x * diff.x + diff.y * diff.y);
 }
 
-// Function to calculate all pairwise distances
+//////////////////////////////////////////////////////////////////////////////////////////
+// Function to calculate all pairs of distances
 std::vector<float> calculateDistances(const std::vector<sf::Vector2f> &points) {
   std::vector<float> distances;
   size_t n = points.size();
@@ -22,21 +24,23 @@ std::vector<float> calculateDistances(const std::vector<sf::Vector2f> &points) {
   return distances;
 }
 
-// Function to calculate the mean of distances
+//////////////////////////////////////////////////////////////////////////////////////////
+// Function to calculate the mean
 float calculateMean(const std::vector<float> &distances) {
   if (distances.empty()) {
-    return 0.0; // No distances, return 0
+    return 0.0;
   }
   float totalDistance =
       std::accumulate(distances.begin(), distances.end(), 0.0f);
   return totalDistance / static_cast<float>(distances.size());
 }
 
-// Function to calculate the standard deviation of distances
+//////////////////////////////////////////////////////////////////////////////////////////
+// Function to calculate the standard deviation
 float calculateStandardDeviation(const std::vector<float> &distances,
                                  float mean) {
   if (distances.empty()) {
-    return 0.0; // No distances, return 0
+    return 0.0;
   }
   float variance =
       std::accumulate(distances.begin(), distances.end(), 0.0f,

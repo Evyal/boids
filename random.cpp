@@ -3,8 +3,13 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <random>
+#include <chrono>
 
-extern std::default_random_engine rng;
+std::default_random_engine rng(static_cast<size_t>(
+    std::chrono::steady_clock::now().time_since_epoch().count()));
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Generate a RANDOM INTEGER (SIZE_T) in the RANGE [min, max], inclusive
 
 size_t randomInt(size_t min, size_t max) {
 
@@ -12,18 +17,17 @@ size_t randomInt(size_t min, size_t max) {
   return dist(rng);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Generate a random FLOAT in the range (min, max]
+
 float randomFloat(float min, float max) {
   std::uniform_real_distribution dist(min, max);
   return dist(rng);
 }
 
-sf::Vector2f randomPosition() {
-  std::uniform_real_distribution distX(constants::randomMinimumX,
-                                       constants::randomMinimumX);
-  std::uniform_real_distribution distY(constants::randomMinimumY,
-                                       constants::randomMaximumY);
-  return {distX(rng), distY(rng)};
-}
+//////////////////////////////////////////////////////////////////////////////////////////
+// Generates a random position for a boid, all the boids spawn around the same
+// center point
 
 sf::Vector2f randomPosition(sf::Vector2f center) {
   std::uniform_real_distribution distX(
@@ -32,6 +36,8 @@ sf::Vector2f randomPosition(sf::Vector2f center) {
   std::uniform_real_distribution distY(
       center.y - constants::randomPositionRange,
       center.y + constants::randomPositionRange);
+
+  // Generate randomly until the boid spawns inside the margins
   bool a{true};
   float x{};
   float y{};
@@ -50,6 +56,10 @@ sf::Vector2f randomPosition(sf::Vector2f center) {
   }
   return {x, y};
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Boids of the same flock are generated with their direction varying just a
+// little between each other
 
 sf::Vector2f randomSpeed(float angleCenter) {
   std::uniform_real_distribution angle(
