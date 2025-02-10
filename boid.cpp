@@ -104,16 +104,20 @@ void toroidalBorders(Boid &boid) {
 
 void mirrorBorders(Boid &boid) {
   if (boid.getPosition().x < constants::marginSize) {
-    boid.setVelocityX(std::abs(boid.getVelocity().x) + constants::speedBoostMirror);
+    boid.setVelocityX(std::abs(boid.getVelocity().x) +
+                      constants::speedBoostMirror);
   } else if (boid.getPosition().x >
              constants::fieldSide + constants::marginSize) {
-    boid.setVelocityX(-std::abs(boid.getVelocity().x) - constants::speedBoostMirror);
+    boid.setVelocityX(-std::abs(boid.getVelocity().x) -
+                      constants::speedBoostMirror);
   }
   if (boid.getPosition().y < constants::marginSize) {
-    boid.setVelocityY(std::abs(boid.getVelocity().y) + constants::speedBoostMirror);
+    boid.setVelocityY(std::abs(boid.getVelocity().y) +
+                      constants::speedBoostMirror);
   } else if (boid.getPosition().y >
              constants::fieldSide + constants::marginSize) {
-    boid.setVelocityY(-std::abs(boid.getVelocity().y) - constants::speedBoostMirror);
+    boid.setVelocityY(-std::abs(boid.getVelocity().y) -
+                      constants::speedBoostMirror);
   }
 }
 
@@ -122,5 +126,5 @@ void mirrorBorders(Boid &boid) {
 // BUILD
 
 Boid buildBoid(sf::Vector2f center, float a) {
-  return {{randomPosition(center)}, {randomSpeed(a)}};
+  return {{randomBoidPosition(center)}, {randomBoidSpeed(a)}};
 }

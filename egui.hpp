@@ -92,8 +92,8 @@ private:
   tgui::Label::Ptr blueSliderLabel;
   tgui::Label::Ptr addFlockButtonLabel;
 
-  void createSlider(float posX, float posY, float width, int min, int max,
-                    int initialValue);
+  void createSlider(float posX, float posY, float width, float height, int min,
+                    int max, int initialValue);
   void createBoidsNumberSlider();
   void createCenterXSlider();
   void createCenterYSlider();
@@ -140,7 +140,7 @@ private:
   void deleteFlock(size_t i);
   void evolveFlock();
   void drawFlocks();
-  void printFlock(size_t center);
+  void printFlock(size_t i);
 
   ////////////////////////////////////////////////////////////////////////////////
 

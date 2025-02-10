@@ -13,9 +13,7 @@ float randomFloat(float min, float max);
 //////////////////////////////////////////////////////////////////////////////////////////
 // Random for generating BOIDS
 
-sf::Vector2f randomPosition();
-sf::Vector2f randomPosition(sf::Vector2f center);
-sf::Vector2f randomSpeed();
-sf::Vector2f randomSpeed(float angleCenter);
+sf::Vector2f randomBoidPosition(sf::Vector2f center);
+sf::Vector2f randomBoidSpeed(float angleCenter);
 
 #endif

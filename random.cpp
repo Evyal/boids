@@ -1,9 +1,9 @@
 #include "random.hpp"
 #include "constants.hpp"
 #include <SFML/System/Vector2.hpp>
+#include <chrono>
 #include <cmath>
 #include <random>
-#include <chrono>
 
 std::default_random_engine rng(static_cast<size_t>(
     std::chrono::steady_clock::now().time_since_epoch().count()));
@@ -29,39 +29,36 @@ float randomFloat(float min, float max) {
 // Generates a random position for a boid, all the boids spawn around the same
 // center point
 
-sf::Vector2f randomPosition(sf::Vector2f center) {
-  std::uniform_real_distribution distX(
-      center.x - constants::randomPositionRange,
-      center.x + constants::randomPositionRange);
-  std::uniform_real_distribution distY(
-      center.y - constants::randomPositionRange,
-      center.y + constants::randomPositionRange);
+sf::Vector2f randomBoidPosition(sf::Vector2f center) {
+  std::uniform_real_distribution angleGen(0.f, 2 * M_PIf);
+  std::uniform_real_distribution moduleGen(0.f, constants::randomPositionRange);
 
   // Generate randomly until the boid spawns inside the margins
-  bool a{true};
-  float x{};
-  float y{};
-  while (a) {
-    x = distX(rng);
-    if (x > constants::randomMinimumX && x < constants::randomMaximumX) {
-      a = false;
+  bool b{true};
+  sf::Vector2f position{};
+  while (b) {
+    position = center;
+
+    float angle{angleGen(rng)};
+    float step{moduleGen(rng)};
+
+    position += {step * cosf(angle), step * sinf(angle)};
+    if (position.x > constants::randomMinimumX &&
+        position.x < constants::randomMaximumX &&
+        position.y > constants::randomMinimumY &&
+        position.y < constants::randomMaximumY) {
+      b = false;
     }
   }
-  a = true;
-  while (a) {
-    y = distY(rng);
-    if (y > constants::randomMinimumY && y < constants::randomMaximumY) {
-      a = false;
-    }
-  }
-  return {x, y};
+
+  return position;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Boids of the same flock are generated with their direction varying just a
 // little between each other
 
-sf::Vector2f randomSpeed(float angleCenter) {
+sf::Vector2f randomBoidSpeed(float angleCenter) {
   std::uniform_real_distribution angle(
       angleCenter - constants::randomAngleRange,
       angleCenter + constants::randomAngleRange);

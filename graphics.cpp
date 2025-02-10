@@ -1,35 +1,30 @@
 #include "graphics.hpp"
 #include "boid.hpp"
 #include "constants.hpp"
-#include "flock.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <cmath>
-#include <cstddef>
 
 // DRAW BOIDS as CIRCLES
 
-sf::CircleShape boidCircle(const Flock &flock, size_t i) {
+sf::CircleShape drawCircleBoid(const Boid &boid, sf::Color color) {
   sf::CircleShape boidBody{constants::boidSize};
   boidBody.setOrigin(constants::boidSize, constants::boidSize);
-  boidBody.setPosition(flock.getBoid(i).getPosition().x,
-                       flock.getBoid(i).getPosition().y);
-  boidBody.setFillColor(flock.getFlockColor());
+  boidBody.setPosition(boid.getPosition().x, boid.getPosition().y);
+  boidBody.setFillColor(color);
   return boidBody;
 }
 
 // DRAW BOIDS as TRIANGLES
 
-sf::CircleShape boidTriangle(const Flock &flock, size_t i) {
+sf::CircleShape drawTriangleBoid(const Boid &boid, sf::Color color) {
   sf::CircleShape boidBody(constants::boidSize, 3);
   boidBody.setScale(1, 2);
-  boidBody.setFillColor(flock.getFlockColor());
+  boidBody.setFillColor(color);
   boidBody.setOrigin(constants::boidSize, constants::boidSize);
-  boidBody.setPosition(flock.getBoid(i).getPosition());
+  boidBody.setPosition(boid.getPosition());
 
-  boidBody.rotate(180 *
-                  std::atan2(flock.getBoid(i).getVelocity().x,
-                             -flock.getBoid(i).getVelocity().y) /
-                  M_PIf);
+  boidBody.rotate(
+      180 * std::atan2(boid.getVelocity().x, -boid.getVelocity().y) / M_PIf);
   return boidBody;
 }

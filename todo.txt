@@ -1,11 +1,18 @@
 LIST OF THINGS TO DO:
 
-    SMALL CORRECTIONS
+    QUESTIONS
+- struct for slider and labels parameteres?
+- void or typed methods for rules?
+- which one is faster?
+
+    CORRECTIONS
 - introduce algorithms  
+- smart pointers
 
     GENERAL
 - preserve class invariants (cassert)
 - fix parameters sliders
+- section egui class
 
     TESTING
 - test all methods

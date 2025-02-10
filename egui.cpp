@@ -2,7 +2,9 @@
 #include "constants.hpp"
 #include "flock.hpp"
 #include "graphics.hpp"
+#include "random.hpp"
 #include "statistics.hpp"
+#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <TGUI/Widget.hpp>
 #include <TGUI/Widgets/Button.hpp>
@@ -86,11 +88,16 @@ void Egui::setup() {
   repelRangeSlider->setVisible(false);
   repelRangeSliderLabel->setVisible(false);
 
-  addFlock(30, {480, 480}, sf::Color{255, 0, 127});  // PINK
-  addFlock(30, {240, 480}, sf::Color{255, 0, 0});    // RED
-  addFlock(30, {360, 240}, sf::Color{255, 204, 0});  // YELLOW
-  addFlock(30, {480, 480}, sf::Color{153, 255, 51}); // GREEN
-  addFlock(30, {480, 480}, sf::Color{0, 204, 204});  // CYAN
+  addFlock(10, {randomFloat(15, 735), randomFloat(15, 735)},
+           sf::Color{255, 0, 127}); // PINK
+  addFlock(20, {randomFloat(15, 735), randomFloat(15, 735)},
+           sf::Color{255, 0, 0}); // RED
+  addFlock(30, {randomFloat(15, 735), randomFloat(15, 735)},
+           sf::Color{255, 204, 0}); // YELLOW
+  addFlock(40, {randomFloat(15, 735), randomFloat(15, 735)},
+           sf::Color{153, 255, 51}); // GREEN
+  addFlock(50, {randomFloat(15, 735), randomFloat(15, 735)},
+           sf::Color{0, 204, 204}); // CYAN
 
   for (auto &labels : dynamicLabels) {
     for (size_t i{0}; i < 4; i++) {
@@ -476,19 +483,31 @@ void Egui::selectedOption3() {
 
 void Egui::drawStatistics() {
   for (unsigned i{0}; i < flockStack_.size(); i++) {
-    sf::RectangleShape rectangle1(sf::Vector2f(250, 105));
-    rectangle1.setPosition(775, 140 + static_cast<float>(i) * 120);
-    rectangle1.setFillColor(sf::Color::Black); // COLORE dello STORMO
+    sf::RectangleShape rectangle1(sf::Vector2f(260, 110));
+    rectangle1.setPosition(770, 140 + static_cast<float>(i) * 120);
+    rectangle1.setFillColor(sf::Color::Black);
     window.draw(rectangle1);
 
-    sf::RectangleShape rectangle(sf::Vector2f(240, 95));
-    rectangle.setPosition(780, 145 + static_cast<float>(i) * 120);
+    sf::RectangleShape rectangle(sf::Vector2f(250, 100));
+    rectangle.setPosition(775, 145 + static_cast<float>(i) * 120);
     window.draw(rectangle);
 
-    sf::RectangleShape rectangle2(sf::Vector2f(15, 85));
-    rectangle2.setPosition(770, 150 + static_cast<float>(i) * 120);
+    sf::RectangleShape rectangle2(sf::Vector2f(15, 90));
+    rectangle2.setPosition(765, 150 + static_cast<float>(i) * 120);
     rectangle2.setFillColor(flockStack_[i].getFlockColor());
     window.draw(rectangle2);
+
+    // sf::CircleShape circleBlack(18);
+    // circleBlack.setOrigin(18, 18);
+    // circleBlack.setPosition(805, 195 + static_cast<float>(i) * 120);
+    // circleBlack.setFillColor(sf::Color::Black);
+    // window.draw(circleBlack);
+
+    // sf::CircleShape circle(17);
+    // circle.setOrigin(17, 17);
+    // circle.setPosition(805, 195 + static_cast<float>(i) * 120);
+    // circle.setFillColor(flockStack_[i].getFlockColor());
+    // window.draw(circle);
 
     printFlock(i);
   }
@@ -498,7 +517,7 @@ void Egui::drawStatistics() {
 
 void Egui::createDeleteFlockButton(size_t index) {
   auto button = tgui::Button::create(std::to_string(index + 1));
-  button->setPosition(1015, 185 + index * 120);
+  button->setPosition(1020, 185 + index * 120);
   button->setSize(15, 15);
   button->getRenderer()->setBackgroundColor(sf::Color::Red);
   button->onPress([this, index = dynamicButtons.size()]() {
@@ -512,30 +531,22 @@ void Egui::createDeleteFlockButton(size_t index) {
 
   auto label0 = tgui::Label::create("Mean Distance: ");
   label0->setTextSize(15);
-  label0->setPosition(
-      {800,
-       150 + index * 120}); // Position the label above the buttonor::Black);
+  label0->setPosition({825, 150 + index * 120});
   gui.add(label0);
 
   auto label1 = tgui::Label::create("Distance std dev: ");
   label1->setTextSize(15);
-  label1->setPosition(
-      {800,
-       170 + index * 120}); // Position the label above the buttonor::Black);
+  label1->setPosition({825, 170 + index * 120});
   gui.add(label1);
 
   auto label2 = tgui::Label::create("Mean Speed: ");
   label2->setTextSize(15);
-  label2->setPosition(
-      {800,
-       195 + index * 120}); // Position the label above the buttonor::Black);
+  label2->setPosition({825, 200 + index * 120});
   gui.add(label2);
 
   auto label3 = tgui::Label::create("Speed std dev: ");
   label3->setTextSize(15);
-  label3->setPosition(
-      {800,
-       215 + index * 120}); // Position the label above the buttonor::Black);
+  label3->setPosition({825, 220 + index * 120});
   gui.add(label3);
 
   dynamicLabels.push_back({label0, label1, label2, label3});
@@ -571,7 +582,7 @@ void Egui::deleteDeleteFlockButton(size_t index) {
 void Egui::repositionButtons() {
   for (size_t i = 0; i < dynamicButtons.size(); ++i) {
     dynamicButtons[i]->setText(std::to_string(i + 1));
-    dynamicButtons[i]->setPosition(1015, 185 + i * 120);
+    dynamicButtons[i]->setPosition(1020, 185 + i * 120);
     dynamicButtons[i]->onPress.disconnectAll();
     dynamicButtons[i]->onPress([this, index = i]() {
       // std::cout << "Button " << index + 1 << " pressed!\n";
@@ -579,10 +590,12 @@ void Egui::repositionButtons() {
       deleteDeleteFlockButton(index);
     });
 
-    dynamicLabels[i][0]->setPosition({800, 150 + i * 120});
-    dynamicLabels[i][1]->setPosition({800, 170 + i * 120});
-    dynamicLabels[i][2]->setPosition({800, 195 + i * 120});
-    dynamicLabels[i][3]->setPosition({800, 215 + i * 120});
+    // CREATE CONSTANTS, please
+
+    dynamicLabels[i][0]->setPosition({825, 150 + i * 120});
+    dynamicLabels[i][1]->setPosition({825, 170 + i * 120});
+    dynamicLabels[i][2]->setPosition({825, 200 + i * 120});
+    dynamicLabels[i][3]->setPosition({825, 220 + i * 120});
   }
 }
 
@@ -590,13 +603,13 @@ void Egui::repositionButtons() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 2
 
-void Egui::createSlider(float posX, float posY, float width, int min, int max,
-                        int initialValue) {
+void Egui::createSlider(float posX, float posY, float width, float height,
+                        int min, int max, int initialValue) {
 
   auto slider =
       tgui::Slider::create(static_cast<float>(min), static_cast<float>(max));
   slider->setPosition(posX, posY);
-  slider->setSize(width, 20);
+  slider->setSize(width, height);
   slider->setValue(static_cast<float>(initialValue));
   gui.add(slider);
 
@@ -996,41 +1009,41 @@ void Egui::createParametersSliders() {
 // Draw Interface
 
 void Egui::drawInterface() {
-  sf::RectangleShape top(sf::Vector2f(750, 15));
-  top.setPosition(0, 0);
-  top.setFillColor(sf::Color::Black);
-  sf::RectangleShape bottom(sf::Vector2f(750, 15));
-  bottom.setPosition(0, 735);
-  bottom.setFillColor(sf::Color::Black);
-  sf::RectangleShape left(sf::Vector2f(15, 720));
-  left.setPosition(0, 15);
-  left.setFillColor(sf::Color::Black);
-  sf::RectangleShape right(sf::Vector2f(15, 720));
-  right.setPosition(735, 15);
-  right.setFillColor(sf::Color::Black);
+  sf::RectangleShape topField(sf::Vector2f(750, 15));
+  topField.setPosition(0, 0);
+  topField.setFillColor(sf::Color::Black);
+  sf::RectangleShape bottomField(sf::Vector2f(750, 15));
+  bottomField.setPosition(0, 735);
+  bottomField.setFillColor(sf::Color::Black);
+  sf::RectangleShape leftField(sf::Vector2f(15, 720));
+  leftField.setPosition(0, 15);
+  leftField.setFillColor(sf::Color::Black);
+  sf::RectangleShape rightField(sf::Vector2f(15, 720));
+  rightField.setPosition(735, 15);
+  rightField.setFillColor(sf::Color::Black);
 
-  window.draw(top);
-  window.draw(bottom);
-  window.draw(left);
-  window.draw(right);
+  window.draw(topField);
+  window.draw(bottomField);
+  window.draw(leftField);
+  window.draw(rightField);
 
-  sf::RectangleShape topS(sf::Vector2f(290, 5));
-  topS.setPosition(755, 5);
-  topS.setFillColor(sf::Color::Black);
-  sf::RectangleShape bottomS(sf::Vector2f(290, 5));
-  bottomS.setPosition(755, 740);
-  bottomS.setFillColor(sf::Color::Black);
-  sf::RectangleShape leftS(sf::Vector2f(5, 740));
-  leftS.setPosition(755, 5);
-  leftS.setFillColor(sf::Color::Black);
-  sf::RectangleShape rightS(sf::Vector2f(5, 740));
-  rightS.setPosition(1040, 5);
-  rightS.setFillColor(sf::Color::Black);
+  sf::RectangleShape topSettings(sf::Vector2f(290, 5));
+  topSettings.setPosition(755, 5);
+  topSettings.setFillColor(sf::Color::Black);
+  sf::RectangleShape bottomSettings(sf::Vector2f(290, 5));
+  bottomSettings.setPosition(755, 740);
+  bottomSettings.setFillColor(sf::Color::Black);
+  sf::RectangleShape leftSettings(sf::Vector2f(5, 740));
+  leftSettings.setPosition(755, 5);
+  leftSettings.setFillColor(sf::Color::Black);
+  sf::RectangleShape rightSettings(sf::Vector2f(5, 740));
+  rightSettings.setPosition(1040, 5);
+  rightSettings.setFillColor(sf::Color::Black);
 
-  window.draw(topS);
-  window.draw(bottomS);
-  window.draw(leftS);
-  window.draw(rightS);
+  window.draw(topSettings);
+  window.draw(bottomSettings);
+  window.draw(leftSettings);
+  window.draw(rightSettings);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1088,8 +1101,11 @@ void Egui::evolveFlock() {
 void Egui::drawFlocks() {
   for (size_t i{0}; i < bodyStack_.size(); i++) {
     bodyStack_[i].clear();
+    sf::Color color{flockStack_[i].getFlockColor()};
+
     for (size_t j{0}; j < flockStack_[i].getSize(); j++) {
-      bodyStack_[i].emplace_back(boidTriangle(flockStack_[i], j));
+      bodyStack_[i].emplace_back(
+          drawTriangleBoid(flockStack_[i].getBoid(j), color));
       window.draw(bodyStack_[i][j]);
     }
   }
@@ -1099,31 +1115,42 @@ void Egui::drawFlocks() {
 
 void Egui::printFlock(size_t i) {
 
-  if (!toroidal) {
-    sf::Text meanDistance;
+  sf::Text flockSize;
 
-    float meanDistanceValue{
-        calculateMean(calculateDistances(flockStack_[i].getFlockPositions()))};
-    meanDistance.setString(std::to_string(static_cast<int>(meanDistanceValue)));
-    meanDistance.setFont(sans);
-    meanDistance.setCharacterSize(20);
-    meanDistance.setFillColor(sf::Color::Black);
-    meanDistance.setPosition(960, 147.f + static_cast<float>(i) * 120);
+  flockSize.setString(
+      std::to_string(static_cast<int>(flockStack_[i].getSize())));
+  flockSize.setFont(sans);
+  flockSize.setCharacterSize(20);
+  flockSize.setOrigin(10,10);
+  flockSize.setFillColor(sf::Color::Black);
+  flockSize.setPosition(800, 190 + static_cast<float>(i) * 120);
 
-    sf::Text standardDeviation;
+  window.draw(flockSize);
 
-    standardDeviation.setString(
-        std::to_string(static_cast<int>(calculateStandardDeviation(
-            calculateDistances(flockStack_[i].getFlockPositions()),
-            meanDistanceValue))));
-    standardDeviation.setFont(sans);
-    standardDeviation.setCharacterSize(20);
-    standardDeviation.setFillColor(sf::Color::Black);
-    standardDeviation.setPosition(960, 167.f + static_cast<float>(i) * 120);
+  sf::Text meanDistance;
 
-    window.draw(meanDistance);
-    window.draw(standardDeviation);
-  }
+  float meanDistanceValue{
+      calculateMean(calculateDistances(flockStack_[i].getFlockPositions()))};
+  meanDistance.setString(std::to_string(static_cast<int>(meanDistanceValue)));
+  meanDistance.setFont(sans);
+  meanDistance.setCharacterSize(20);
+  meanDistance.setFillColor(sf::Color::Black);
+  meanDistance.setPosition(975, 145.f + static_cast<float>(i) * 120);
+
+  window.draw(meanDistance);
+
+  sf::Text standardDeviation;
+
+  standardDeviation.setString(
+      std::to_string(static_cast<int>(calculateStandardDeviation(
+          calculateDistances(flockStack_[i].getFlockPositions()),
+          meanDistanceValue))));
+  standardDeviation.setFont(sans);
+  standardDeviation.setCharacterSize(20);
+  standardDeviation.setFillColor(sf::Color::Black);
+  standardDeviation.setPosition(975, 165.f + static_cast<float>(i) * 120);
+
+  window.draw(standardDeviation);
 
   sf::Text meanSpeed;
 
@@ -1132,7 +1159,9 @@ void Egui::printFlock(size_t i) {
   meanSpeed.setFont(sans);
   meanSpeed.setCharacterSize(20);
   meanSpeed.setFillColor(sf::Color::Black);
-  meanSpeed.setPosition(960, 192.f + static_cast<float>(i) * 120);
+  meanSpeed.setPosition(975, 195.f + static_cast<float>(i) * 120);
+
+  window.draw(meanSpeed);
 
   sf::Text SpeedStandardDeviation;
 
@@ -1142,9 +1171,8 @@ void Egui::printFlock(size_t i) {
   SpeedStandardDeviation.setFont(sans);
   SpeedStandardDeviation.setCharacterSize(20);
   SpeedStandardDeviation.setFillColor(sf::Color::Black);
-  SpeedStandardDeviation.setPosition(960, 212.f + static_cast<float>(i) * 120);
+  SpeedStandardDeviation.setPosition(975, 215.f + static_cast<float>(i) * 120);
 
-  window.draw(meanSpeed);
   window.draw(SpeedStandardDeviation);
 }
 
