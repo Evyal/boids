@@ -5,6 +5,7 @@
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <cmath>
 
+//////////////////////////////////////////////////////////////////////////////////////////
 // DRAW BOIDS as CIRCLES
 
 sf::CircleShape drawCircleBoid(const Boid &boid, sf::Color color) {
@@ -15,6 +16,7 @@ sf::CircleShape drawCircleBoid(const Boid &boid, sf::Color color) {
   return boidBody;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
 // DRAW BOIDS as TRIANGLES
 
 sf::CircleShape drawTriangleBoid(const Boid &boid, sf::Color color) {

@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include "structs.hpp"
 
 namespace constants {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,6 +91,7 @@ inline constexpr float defaultRepelStrenght{0.3f};
 inline constexpr float defaultRepelRange{20.0f};
 
 // COLOUR SLIDERS
+inline constexpr SlidersParameters sketch{0, 0, 0, 0, 0, 0, 0};
 inline constexpr int colorSliderMax{255};
 inline constexpr int colorSliderTotal{510};
 

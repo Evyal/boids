@@ -603,7 +603,7 @@ void Egui::repositionButtons() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 2
 
-void Egui::createSlider(float posX, float posY, float width, float height,
+tgui::Slider Egui::createSlider(float posX, float posY, float width, float height,
                         int min, int max, int initialValue) {
 
   auto slider =

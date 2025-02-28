@@ -1,13 +1,12 @@
 LIST OF THINGS TO DO:
 
     QUESTIONS
-- struct for slider and labels parameteres?
+- struct for slider and labels parameteres
 - void or typed methods for rules?
 - which one is faster?
 
     CORRECTIONS
 - introduce algorithms  
-- smart pointers
 
     GENERAL
 - preserve class invariants (cassert)
