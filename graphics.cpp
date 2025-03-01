@@ -1,12 +1,13 @@
 #include "graphics.hpp"
 #include "boid.hpp"
 #include "constants.hpp"
+#include "structs.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <cmath>
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// DRAW BOIDS as CIRCLES
+// CREATE BOIDS as CIRCLES
 
 sf::CircleShape drawCircleBoid(const Boid &boid, sf::Color color) {
   sf::CircleShape boidBody{constants::boidSize};
@@ -17,7 +18,7 @@ sf::CircleShape drawCircleBoid(const Boid &boid, sf::Color color) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// DRAW BOIDS as TRIANGLES
+// CREATE BOIDS as TRIANGLES
 
 sf::CircleShape drawTriangleBoid(const Boid &boid, sf::Color color) {
   sf::CircleShape boidBody(constants::boidSize, 3);
@@ -29,4 +30,14 @@ sf::CircleShape drawTriangleBoid(const Boid &boid, sf::Color color) {
   boidBody.rotate(
       180 * std::atan2(boid.getVelocity().x, -boid.getVelocity().y) / M_PIf);
   return boidBody;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// CREATE RECTANGLE
+
+sf::RectangleShape drawRectangle(const RectangleParameters &par) {
+  sf::RectangleShape rectangle(sf::Vector2f(par.width, par.height));
+  rectangle.setPosition(par.posX, par.posY);
+  rectangle.setFillColor(par.color);
+  return rectangle;
 }

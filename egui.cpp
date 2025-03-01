@@ -4,11 +4,13 @@
 #include "graphics.hpp"
 #include "random.hpp"
 #include "statistics.hpp"
+#include "structs.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <TGUI/Widget.hpp>
 #include <TGUI/Widgets/Button.hpp>
 #include <TGUI/Widgets/Label.hpp>
+#include <TGUI/Widgets/Slider.hpp>
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -30,63 +32,29 @@ void Egui::setup() {
   sans.loadFromFile("../OpenSans-Regular.ttf");
 
   createSwitchButton();
-
-  // OPTION 2
   createThreeWaySwitch();
 
-  createBoidsNumberSlider();
-  boidsNumberSlider->setVisible(false);
-  boidsNumberSliderLabel->setVisible(false);
-  maxBoidsNumberLabel->setVisible(false);
+  // OPTION 1
 
-  createCenterXSlider();
-  centerXSlider->setVisible(false);
-  centerXSliderLabel->setVisible(false);
+  for (auto &labels : dynamicLabels) {
+    for (size_t i{0}; i < 4; i++) {
+      labels[i]->setVisible(true);
+    }
+  }
 
-  createCenterYSlider();
-  centerYSlider->setVisible(false);
-  centerYSliderLabel->setVisible(false);
+  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
+    dynamicButtons[i]->setVisible(true);
+  }
 
-  createRedSlider();
-  redSlider->setVisible(false);
-  redSliderLabel->setVisible(false);
+  // OPTION 2
 
-  createGreenSlider();
-  greenSlider->setVisible(false);
-  greenSliderLabel->setVisible(false);
-
-  createBlueSlider();
-  blueSlider->setVisible(false);
-  blueSliderLabel->setVisible(false);
-
-  createAddFlockButton();
-  addFlockButton->setVisible(false);
-  addFlockButtonLabel->setVisible(false);
+  setupOpt2();
 
   // OPTION 3
 
-  createParametersSliders();
+  setupOpt3();
 
-  separationSlider->setVisible(false);
-  separationSliderLabel->setVisible(false);
-
-  separationRangeSlider->setVisible(false);
-  separationRangeSliderLabel->setVisible(false);
-
-  alignmentSlider->setVisible(false);
-  alignmentSliderLabel->setVisible(false);
-
-  cohesionSlider->setVisible(false);
-  cohesionSliderLabel->setVisible(false);
-
-  interactionSlider->setVisible(false);
-  interactionSliderLabel->setVisible(false);
-
-  repelSlider->setVisible(false);
-  repelSliderLabel->setVisible(false);
-
-  repelRangeSlider->setVisible(false);
-  repelRangeSliderLabel->setVisible(false);
+  // GENERATE FLOCKS at the BEGINNING
 
   addFlock(10, {randomFloat(15, 735), randomFloat(15, 735)},
            sf::Color{255, 0, 127}); // PINK
@@ -98,16 +66,6 @@ void Egui::setup() {
            sf::Color{153, 255, 51}); // GREEN
   addFlock(50, {randomFloat(15, 735), randomFloat(15, 735)},
            sf::Color{0, 204, 204}); // CYAN
-
-  for (auto &labels : dynamicLabels) {
-    for (size_t i{0}; i < 4; i++) {
-      labels[i]->setVisible(true);
-    }
-  }
-
-  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-    dynamicButtons[i]->setVisible(true);
-  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -304,50 +262,11 @@ void Egui::selectedOption1() {
 
   // OPTION 2 FALSE
 
-  boidsNumberSlider->setVisible(false);
-  boidsNumberSliderLabel->setVisible(false);
-  maxBoidsNumberLabel->setVisible(false);
-
-  centerXSlider->setVisible(false);
-  centerXSliderLabel->setVisible(false);
-
-  centerYSlider->setVisible(false);
-  centerYSliderLabel->setVisible(false);
-
-  redSlider->setVisible(false);
-  redSliderLabel->setVisible(false);
-
-  greenSlider->setVisible(false);
-  greenSliderLabel->setVisible(false);
-
-  blueSlider->setVisible(false);
-  blueSliderLabel->setVisible(false);
-
-  addFlockButton->setVisible(false);
-  addFlockButtonLabel->setVisible(false);
+  setVisibleOpt2(false);
 
   // OPTION 3 FALSE
 
-  separationSlider->setVisible(false);
-  separationSliderLabel->setVisible(false);
-
-  separationRangeSlider->setVisible(false);
-  separationRangeSliderLabel->setVisible(false);
-
-  alignmentSlider->setVisible(false);
-  alignmentSliderLabel->setVisible(false);
-
-  cohesionSlider->setVisible(false);
-  cohesionSliderLabel->setVisible(false);
-
-  interactionSlider->setVisible(false);
-  interactionSliderLabel->setVisible(false);
-
-  repelSlider->setVisible(false);
-  repelSliderLabel->setVisible(false);
-
-  repelRangeSlider->setVisible(false);
-  repelRangeSliderLabel->setVisible(false);
+  setVisibleOpt3(false);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -367,50 +286,12 @@ void Egui::selectedOption2() {
   }
 
   // OPTION 2 TRUE
-  boidsNumberSlider->setVisible(true);
-  boidsNumberSliderLabel->setVisible(true);
-  maxBoidsNumberLabel->setVisible(true);
 
-  centerXSlider->setVisible(true);
-  centerXSliderLabel->setVisible(true);
-
-  centerYSlider->setVisible(true);
-  centerYSliderLabel->setVisible(true);
-
-  redSlider->setVisible(true);
-  redSliderLabel->setVisible(true);
-
-  greenSlider->setVisible(true);
-  greenSliderLabel->setVisible(true);
-
-  blueSlider->setVisible(true);
-  blueSliderLabel->setVisible(true);
-
-  addFlockButton->setVisible(true);
-  addFlockButtonLabel->setVisible(true);
+  setVisibleOpt2(true);
 
   // OPTION 3 FALSE
 
-  separationSlider->setVisible(false);
-  separationSliderLabel->setVisible(false);
-
-  separationRangeSlider->setVisible(false);
-  separationRangeSliderLabel->setVisible(false);
-
-  alignmentSlider->setVisible(false);
-  alignmentSliderLabel->setVisible(false);
-
-  cohesionSlider->setVisible(false);
-  cohesionSliderLabel->setVisible(false);
-
-  interactionSlider->setVisible(false);
-  interactionSliderLabel->setVisible(false);
-
-  repelSlider->setVisible(false);
-  repelSliderLabel->setVisible(false);
-
-  repelRangeSlider->setVisible(false);
-  repelRangeSliderLabel->setVisible(false);
+  setVisibleOpt3(false);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -431,50 +312,11 @@ void Egui::selectedOption3() {
 
   // OPTION 2 FALSE
 
-  boidsNumberSlider->setVisible(false);
-  boidsNumberSliderLabel->setVisible(false);
-  maxBoidsNumberLabel->setVisible(false);
-
-  centerXSlider->setVisible(false);
-  centerXSliderLabel->setVisible(false);
-
-  centerYSlider->setVisible(false);
-  centerYSliderLabel->setVisible(false);
-
-  redSlider->setVisible(false);
-  redSliderLabel->setVisible(false);
-
-  greenSlider->setVisible(false);
-  greenSliderLabel->setVisible(false);
-
-  blueSlider->setVisible(false);
-  blueSliderLabel->setVisible(false);
-
-  addFlockButton->setVisible(false);
-  addFlockButtonLabel->setVisible(false);
+  setVisibleOpt2(false);
 
   // OPTION 3 TRUE
 
-  separationSlider->setVisible(true);
-  separationSliderLabel->setVisible(true);
-
-  separationRangeSlider->setVisible(true);
-  separationRangeSliderLabel->setVisible(true);
-
-  alignmentSlider->setVisible(true);
-  alignmentSliderLabel->setVisible(true);
-
-  cohesionSlider->setVisible(true);
-  cohesionSliderLabel->setVisible(true);
-
-  interactionSlider->setVisible(true);
-  interactionSliderLabel->setVisible(true);
-
-  repelSlider->setVisible(true);
-  repelSliderLabel->setVisible(true);
-
-  repelRangeSlider->setVisible(true);
-  repelRangeSliderLabel->setVisible(true);
+  setVisibleOpt3(true);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -603,202 +445,109 @@ void Egui::repositionButtons() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 2
 
-tgui::Slider Egui::createSlider(float posX, float posY, float width, float height,
-                        int min, int max, int initialValue) {
+void Egui::createSliderOpt2(const SlidersParameters &sliderPar) {
 
-  auto slider =
-      tgui::Slider::create(static_cast<float>(min), static_cast<float>(max));
-  slider->setPosition(posX, posY);
-  slider->setSize(width, height);
-  slider->setValue(static_cast<float>(initialValue));
+  auto slider = tgui::Slider::create(static_cast<float>(sliderPar.min),
+                                     static_cast<float>(sliderPar.max));
+  slider->setPosition(sliderPar.posX, sliderPar.posY);
+  slider->setSize(sliderPar.width, sliderPar.height);
+  slider->setValue(static_cast<float>(sliderPar.initialValue));
   gui.add(slider);
 
+  option2Sliders.emplace_back(slider);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::createLabelOpt2(const LabelsParameters &labelsPar) {
+
   auto label = tgui::Label::create();
-  label->setPosition(posX + width + 10, posY - 5);
-  label->setText("Value: " + std::to_string(initialValue));
+  label->setPosition(labelsPar.posX, labelsPar.posY);
   label->getRenderer()->setTextColor(sf::Color::White);
+  label->setTextSize(labelsPar.textSize);
+  label->getRenderer()->setTextColor(sf::Color::Black);
   gui.add(label);
 
-  slider->onValueChange([label, slider]() {
-    label->setText("Value: " +
-                   std::to_string(static_cast<int>(slider->getValue())));
+  option2Labels.emplace_back(label);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::setLabelTextOpt2(size_t i, const std::string &text) {
+  option2Labels[i]->setText(
+      text + std::to_string(static_cast<int>(option2Sliders[i]->getValue())));
+
+  option2Sliders[i]->onValueChange([this, i, text]() {
+    option2Labels[i]->setText(
+        text + std::to_string(static_cast<int>(option2Sliders[i]->getValue())));
   });
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createBoidsNumberSlider() {
+void Egui::setupOpt2() {
+  createSliderOpt2(constants::boidsNumberSlider);
+  createSliderOpt2(constants::centerXSlider);
+  createSliderOpt2(constants::centerYSlider);
+  createSliderOpt2(constants::redSlider);
+  createSliderOpt2(constants::greenSlider);
+  createSliderOpt2(constants::blueSlider);
 
-  boidsNumberSlider = tgui::Slider::create();
-  boidsNumberSlider->setPosition(775, 190); // Set position
-  boidsNumberSlider->setSize(250, 20);      // Set width and fixed height
-  boidsNumberSlider->setMinimum(5);         // Set minimum value
-  boidsNumberSlider->setMaximum(100);       // Set maximum value
-  boidsNumberSlider->setValue(10);          // Set initial value
-  gui.add(boidsNumberSlider);               // Add the slider to the GUI
+  createLabelOpt2(constants::boidsNumberSliderLabel);
+  createLabelOpt2(constants::centerXSliderLabel);
+  createLabelOpt2(constants::centerYSliderLabel);
+  createLabelOpt2(constants::redSliderLabel);
+  createLabelOpt2(constants::greenSliderLabel);
+  createLabelOpt2(constants::blueSliderLabel);
+  createLabelOpt2(constants::maxBoidsNumberLabel); // INDEX 6
 
-  // Create the label for this slider
-  boidsNumberSliderLabel = tgui::Label::create();
-  boidsNumberSliderLabel->setPosition(775,
-                                      160); // Position next to the slider
-  boidsNumberSliderLabel->setText("Create N boids: " + std::to_string(10));
-  boidsNumberSliderLabel->setTextSize(15);
-  boidsNumberSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(boidsNumberSliderLabel); // Add the label to the GUI
+  // VALUE SHOULD CHANGE when FLOCK are created or destructed
+  option2Labels[6]->setText("Number of boids: " + std::to_string(10) + "/250");
 
-  // Connect slider to update the corresponding label
-  boidsNumberSlider->onValueChange([this]() {
-    boidsNumberSliderLabel->setText(
-        "Create N boids: " +
-        std::to_string(static_cast<int>(boidsNumberSlider->getValue())));
-  });
+  setLabelTextOpt2(0, "Create N boids: ");
+  setLabelTextOpt2(1, "Center of Spawn X: ");
+  setLabelTextOpt2(2, "Center of Spawn Y: ");
+  setLabelTextOpt2(3, "Red: ");
+  setLabelTextOpt2(4, "Green: ");
+  setLabelTextOpt2(5, "Blue: ");
 
-  maxBoidsNumberLabel = tgui::Label::create();
-  maxBoidsNumberLabel->setPosition(775,
-                                   115); // Position next to the slider
-  maxBoidsNumberLabel->setText("Number of boids: " + std::to_string(10) +
-                               "/250");
-  maxBoidsNumberLabel->setTextSize(19);
-  maxBoidsNumberLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(maxBoidsNumberLabel);
+  // HANDLE MAXIMUM VALUE of COLOUR SLIDERS
+  option2Sliders[3]->onValueChange(
+      [&]() { handleColorSliderChange(option2Sliders[3]); });
+  option2Sliders[4]->onValueChange(
+      [&]() { handleColorSliderChange(option2Sliders[4]); });
+  option2Sliders[5]->onValueChange(
+      [&]() { handleColorSliderChange(option2Sliders[5]); });
+
+  createAddFlockButton(constants::addFlockButton);
+  createLabelOpt2(constants::addFlockButtonLabel); // LABEL with INDEX 7
+  addFlockButtonLabel = option2Labels[7];
+  addFlockButtonLabel->setText(
+      "Number of flocks: " + std::to_string(flockStack_.size()) + "/5");
+
+  setVisibleOpt2(false);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createCenterXSlider() {
-
-  centerXSlider = tgui::Slider::create();
-  centerXSlider->setPosition(775, 270);
-  centerXSlider->setSize(250, 20);
-  centerXSlider->setMinimum(0);
-  centerXSlider->setMaximum(720);
-  centerXSlider->setValue(360);
-  gui.add(centerXSlider);
-
-  centerXSliderLabel = tgui::Label::create();
-  centerXSliderLabel->setPosition(775, 240);
-  centerXSliderLabel->setText("Center of Spawn X: " + std::to_string(360));
-  centerXSliderLabel->setTextSize(15);
-  centerXSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(centerXSliderLabel);
-
-  centerXSlider->onValueChange([this]() {
-    centerXSliderLabel->setText(
-        "Center of Spawn X: " +
-        std::to_string(static_cast<int>(centerXSlider->getValue())));
-  });
+void Egui::setVisibleOpt2(bool visible) {
+  for (auto &i : option2Sliders) {
+    i->setVisible(visible);
+  }
+  for (auto &i : option2Labels) {
+    i->setVisible(visible);
+  }
+  addFlockButton->setVisible(visible);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createCenterYSlider() {
+void Egui::handleColorSliderChange(tgui::Slider::Ptr changedSlider) {
+  int newTotal = static_cast<int>(option2Sliders[3]->getValue() +
+                                  option2Sliders[4]->getValue() +
+                                  option2Sliders[5]->getValue());
 
-  centerYSlider = tgui::Slider::create();
-  centerYSlider->setPosition(775, 330);
-  centerYSlider->setSize(250, 20);
-  centerYSlider->setMinimum(0);
-  centerYSlider->setMaximum(720);
-  centerYSlider->setValue(360);
-  gui.add(centerYSlider);
-
-  centerYSliderLabel = tgui::Label::create();
-  centerYSliderLabel->setPosition(775, 300);
-  centerYSliderLabel->setText("Center of Spawn Y: " + std::to_string(360));
-  centerYSliderLabel->setTextSize(15);
-  centerYSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(centerYSliderLabel);
-
-  centerYSlider->onValueChange([this]() {
-    centerYSliderLabel->setText(
-        "Center of Spawn Y: " +
-        std::to_string(static_cast<int>(centerYSlider->getValue())));
-  });
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::createRedSlider() {
-
-  redSlider = tgui::Slider::create();
-  redSlider->setPosition(775, 410);
-  redSlider->setSize(250, 20);
-  redSlider->setMinimum(0);
-  redSlider->setMaximum(constants::colorSliderMax);
-  redSlider->setValue(0);
-  redSlider->onValueChange([&]() { handleSliderChange(redSlider); });
-  gui.add(redSlider);
-
-  redSliderLabel = tgui::Label::create();
-  redSliderLabel->setPosition(775, 380);
-  redSliderLabel->setText("Red: " + std::to_string(0));
-  redSliderLabel->setTextSize(15);
-  redSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(redSliderLabel);
-
-  redSlider->onValueChange([this]() {
-    redSliderLabel->setText(
-        "Red: " + std::to_string(static_cast<int>(redSlider->getValue())));
-  });
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::createGreenSlider() {
-
-  greenSlider = tgui::Slider::create();
-  greenSlider->setPosition(775, 470);
-  greenSlider->setSize(250, 20);
-  greenSlider->setMinimum(0);
-  greenSlider->setMaximum(constants::colorSliderMax);
-  greenSlider->setValue(0);
-  greenSlider->onValueChange([&]() { handleSliderChange(greenSlider); });
-  gui.add(greenSlider);
-
-  greenSliderLabel = tgui::Label::create();
-  greenSliderLabel->setPosition(775, 440);
-  greenSliderLabel->setText("Green: " + std::to_string(0));
-  greenSliderLabel->setTextSize(15);
-  greenSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(greenSliderLabel);
-
-  greenSlider->onValueChange([this]() {
-    greenSliderLabel->setText(
-        "Green: " + std::to_string(static_cast<int>(greenSlider->getValue())));
-  });
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::createBlueSlider() {
-
-  blueSlider = tgui::Slider::create();
-  blueSlider->setPosition(775, 530);
-  blueSlider->setSize(250, 20);
-  blueSlider->setMinimum(0);
-  blueSlider->setMaximum(constants::colorSliderMax);
-  blueSlider->onValueChange([&]() { handleSliderChange(blueSlider); });
-  blueSlider->setValue(0);
-
-  gui.add(blueSlider);
-
-  blueSliderLabel = tgui::Label::create();
-  blueSliderLabel->setPosition(775, 500);
-  blueSliderLabel->setText("Blue: " + std::to_string(0));
-  blueSliderLabel->setTextSize(15);
-  blueSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(blueSliderLabel);
-
-  blueSlider->onValueChange([this]() {
-    blueSliderLabel->setText(
-        "Blue: " + std::to_string(static_cast<int>(blueSlider->getValue())));
-  });
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::handleSliderChange(tgui::Slider::Ptr changedSlider) {
-  int newTotal = static_cast<int>(
-      redSlider->getValue() + greenSlider->getValue() + blueSlider->getValue());
+  // 3 is RED, 4 is GREEN, 5 is BLUE
 
   // If the new total exceeds the cap of 510, adjust the current slider's value
   if (newTotal > 510) {
@@ -810,10 +559,10 @@ void Egui::handleSliderChange(tgui::Slider::Ptr changedSlider) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createAddFlockButton() {
+void Egui::createAddFlockButton(const TguiParameters &par) {
   addFlockButton = tgui::Button::create("Create Flock");
-  addFlockButton->setPosition(775, 645);
-  addFlockButton->setSize(250, 80);
+  addFlockButton->setPosition(par.posX, par.posY);
+  addFlockButton->setSize(par.width, par.height);
   addFlockButton->getRenderer()->setBackgroundColor(
       sf::Color(128, 128, 128)); // Default "off"
   addFlockButton->getRenderer()->setBackgroundColorHover(
@@ -822,55 +571,53 @@ void Egui::createAddFlockButton() {
       sf::Color(255, 255, 204));
 
   addFlockButton->onPress([this]() {
-    addFlock(
-        static_cast<size_t>(boidsNumberSlider->getValue()),
-        {centerXSlider->getValue() + 15.f, centerYSlider->getValue() + 15.f},
-        sf::Color(static_cast<uint8_t>(redSlider->getValue()),
-                  static_cast<uint8_t>(greenSlider->getValue()),
-                  static_cast<uint8_t>(blueSlider->getValue())));
+    addFlock(static_cast<size_t>(option2Sliders[0]->getValue()),
+             {option2Sliders[1]->getValue() + constants::marginSize,
+              option2Sliders[2]->getValue() + constants::marginSize},
+             sf::Color(static_cast<uint8_t>(option2Sliders[3]->getValue()),
+                       static_cast<uint8_t>(option2Sliders[4]->getValue()),
+                       static_cast<uint8_t>(option2Sliders[5]->getValue())));
   });
 
   gui.add(addFlockButton);
-
-  addFlockButtonLabel = tgui::Label::create(
-      "Number of flocks: " + std::to_string(flockStack_.size()) + "/5");
-  addFlockButtonLabel->setPosition(775, 600);
-  addFlockButtonLabel->setSize(250, 40);
-  addFlockButtonLabel->setTextSize(20);
-  addFlockButtonLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(addFlockButtonLabel); // Add the label to the GUI
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::enableCreateFlockButton() {
   if (flockStack_.size() == 5 || getActiveBoids() > 245) {
-    boidsNumberSlider->setMaximum(5);
-    boidsNumberSlider->setEnabled(false);
-    boidsNumberSliderLabel->setText("Create N boids: Disabled");
-    maxBoidsNumberLabel->setText(
+
+    // index 0 is boids number
+    // index 6 is boids max number
+
+    // option2Sliders[0]->setMaximum(5);
+    option2Sliders[0]->setEnabled(false);
+
+    option2Labels[0]->setText("Create N boids: Disabled");
+    option2Labels[6]->setText(
         "Number of boids: " + std::to_string(getActiveBoids()) + "/250");
 
     addFlockButton->setEnabled(false);
 
   } else if (getActiveBoids() > 150) {
-    boidsNumberSlider->setMaximum(250 - static_cast<float>(getActiveBoids()));
-    boidsNumberSlider->setEnabled(true);
-    boidsNumberSliderLabel->setText(
+    option2Sliders[0]->setMaximum(250 - static_cast<float>(getActiveBoids()));
+    option2Sliders[0]->setEnabled(true);
+    option2Labels[0]->setText(
         "Create N boids: " +
-        std::to_string(static_cast<int>(boidsNumberSlider->getValue())));
-    maxBoidsNumberLabel->setText(
+        std::to_string(static_cast<int>(option2Sliders[0]->getValue())));
+    option2Labels[6]->setText(
         "Number of boids: " + std::to_string(getActiveBoids()) + "/250");
 
     addFlockButton->setEnabled(true);
 
   } else {
-    boidsNumberSlider->setMaximum(100);
-    boidsNumberSlider->setEnabled(true);
-    boidsNumberSliderLabel->setText(
+    option2Sliders[0]->setMaximum(100);
+    option2Sliders[0]->setEnabled(true);
+
+    option2Labels[0]->setText(
         "Create N boids: " +
-        std::to_string(static_cast<int>(boidsNumberSlider->getValue())));
-    maxBoidsNumberLabel->setText(
+        std::to_string(static_cast<int>(option2Sliders[0]->getValue())));
+    option2Labels[6]->setText(
         "Number of boids: " + std::to_string(getActiveBoids()) + "/250");
 
     addFlockButton->setEnabled(true);
@@ -884,124 +631,73 @@ void Egui::enableCreateFlockButton() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 3
 
-void Egui::createParametersSliders() {
-  separationSlider = tgui::EditBoxSlider::create();
-  separationSlider->setPosition(775, 150);
-  separationSlider->setSize(250, 20);
-  separationSlider->setMinimum(0);
-  separationSlider->setMaximum(constants::maxSeparationStrength * 1000);
-  separationSlider->setValue(constants::defaultSeparationStrenght * 1000);
-  separationSlider->setStep(0.1f);
-  gui.add(separationSlider);
+void Egui::createSliderOpt3(const SlidersParameters &params) {
+  auto slider = tgui::EditBoxSlider::create();
+  slider->setPosition(params.posX, params.posY);
+  slider->setSize(params.width, params.height);
+  slider->setMinimum(params.min);
+  slider->setMaximum(params.max);
+  slider->setValue(params.initialValue);
 
-  separationSliderLabel = tgui::Label::create();
-  separationSliderLabel->setPosition(775, 120);
-  separationSliderLabel->setText("Separation Strenght");
-  separationSliderLabel->setTextSize(15);
-  separationSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(separationSliderLabel);
+  gui.add(slider);
 
-  //////////////////////////////////////////////////////////////////////////////////////////
+  option3Sliders.emplace_back(slider);
+}
 
-  separationRangeSlider = tgui::EditBoxSlider::create();
-  separationRangeSlider->setPosition(775, 210);
-  separationRangeSlider->setSize(250, 20);
-  separationRangeSlider->setMinimum(0);
-  separationRangeSlider->setMaximum(constants::maxSeparationRange);
-  separationRangeSlider->setValue(constants::defaultSeparationRange);
-  gui.add(separationRangeSlider);
+//////////////////////////////////////////////////////////////////////////////////////////
 
-  separationRangeSliderLabel = tgui::Label::create();
-  separationRangeSliderLabel->setPosition(775, 180);
-  separationRangeSliderLabel->setText("Separation Range");
-  separationRangeSliderLabel->setTextSize(15);
-  separationRangeSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(separationRangeSliderLabel);
+void Egui::createLabelOpt3(const LabelsParameters &labelsPar,
+                           const std::string &text) {
 
-  //////////////////////////////////////////////////////////////////////////////////////////
+  auto label = tgui::Label::create();
+  label->setPosition(labelsPar.posX, labelsPar.posY);
+  label->setTextSize(labelsPar.textSize);
+  label->getRenderer()->setTextColor(sf::Color::Black);
+  label->setText(text);
+  gui.add(label);
 
-  alignmentSlider = tgui::EditBoxSlider::create();
-  alignmentSlider->setPosition(775, 270);
-  alignmentSlider->setSize(250, 20);
-  alignmentSlider->setMinimum(0);
-  alignmentSlider->setMaximum(constants::maxAlignmentStrength * 1000);
-  alignmentSlider->setValue(constants::defaultAlignmentStrenght * 1000);
-  gui.add(alignmentSlider);
+  option3Labels.emplace_back(label);
+}
 
-  alignmentSliderLabel = tgui::Label::create();
-  alignmentSliderLabel->setPosition(775, 240);
-  alignmentSliderLabel->setText("Alignment Strenght");
-  alignmentSliderLabel->setTextSize(15);
-  alignmentSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(alignmentSliderLabel);
+//////////////////////////////////////////////////////////////////////////////////////////
 
-  //////////////////////////////////////////////////////////////////////////////////////////
+void Egui::setupOpt3() {
+  createSliderOpt3(constants::separationSlider);
+  createSliderOpt3(constants::separationRangeSlider);
+  createSliderOpt3(constants::alignmentSlider);
+  createSliderOpt3(constants::cohesionSlider);
+  createSliderOpt3(constants::interactionSlider);
+  createSliderOpt3(constants::repelSlider);
+  createSliderOpt3(constants::repelRangeSlider);
 
-  cohesionSlider = tgui::EditBoxSlider::create();
-  cohesionSlider->setPosition(775, 330);
-  cohesionSlider->setSize(250, 20);
-  cohesionSlider->setMinimum(0);
-  cohesionSlider->setMaximum(constants::maxCohesionStrength * 1000);
-  cohesionSlider->setValue(constants::defaultCohesionStrenght * 1000);
-  gui.add(cohesionSlider);
+  createLabelOpt3(constants::separationSliderLabel, "Separation Strenght");
+  createLabelOpt3(constants::separationRangeSliderLabel, "Separation Range");
+  createLabelOpt3(constants::alignmentSliderLabel, "Alignment Strenght");
+  createLabelOpt3(constants::cohesionSliderLabel, "Cohesion Strenght");
+  createLabelOpt3(constants::interactionSliderLabel, "Interaction Range");
+  createLabelOpt3(constants::repelSliderLabel, "Repel Strenght");
+  createLabelOpt3(constants::repelRangeSliderLabel, "Repel Range");
 
-  cohesionSliderLabel = tgui::Label::create();
-  cohesionSliderLabel->setPosition(775, 300);
-  cohesionSliderLabel->setText("Cohesion Strenght");
-  cohesionSliderLabel->setTextSize(15);
-  cohesionSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(cohesionSliderLabel);
+  separationSlider = option3Sliders[0];
+  separationRangeSlider = option3Sliders[1];
+  alignmentSlider = option3Sliders[2];
+  cohesionSlider = option3Sliders[3];
+  interactionSlider = option3Sliders[4];
+  repelSlider = option3Sliders[5];
+  repelRangeSlider = option3Sliders[6];
 
-  //////////////////////////////////////////////////////////////////////////////////////////
+  setVisibleOpt3(false);
+}
 
-  interactionSlider = tgui::EditBoxSlider::create();
-  interactionSlider->setPosition(775, 390);
-  interactionSlider->setSize(250, 20);
-  interactionSlider->setMinimum(0);
-  interactionSlider->setMaximum(constants::maxInteractionRange);
-  interactionSlider->setValue(constants::defaultInteractionRange);
-  gui.add(interactionSlider);
+//////////////////////////////////////////////////////////////////////////////////////////
 
-  interactionSliderLabel = tgui::Label::create();
-  interactionSliderLabel->setPosition(775, 360);
-  interactionSliderLabel->setText("Interaction Range");
-  interactionSliderLabel->setTextSize(15);
-  interactionSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(interactionSliderLabel);
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-
-  repelSlider = tgui::EditBoxSlider::create();
-  repelSlider->setPosition(775, 450);
-  repelSlider->setSize(250, 20);
-  repelSlider->setMinimum(0);
-  repelSlider->setMaximum(constants::maxRepelStrenght * 1000);
-  repelSlider->setValue(constants::defaultRepelStrenght * 1000);
-  gui.add(repelSlider);
-
-  repelSliderLabel = tgui::Label::create();
-  repelSliderLabel->setPosition(775, 420);
-  repelSliderLabel->setText("Repel Strenght");
-  repelSliderLabel->setTextSize(15);
-  repelSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(repelSliderLabel);
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-
-  repelRangeSlider = tgui::EditBoxSlider::create();
-  repelRangeSlider->setPosition(775, 510);
-  repelRangeSlider->setSize(250, 20);
-  repelRangeSlider->setMinimum(0);
-  repelRangeSlider->setMaximum(constants::maxRepelRange);
-  repelRangeSlider->setValue(constants::defaultRepelRange);
-  gui.add(repelRangeSlider);
-
-  repelRangeSliderLabel = tgui::Label::create();
-  repelRangeSliderLabel->setPosition(775, 480);
-  repelRangeSliderLabel->setText("Repel range");
-  repelRangeSliderLabel->setTextSize(15);
-  repelRangeSliderLabel->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(repelRangeSliderLabel);
+void Egui::setVisibleOpt3(bool visible) {
+  for (auto &i : option3Sliders) {
+    i->setVisible(visible);
+  }
+  for (auto &i : option3Labels) {
+    i->setVisible(visible);
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1009,36 +705,20 @@ void Egui::createParametersSliders() {
 // Draw Interface
 
 void Egui::drawInterface() {
-  sf::RectangleShape topField(sf::Vector2f(750, 15));
-  topField.setPosition(0, 0);
-  topField.setFillColor(sf::Color::Black);
-  sf::RectangleShape bottomField(sf::Vector2f(750, 15));
-  bottomField.setPosition(0, 735);
-  bottomField.setFillColor(sf::Color::Black);
-  sf::RectangleShape leftField(sf::Vector2f(15, 720));
-  leftField.setPosition(0, 15);
-  leftField.setFillColor(sf::Color::Black);
-  sf::RectangleShape rightField(sf::Vector2f(15, 720));
-  rightField.setPosition(735, 15);
-  rightField.setFillColor(sf::Color::Black);
+  sf::RectangleShape topField(drawRectangle(constants::topMargin));
+  sf::RectangleShape bottomField(drawRectangle(constants::bottomMargin));
+  sf::RectangleShape leftField(drawRectangle(constants::leftMargin));
+  sf::RectangleShape rightField(drawRectangle(constants::rightMargin));
 
   window.draw(topField);
   window.draw(bottomField);
   window.draw(leftField);
   window.draw(rightField);
 
-  sf::RectangleShape topSettings(sf::Vector2f(290, 5));
-  topSettings.setPosition(755, 5);
-  topSettings.setFillColor(sf::Color::Black);
-  sf::RectangleShape bottomSettings(sf::Vector2f(290, 5));
-  bottomSettings.setPosition(755, 740);
-  bottomSettings.setFillColor(sf::Color::Black);
-  sf::RectangleShape leftSettings(sf::Vector2f(5, 740));
-  leftSettings.setPosition(755, 5);
-  leftSettings.setFillColor(sf::Color::Black);
-  sf::RectangleShape rightSettings(sf::Vector2f(5, 740));
-  rightSettings.setPosition(1040, 5);
-  rightSettings.setFillColor(sf::Color::Black);
+  sf::RectangleShape topSettings(drawRectangle(constants::topSettingMargin));
+  sf::RectangleShape bottomSettings(drawRectangle(constants::topSettingMargin));
+  sf::RectangleShape leftSettings(drawRectangle(constants::topSettingMargin));
+  sf::RectangleShape rightSettings(drawRectangle(constants::topSettingMargin));
 
   window.draw(topSettings);
   window.draw(bottomSettings);
@@ -1085,13 +765,17 @@ void Egui::evolveFlock() {
   bodyStack_.resize(flockStack_.size());
   for (size_t i{0}; i < flockStack_.size(); i++) {
     flockStack_[i].updateFlock(
-        flockStack_[i].Separation(separationSlider->getValue() / 1000,
+        flockStack_[i].Separation(separationSlider->getValue() /
+                                      constants::scalingFactor,
                                   separationRangeSlider->getValue()),
-        flockStack_[i].Alignment(alignmentSlider->getValue() / 1000,
+        flockStack_[i].Alignment(alignmentSlider->getValue() /
+                                     constants::scalingFactor,
                                  interactionSlider->getValue()),
-        flockStack_[i].Cohesion(cohesionSlider->getValue() / 1000,
+        flockStack_[i].Cohesion(cohesionSlider->getValue() /
+                                    constants::scalingFactor,
                                 interactionSlider->getValue()),
-        Repel(flockStack_, i, repelSlider->getValue() / 1000,
+        Repel(flockStack_, i,
+              repelSlider->getValue() / constants::scalingFactor,
               repelRangeSlider->getValue()));
   }
 }
@@ -1121,7 +805,7 @@ void Egui::printFlock(size_t i) {
       std::to_string(static_cast<int>(flockStack_[i].getSize())));
   flockSize.setFont(sans);
   flockSize.setCharacterSize(20);
-  flockSize.setOrigin(10,10);
+  flockSize.setOrigin(10, 10);
   flockSize.setFillColor(sf::Color::Black);
   flockSize.setPosition(800, 190 + static_cast<float>(i) * 120);
 

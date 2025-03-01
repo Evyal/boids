@@ -1,24 +1,40 @@
 #ifndef STRUCTS_HPP
 #define STRUCTS_HPP
 
-struct SlidersParameters {
+#include <SFML/Graphics/Color.hpp>
+
+struct TguiParameters {
   float posX{};
   float posY{};
   float width{};
   float height{};
-  int min{};
-  int max{};
-  int initialValue{};
+};
+struct SlidersParameters : TguiParameters {
+  float min{};
+  float max{};
+  float initialValue{};
 };
 
-struct LabelsParamaters {
+struct LabelsParameters {
+  float posX{};
+  float posY{};
+  unsigned textSize{};
+};
+
+struct RectangleParameters {
   float posX{};
   float posY{};
   float width{};
   float height{};
-  int min{};
-  int max{};
-  int initialValue{};
+  sf::Color color{sf::Color::Black};
 };
+
+struct TextParameters {
+    float posX{};
+    float posY{};
+    float width{};
+    float height{};
+    sf::Color color{sf::Color::Black};
+  };
 
 #endif

@@ -2,6 +2,7 @@
 #define EGUI_HPP
 
 #include "flock.hpp"
+#include "structs.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -11,8 +12,10 @@
 #include <TGUI/Widgets/Button.hpp>
 #include <TGUI/Widgets/EditBoxSlider.hpp>
 #include <TGUI/Widgets/Label.hpp>
+#include <TGUI/Widgets/Slider.hpp>
 #include <array>
 #include <cstddef>
+#include <string>
 #include <vector>
 
 class Egui {
@@ -37,16 +40,8 @@ private:
   std::vector<std::vector<sf::CircleShape>> bodyStack_;
 
   ////////////////////////////////////////////////////////////////////////////////
-  // ON OFF BUTTON
-
-  tgui::Button::Ptr switchButton;
-  bool isSwitchOn = false;
-
-  void createSwitchButton();
-  void toggleSwitch();
-
   ////////////////////////////////////////////////////////////////////////////////
-  // THREE WAY SWITCH
+  // THREE WAY SWITCH, SELECT OPTION
 
   tgui::Button::Ptr option1;
   tgui::Button::Ptr option2;
@@ -55,14 +50,27 @@ private:
 
   void createThreeWaySwitch();
   void toggleButtons(tgui::Button::Ptr pressedButton);
+
+  // CONTINUOUS SELECTION
   void selectedOption();
 
+  // SELECTION on CLICK
   void selectedOption1();
   void selectedOption2();
   void selectedOption3();
 
   ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   // OPTION 1
+
+  // ON OFF BUTTON, for MIRROR or TOROIDAL MODE
+  tgui::Button::Ptr switchButton;
+  bool isSwitchOn = false;
+
+  void createSwitchButton();
+  void toggleSwitch();
+
+  ////////////////////////////////////////////////////////////////////////////////
 
   std::vector<tgui::Button::Ptr> dynamicButtons;
   std::vector<std::array<tgui::Label::Ptr, 4>> dynamicLabels;
@@ -70,43 +78,50 @@ private:
   void createDeleteFlockButton(size_t index);
   void deleteDeleteFlockButton(size_t index);
   void repositionButtons();
+
+  ////////////////////////////////////////////////////////////////////////////////
+
   void drawStatistics();
 
   ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   // OPTION 2
 
-  tgui::Slider createSlider(float posX, float posY, float width, float height,
-                            int min, int max, int initialValue);
+  std::vector<tgui::Slider::Ptr> option2Sliders;
+  std::vector<tgui::Label::Ptr> option2Labels;
 
-  tgui::Slider::Ptr boidsNumberSlider;
-  tgui::Slider::Ptr centerXSlider;
-  tgui::Slider::Ptr centerYSlider;
-  tgui::Slider::Ptr redSlider;
-  tgui::Slider::Ptr greenSlider;
-  tgui::Slider::Ptr blueSlider;
+  // CREATE and STORE
+  void createSliderOpt2(const SlidersParameters &sliderPar);
+  void createLabelOpt2(const LabelsParameters &labelsPar);
+  void setLabelTextOpt2(size_t i, const std::string &text);
+
+  void handleColorSliderChange(tgui::Slider::Ptr changedSlider);
+
   tgui::Button::Ptr addFlockButton;
-
-  tgui::Label::Ptr maxBoidsNumberLabel;
-  tgui::Label::Ptr boidsNumberSliderLabel;
-  tgui::Label::Ptr centerXSliderLabel;
-  tgui::Label::Ptr centerYSliderLabel;
-  tgui::Label::Ptr redSliderLabel;
-  tgui::Label::Ptr greenSliderLabel;
-  tgui::Label::Ptr blueSliderLabel;
   tgui::Label::Ptr addFlockButtonLabel;
 
-  void createBoidsNumberSlider();
-  void createCenterXSlider();
-  void createCenterYSlider();
-  void createRedSlider();
-  void createGreenSlider();
-  void createBlueSlider();
-  void handleSliderChange(tgui::Slider::Ptr changedSlider);
-  void createAddFlockButton();
+  void createAddFlockButton(const TguiParameters &par);
   void enableCreateFlockButton();
 
   ////////////////////////////////////////////////////////////////////////////////
+
+  void setupOpt2();
+  void setVisibleOpt2(bool visible);
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   // OPTION 3
+
+  std::vector<tgui::EditBoxSlider::Ptr> option3Sliders;
+  std::vector<tgui::Label::Ptr> option3Labels;
+
+  // 0 separationSlider
+  // 1 separationRangeSlider
+  // 2 alignmentSlider
+  // 3 cohesionSlider
+  // 4 interactionSlider
+  // 5 repelSlider
+  // 6 repelRangeSlider
 
   tgui::EditBoxSlider::Ptr separationSlider;
   tgui::EditBoxSlider::Ptr separationRangeSlider;
@@ -116,16 +131,18 @@ private:
   tgui::EditBoxSlider::Ptr repelSlider;
   tgui::EditBoxSlider::Ptr repelRangeSlider;
 
-  tgui::Label::Ptr separationSliderLabel;
-  tgui::Label::Ptr separationRangeSliderLabel;
-  tgui::Label::Ptr alignmentSliderLabel;
-  tgui::Label::Ptr cohesionSliderLabel;
-  tgui::Label::Ptr interactionSliderLabel;
-  tgui::Label::Ptr repelSliderLabel;
-  tgui::Label::Ptr repelRangeSliderLabel;
-
   void createParametersSliders();
 
+  void createSliderOpt3(const SlidersParameters &sliderPar);
+  void createLabelOpt3(const LabelsParameters &labelsPar,
+                       const std::string &text);
+
+  ////////////////////////////////////////////////////////////////////////////////
+
+  void setupOpt3();
+  void setVisibleOpt3(bool visible);
+
+  ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   // INTERFACE
 
@@ -147,6 +164,7 @@ private:
 
   size_t getActiveBoids();
 
+  ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
 };
 
