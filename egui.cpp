@@ -66,7 +66,7 @@ void Egui::setup() {
 void Egui::run() {
 
   window.setPosition({120, 50});
-  window.setFramerateLimit(50);
+  window.setFramerateLimit(60);
   sf::Event event;
 
   while (window.isOpen()) {
@@ -783,16 +783,26 @@ void Egui::deleteFlock(size_t i) {
 void Egui::evolveFlock() {
   bodyStack_.resize(flockStack_.size());
   for (size_t i{0}; i < flockStack_.size(); i++) {
+    // flockStack_[i].updateFlock(
+    //     flockStack_[i].Separation(separationSlider->getValue() /
+    //                                   constants::scalingFactor,
+    //                               separationRangeSlider->getValue()),
+    //     flockStack_[i].Alignment(alignmentSlider->getValue() /
+    //                                  constants::scalingFactor,
+    //                              interactionSlider->getValue()),
+    //     flockStack_[i].Cohesion(cohesionSlider->getValue() /
+    //                                 constants::scalingFactor,
+    //                             interactionSlider->getValue()),
+    //     Repel(flockStack_, i,
+    //           repelSlider->getValue() / constants::scalingFactor,
+    //           repelRangeSlider->getValue()));
+
     flockStack_[i].updateFlock(
-        flockStack_[i].Separation(separationSlider->getValue() /
-                                      constants::scalingFactor,
-                                  separationRangeSlider->getValue()),
-        flockStack_[i].Alignment(alignmentSlider->getValue() /
-                                     constants::scalingFactor,
-                                 interactionSlider->getValue()),
-        flockStack_[i].Cohesion(cohesionSlider->getValue() /
-                                    constants::scalingFactor,
-                                interactionSlider->getValue()),
+        separationSlider->getValue() / constants::scalingFactor,
+        separationRangeSlider->getValue(),
+        alignmentSlider->getValue() / constants::scalingFactor,
+        cohesionSlider->getValue() / constants::scalingFactor,
+        interactionSlider->getValue(),
         Repel(flockStack_, i,
               repelSlider->getValue() / constants::scalingFactor,
               repelRangeSlider->getValue()));

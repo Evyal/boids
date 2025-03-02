@@ -82,9 +82,14 @@ inline constexpr float maxRepelRange{720.f};
 
 // DEFAULT VALUES
 inline constexpr float defaultSeparationStrenght{0.5f};
-inline constexpr float defaultSeparationRange{12.0f};
-inline constexpr float defaultAlignmentStrenght{0.03f};
+
+// inline constexpr float defaultSeparationRange{12.0f};
+// inline constexpr float defaultAlignmentStrenght{0.03f};
+// inline constexpr float defaultCohesionStrenght{0.015f};
+inline constexpr float defaultSeparationRange{15.0f};
+inline constexpr float defaultAlignmentStrenght{0.015f};
 inline constexpr float defaultCohesionStrenght{0.015f};
+
 inline constexpr float defaultInteractionRange{300.f};
 
 inline constexpr float defaultRepelStrenght{0.3f};

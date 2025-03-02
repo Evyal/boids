@@ -36,21 +36,38 @@ public:
   std::vector<sf::Vector2f> getFlockVelocities() const;
   std::vector<float> getSpeedVector() const;
 
+  // //////////////////////////////////////////////////////////////////////////////////////////
+  // // RULES
+  // // SEPARATION
+  // std::vector<sf::Vector2f> Separation(float separation,
+  //                                      float separationRange) const;
+  // // ALIGNMENT
+  // std::vector<sf::Vector2f> Alignment(float alignment, float interaction)
+  // const;
+  // // COESION
+  // std::vector<sf::Vector2f> Cohesion(float cohesion, float interaction)
+  // const;
+
+  // //////////////////////////////////////////////////////////////////////////////////////////
+  // // UPDATE
+  // void updateFlock(const std::vector<sf::Vector2f> &separationSpeed,
+  //                  const std::vector<sf::Vector2f> &alignmentSpeed,
+  //                  const std::vector<sf::Vector2f> &coesionSpeed,
+  //                  const std::vector<sf::Vector2f> &repelSpeed);
+
   //////////////////////////////////////////////////////////////////////////////////////////
   // RULES
   // SEPARATION
-  std::vector<sf::Vector2f> Separation(float separation,
-                                       float separationRange) const;
+  void Separation(float separation, float separationRange);
   // ALIGNMENT
-  std::vector<sf::Vector2f> Alignment(float alignment, float interaction) const;
+  void Alignment(float alignment, float interaction);
   // COESION
-  std::vector<sf::Vector2f> Cohesion(float cohesion, float interaction) const;
+  void Cohesion(float cohesion, float interaction);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // UPDATE
-  void updateFlock(const std::vector<sf::Vector2f> &separationSpeed,
-                   const std::vector<sf::Vector2f> &alignmentSpeed,
-                   const std::vector<sf::Vector2f> &coesionSpeed,
+  void updateFlock(float separation, float separationRange, float alignment,
+                   float cohesion, float interaction,
                    const std::vector<sf::Vector2f> &repelSpeed);
 };
 
