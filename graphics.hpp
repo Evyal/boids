@@ -5,13 +5,14 @@
 #include "constants.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <cmath>
 
 // DRAW BOID
 
-sf::CircleShape drawCircleBoid(const Boid &boid, sf::Color color);
-sf::CircleShape drawTriangleBoid(const Boid &boid, sf::Color color);
+sf::CircleShape getCircleBoid(const Boid &boid, const sf::Color &color = sf::Color::Black);
+sf::CircleShape getTriangleBoid(const Boid &boid, const sf::Color &color = sf::Color::Black);
 
-sf::RectangleShape drawRectangle(const RectangleParameters &par);
+sf::RectangleShape getRectangle(const RectanglePar &parconst, const sf::Color &color = sf::Color::Black);
 
 #endif

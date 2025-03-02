@@ -4,15 +4,8 @@
 #include "flock.hpp"
 #include "structs.hpp"
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/System/Vector2.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
-#include <TGUI/Vector2.hpp>
-#include <TGUI/Widgets/Button.hpp>
-#include <TGUI/Widgets/EditBoxSlider.hpp>
-#include <TGUI/Widgets/Label.hpp>
-#include <TGUI/Widgets/Slider.hpp>
 #include <array>
 #include <cstddef>
 #include <string>
@@ -48,7 +41,8 @@ private:
   tgui::Button::Ptr option3;
   tgui::Button::Ptr activeButton = nullptr; // Track the active button
 
-  void createThreeWaySwitch();
+  void createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
+                            const TguiPar &button3);
   void toggleButtons(tgui::Button::Ptr pressedButton);
 
   // CONTINUOUS SELECTION
@@ -67,7 +61,7 @@ private:
   tgui::Button::Ptr switchButton;
   bool isSwitchOn = false;
 
-  void createSwitchButton();
+  void createSwitchButton(const TguiPar &par);
   void toggleSwitch();
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -76,12 +70,21 @@ private:
   std::vector<std::array<tgui::Label::Ptr, 4>> dynamicLabels;
 
   void createDeleteFlockButton(size_t index);
+  void createStatisticsLabels(size_t index);
+
   void deleteDeleteFlockButton(size_t index);
   void repositionButtons();
 
   ////////////////////////////////////////////////////////////////////////////////
 
+  void printValue(const LabelsPar &par, int value, size_t index);
+  void printFlockStats(size_t index);
+
   void drawStatistics();
+
+  ////////////////////////////////////////////////////////////////////////////////
+
+  void setVisibleOpt1(bool visible);
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -91,8 +94,8 @@ private:
   std::vector<tgui::Label::Ptr> option2Labels;
 
   // CREATE and STORE
-  void createSliderOpt2(const SlidersParameters &sliderPar);
-  void createLabelOpt2(const LabelsParameters &labelsPar);
+  void createSliderOpt2(const SlidersPar &sliderPar);
+  void createLabelOpt2(const LabelsPar &labelsPar);
   void setLabelTextOpt2(size_t i, const std::string &text);
 
   void handleColorSliderChange(tgui::Slider::Ptr changedSlider);
@@ -100,7 +103,7 @@ private:
   tgui::Button::Ptr addFlockButton;
   tgui::Label::Ptr addFlockButtonLabel;
 
-  void createAddFlockButton(const TguiParameters &par);
+  void createAddFlockButton(const TguiPar &par);
   void enableCreateFlockButton();
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -133,9 +136,8 @@ private:
 
   void createParametersSliders();
 
-  void createSliderOpt3(const SlidersParameters &sliderPar);
-  void createLabelOpt3(const LabelsParameters &labelsPar,
-                       const std::string &text);
+  void createSliderOpt3(const SlidersPar &sliderPar);
+  void createLabelOpt3(const LabelsPar &labelsPar, const std::string &text);
 
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -158,7 +160,6 @@ private:
   void deleteFlock(size_t i);
   void evolveFlock();
   void drawFlocks();
-  void printFlock(size_t i);
 
   ////////////////////////////////////////////////////////////////////////////////
 

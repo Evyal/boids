@@ -9,7 +9,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE BOIDS as CIRCLES
 
-sf::CircleShape drawCircleBoid(const Boid &boid, sf::Color color) {
+sf::CircleShape getCircleBoid(const Boid &boid, const sf::Color &color) {
   sf::CircleShape boidBody{constants::boidSize};
   boidBody.setOrigin(constants::boidSize, constants::boidSize);
   boidBody.setPosition(boid.getPosition().x, boid.getPosition().y);
@@ -20,7 +20,7 @@ sf::CircleShape drawCircleBoid(const Boid &boid, sf::Color color) {
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE BOIDS as TRIANGLES
 
-sf::CircleShape drawTriangleBoid(const Boid &boid, sf::Color color) {
+sf::CircleShape getTriangleBoid(const Boid &boid, const sf::Color &color) {
   sf::CircleShape boidBody(constants::boidSize, 3);
   boidBody.setScale(1, 2);
   boidBody.setFillColor(color);
@@ -35,9 +35,10 @@ sf::CircleShape drawTriangleBoid(const Boid &boid, sf::Color color) {
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE RECTANGLE
 
-sf::RectangleShape drawRectangle(const RectangleParameters &par) {
+sf::RectangleShape getRectangle(const RectanglePar &par,
+                                 const sf::Color &color) {
   sf::RectangleShape rectangle(sf::Vector2f(par.width, par.height));
   rectangle.setPosition(par.posX, par.posY);
-  rectangle.setFillColor(par.color);
+  rectangle.setFillColor(color);
   return rectangle;
 }

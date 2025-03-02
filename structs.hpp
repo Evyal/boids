@@ -3,38 +3,29 @@
 
 #include <SFML/Graphics/Color.hpp>
 
-struct TguiParameters {
+struct TguiPar {
   float posX{};
   float posY{};
   float width{};
   float height{};
 };
-struct SlidersParameters : TguiParameters {
+struct SlidersPar : TguiPar {
   float min{};
   float max{};
   float initialValue{};
 };
 
-struct LabelsParameters {
+struct LabelsPar {
   float posX{};
   float posY{};
   unsigned textSize{};
 };
 
-struct RectangleParameters {
+struct RectanglePar {
   float posX{};
   float posY{};
   float width{};
   float height{};
-  sf::Color color{sf::Color::Black};
 };
-
-struct TextParameters {
-    float posX{};
-    float posY{};
-    float width{};
-    float height{};
-    sf::Color color{sf::Color::Black};
-  };
 
 #endif

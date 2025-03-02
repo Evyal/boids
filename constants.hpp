@@ -92,6 +92,48 @@ inline constexpr float defaultRepelRange{20.0f};
 
 inline constexpr float scalingFactor{1000.0f};
 
+// SELECT OPTION
+
+inline constexpr TguiPar button1{770, 20, 80, 50};
+inline constexpr TguiPar button2{860, 20, 80, 50};
+inline constexpr TguiPar button3{950, 20, 80, 50};
+
+inline const sf::Color onThreeWayBGColor{sf::Color(255, 255, 160)};
+inline const sf::Color onThreeWayBGColorHover{sf::Color(255, 255, 160)};
+
+inline const sf::Color offThreeWayBGColor{sf::Color(128, 128, 128)};
+inline const sf::Color offThreeWayBGColorHover{sf::Color(190, 190, 190)};
+
+inline const sf::Color threeWayBGColorDown{sf::Color(160, 160, 160)};
+
+// OPTION 1
+
+inline constexpr TguiPar toroidalButton{770, 80, 260, 50};
+
+inline const sf::Color onToroidalColor{sf::Color(204, 255, 153)};
+inline const sf::Color onToroidalHover{sf::Color(229, 255, 204)};
+inline const sf::Color onToroidalDown{sf::Color(229, 255, 204)};
+
+inline const sf::Color offToroidalColor{sf::Color(153, 255, 255)};
+inline const sf::Color offToroidalHover{sf::Color(204, 255, 255)};
+inline const sf::Color offToroidalDown{sf::Color(204, 255, 255)};
+
+// DRAW STATISTICS
+
+inline const RectanglePar statsRectangle1{770, 140, 260, 110};
+inline const RectanglePar statsRectangle2{775, 145, 250, 100};
+inline const RectanglePar statsRectangle3{765, 150, 15, 90};
+
+inline constexpr TguiPar deleteFlockButton{1020, 185, 15, 15};
+inline constexpr int distancePerIndex{120};
+
+inline constexpr LabelsPar statisticsLabel{825, 150, 15};
+inline constexpr int labelsDistance{25};
+
+inline constexpr LabelsPar flockSizeLabel{790, 180, 20};
+inline constexpr LabelsPar statisticsValueLabel{975, 145, 20};
+
+// OPTION 2
 // SLIDERS
 
 inline constexpr int slidersPosX{775};
@@ -100,108 +142,93 @@ inline constexpr int slidersHeight{20};
 inline constexpr int colorSliderMax{255};
 inline constexpr int colorSliderTotal{510};
 
-inline constexpr int labelsTextSize{15};
-
-inline constexpr SlidersParameters boidsNumberSlider{
+inline constexpr SlidersPar boidsNumberSlider{
     {slidersPosX, 190, slidersWidth, slidersHeight}, 5, 100, 10};
-inline constexpr SlidersParameters centerXSlider{
+inline constexpr SlidersPar centerXSlider{
     {slidersPosX, 270, slidersWidth, slidersHeight}, 0, 720, 360};
-inline constexpr SlidersParameters centerYSlider{
+inline constexpr SlidersPar centerYSlider{
     {slidersPosX, 330, slidersWidth, slidersHeight}, 0, 720, 360};
-inline constexpr SlidersParameters redSlider{
+inline constexpr SlidersPar redSlider{
     {slidersPosX, 410, slidersWidth, slidersHeight}, 0, colorSliderMax, 0};
-inline constexpr SlidersParameters greenSlider{
+inline constexpr SlidersPar greenSlider{
     {slidersPosX, 470, slidersWidth, slidersHeight}, 0, colorSliderMax, 0};
-inline constexpr SlidersParameters blueSlider{
+inline constexpr SlidersPar blueSlider{
     {slidersPosX, 530, slidersWidth, slidersHeight}, 0, colorSliderMax, 0};
 
-inline constexpr LabelsParameters boidsNumberSliderLabel{slidersPosX, 160,
-                                                         labelsTextSize};
-inline constexpr LabelsParameters centerXSliderLabel{slidersPosX, 240,
-                                                     labelsTextSize};
-inline constexpr LabelsParameters centerYSliderLabel{slidersPosX, 300,
-                                                     labelsTextSize};
-inline constexpr LabelsParameters redSliderLabel{slidersPosX, 380,
-                                                 labelsTextSize};
-inline constexpr LabelsParameters greenSliderLabel{slidersPosX, 440,
-                                                   labelsTextSize};
-inline constexpr LabelsParameters blueSliderLabel{slidersPosX, 500,
-                                                  labelsTextSize};
-inline constexpr LabelsParameters maxBoidsNumberLabel{slidersPosX, 115, 19};
+inline constexpr LabelsPar boidsNumberSliderLabel{slidersPosX, 160, 15};
+inline constexpr LabelsPar centerXSliderLabel{slidersPosX, 240, 15};
+inline constexpr LabelsPar centerYSliderLabel{slidersPosX, 300, 15};
+inline constexpr LabelsPar redSliderLabel{slidersPosX, 380, 15};
+inline constexpr LabelsPar greenSliderLabel{slidersPosX, 440, 15};
+inline constexpr LabelsPar blueSliderLabel{slidersPosX, 500, 15};
+inline constexpr LabelsPar maxBoidsNumberLabel{slidersPosX, 115, 19};
 
-inline constexpr TguiParameters addFlockButton{775, 645, 250, 80};
-inline constexpr LabelsParameters addFlockButtonLabel{775, 600, 20};
+inline constexpr TguiPar addFlockButton{775, 645, 250, 80};
+inline constexpr LabelsPar addFlockButtonLabel{775, 600, 20};
 
 // OPTION 3
 
-inline constexpr SlidersParameters separationSlider{
+inline constexpr SlidersPar separationSlider{
     {slidersPosX, 150, slidersWidth, slidersHeight},
     0,
     maxSeparationStrength *constants::scalingFactor,
     defaultSeparationStrenght *constants::scalingFactor};
 
-inline constexpr SlidersParameters separationRangeSlider{
+inline constexpr SlidersPar separationRangeSlider{
     {slidersPosX, 210, slidersWidth, slidersHeight},
     0,
     maxSeparationRange,
     defaultSeparationRange};
 
-inline constexpr SlidersParameters alignmentSlider{
+inline constexpr SlidersPar alignmentSlider{
     {slidersPosX, 270, slidersWidth, slidersHeight},
     0,
     maxAlignmentStrength *constants::scalingFactor,
     defaultAlignmentStrenght *constants::scalingFactor};
 
-inline constexpr SlidersParameters cohesionSlider{
+inline constexpr SlidersPar cohesionSlider{
     {slidersPosX, 330, slidersWidth, slidersHeight},
     0,
     maxCohesionStrength *constants::scalingFactor,
     defaultCohesionStrenght *constants::scalingFactor};
 
-inline constexpr SlidersParameters interactionSlider{
+inline constexpr SlidersPar interactionSlider{
     {slidersPosX, 390, slidersWidth, slidersHeight},
     0,
     maxInteractionRange,
     defaultInteractionRange};
 
-inline constexpr SlidersParameters repelSlider{
+inline constexpr SlidersPar repelSlider{
     {slidersPosX, 450, slidersWidth, slidersHeight},
     0,
     maxRepelStrenght *constants::scalingFactor,
     defaultRepelStrenght *constants::scalingFactor};
 
-inline constexpr SlidersParameters repelRangeSlider{
+inline constexpr SlidersPar repelRangeSlider{
     {slidersPosX, 510, slidersWidth, slidersHeight},
     0,
     maxRepelRange,
     defaultRepelRange};
 
-inline constexpr LabelsParameters separationSliderLabel{slidersPosX, 120, 15};
-inline constexpr LabelsParameters separationRangeSliderLabel{slidersPosX, 180,
-                                                             15};
-inline constexpr LabelsParameters alignmentSliderLabel{slidersPosX, 240, 15};
-inline constexpr LabelsParameters cohesionSliderLabel{slidersPosX, 300, 15};
-inline constexpr LabelsParameters interactionSliderLabel{slidersPosX, 360, 15};
-inline constexpr LabelsParameters repelSliderLabel{slidersPosX, 420, 15};
-inline constexpr LabelsParameters repelRangeSliderLabel{slidersPosX, 480, 15};
+inline constexpr LabelsPar separationSliderLabel{slidersPosX, 120, 15};
+inline constexpr LabelsPar separationRangeSliderLabel{slidersPosX, 180, 15};
+inline constexpr LabelsPar alignmentSliderLabel{slidersPosX, 240, 15};
+inline constexpr LabelsPar cohesionSliderLabel{slidersPosX, 300, 15};
+inline constexpr LabelsPar interactionSliderLabel{slidersPosX, 360, 15};
+inline constexpr LabelsPar repelSliderLabel{slidersPosX, 420, 15};
+inline constexpr LabelsPar repelRangeSliderLabel{slidersPosX, 480, 15};
 
 // INTERFACE
 
-inline const RectangleParameters topMargin{0, 0, 750, 15, sf::Color::Black};
-inline const RectangleParameters bottomMargin{0, 735, 750, 15,
-                                              sf::Color::Black};
-inline const RectangleParameters leftMargin{0, 15, 15, 720, sf::Color::Black};
-inline const RectangleParameters rightMargin{735, 15, 15, 720,
-                                             sf::Color::Black};
+inline const RectanglePar topMargin{0, 0, 750, 15};
+inline const RectanglePar bottomMargin{0, 735, 750, 15};
+inline const RectanglePar leftMargin{0, 15, 15, 720};
+inline const RectanglePar rightMargin{735, 15, 15, 720};
 
-inline const RectangleParameters topSettingMargin{755, 5, 290, 5,
-                                                   sf::Color::Black};
-inline const RectangleParameters bottomSettingMargin{755, 740, 290, 5,
-                                                      sf::Color::Black};
-inline const RectangleParameters leftSettingMargin{755, 5, 5, 740,
-                                                    sf::Color::Black};
-inline const RectangleParameters rightSettingMargin{1040, 5, 5, 740,
-                                                     sf::Color::Black};
+inline const RectanglePar topSettingMargin{755, 5, 290, 5};
+inline const RectanglePar bottomSettingMargin{755, 740, 290, 5};
+inline const RectanglePar leftSettingMargin{755, 5, 5, 740};
+inline const RectanglePar rightSettingMargin{1040, 5, 5, 740};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////

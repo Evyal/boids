@@ -5,12 +5,8 @@
 #include "random.hpp"
 #include "statistics.hpp"
 #include "structs.hpp"
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/Color.hpp>
-#include <TGUI/Widget.hpp>
-#include <TGUI/Widgets/Button.hpp>
-#include <TGUI/Widgets/Label.hpp>
-#include <TGUI/Widgets/Slider.hpp>
+#include <SFML/Graphics.hpp>
+#include <TGUI/TGUI.hpp>
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -29,22 +25,14 @@ Egui::Egui() : window(sf::VideoMode(1050, 750), "Egui"), gui(window) {}
 
 void Egui::setup() {
 
+  // THE ORDER in WHICH OPTIONS are SET UP is IMPORTANT!!!
+
   sans.loadFromFile("../OpenSans-Regular.ttf");
 
-  createSwitchButton();
-  createThreeWaySwitch();
+  // CREATE OPTIONS
 
-  // OPTION 1
-
-  for (auto &labels : dynamicLabels) {
-    for (size_t i{0}; i < 4; i++) {
-      labels[i]->setVisible(true);
-    }
-  }
-
-  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-    dynamicButtons[i]->setVisible(true);
-  }
+  createThreeWaySwitch(constants::button1, constants::button2,
+                       constants::button3);
 
   // OPTION 2
 
@@ -66,6 +54,11 @@ void Egui::setup() {
            sf::Color{153, 255, 51}); // GREEN
   addFlock(50, {randomFloat(15, 735), randomFloat(15, 735)},
            sf::Color{0, 204, 204}); // CYAN
+
+  // OPTION 1
+
+  createSwitchButton(constants::toroidalButton);
+  setVisibleOpt1(true);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -107,14 +100,133 @@ void Egui::run() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // Sets up the GUI components
 
-void Egui::createSwitchButton() {
+void Egui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
+                                const TguiPar &button3) {
+  // Button 1
+  sf::Color a = constants::offThreeWayBGColor;
+  sf::Color b = constants::offThreeWayBGColorHover;
+  sf::Color c = constants::threeWayBGColorDown;
+
+  option1 = tgui::Button::create("Statistics");
+  option1->setPosition(button1.posX, button1.posY);
+  option1->setSize(button1.width, button1.height);
+  option1->getRenderer()->setBackgroundColor(
+      constants::onThreeWayBGColor); // Default "on"
+  option1->getRenderer()->setBackgroundColorHover(
+      constants::onThreeWayBGColorHover);
+  option1->getRenderer()->setBackgroundColorDown(c);
+
+  option1->onPress([this]() {
+    toggleButtons(option1);
+    selectedOption1();
+  });
+
+  gui.add(option1);
+
+  // Button 2
+  option2 = tgui::Button::create("Create flock");
+  option2->setPosition(button2.posX, button2.posY);
+  option2->setSize(button2.width, button2.height);
+  option2->getRenderer()->setBackgroundColor(a); // Default "off"
+  option2->getRenderer()->setBackgroundColorHover(b);
+  option2->getRenderer()->setBackgroundColorDown(c);
+
+  option2->onPress([this]() {
+    toggleButtons(option2);
+    selectedOption2();
+  });
+
+  gui.add(option2);
+
+  // Button 3
+  option3 = tgui::Button::create("Set\n"
+                                 "parameters");
+  option3->setPosition(button3.posX, button3.posY);
+  option3->setSize(button3.width, button3.height);
+  option3->getRenderer()->setBackgroundColor(a); // Default "off"
+  option3->getRenderer()->setBackgroundColorHover(b);
+  option3->getRenderer()->setBackgroundColorDown(c);
+
+  option3->onPress([this]() {
+    toggleButtons(option3);
+    selectedOption3();
+  });
+
+  gui.add(option3);
+
+  activeButton = option1;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::toggleButtons(tgui::Button::Ptr pressedButton) {
+  // Set all buttons to "off" (gray background)
+  option1->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
+  option2->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
+  option3->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
+
+  option1->getRenderer()->setBackgroundColorHover(
+      constants::offThreeWayBGColorHover);
+  option2->getRenderer()->setBackgroundColorHover(
+      constants::offThreeWayBGColorHover);
+  option3->getRenderer()->setBackgroundColorHover(
+      constants::offThreeWayBGColorHover);
+
+  pressedButton->getRenderer()->setBackgroundColor(
+      constants::onThreeWayBGColor);
+  pressedButton->getRenderer()->setBackgroundColorHover(
+      constants::onThreeWayBGColorHover);
+
+  activeButton = pressedButton;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Updates CONTINUOUSLY to the SELECTED OPTION
+
+void Egui::selectedOption() {
+  if (activeButton == option1) {
+    drawStatistics();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// CHANGES WHAT DO DISPLAY ON CLICK
+
+void Egui::selectedOption1() {
+  setVisibleOpt1(true);
+  setVisibleOpt2(false);
+  setVisibleOpt3(false);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::selectedOption2() {
+  setVisibleOpt1(false);
+  setVisibleOpt2(true);
+  setVisibleOpt3(false);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::selectedOption3() {
+  setVisibleOpt1(false);
+  setVisibleOpt2(false);
+  setVisibleOpt3(true);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+// OPTION 1
+
+void Egui::createSwitchButton(const TguiPar &par) {
   switchButton = tgui::Button::create("Mirror Mode");
-  switchButton->setPosition(770, 80);
-  switchButton->setSize(260, 50);
-  switchButton->getRenderer()->setBackgroundColor(sf::Color(153, 255, 255));
+  switchButton->setPosition(par.posX, par.posY);
+  switchButton->setSize(par.width, par.height);
+  switchButton->getRenderer()->setBackgroundColor(constants::offToroidalColor);
   switchButton->getRenderer()->setBackgroundColorHover(
-      sf::Color(204, 255, 255));
-  switchButton->getRenderer()->setBackgroundColorDown(sf::Color(204, 255, 255));
+      constants::offToroidalHover);
+  switchButton->getRenderer()->setBackgroundColorDown(
+      constants::offToroidalDown);
 
   // Attach the toggleSwitch action to the button
   switchButton->onPress([this]() { toggleSwitch(); });
@@ -129,241 +241,65 @@ void Egui::toggleSwitch() {
 
   if (isSwitchOn) {
     switchButton->setText("Toroidal Mode");
-    switchButton->getRenderer()->setBackgroundColor(sf::Color(204, 255, 153));
+    switchButton->getRenderer()->setBackgroundColor(constants::onToroidalColor);
     switchButton->getRenderer()->setBackgroundColorHover(
-        sf::Color(229, 255, 204));
+        constants::onToroidalHover);
     switchButton->getRenderer()->setBackgroundColorDown(
-        sf::Color(229, 255, 204));
+        constants::onToroidalDown);
     toroidal = true;
   } else {
     switchButton->setText("Mirror Mode");
-    switchButton->getRenderer()->setBackgroundColor(sf::Color(153, 255, 255));
+    switchButton->getRenderer()->setBackgroundColor(
+        constants::offToroidalColor);
     switchButton->getRenderer()->setBackgroundColorHover(
-        sf::Color(204, 255, 255));
+        constants::offToroidalHover);
     switchButton->getRenderer()->setBackgroundColorDown(
-        sf::Color(204, 255, 255));
+        constants::offToroidalDown);
     toroidal = false;
   }
-
-  // Add any action to perform when the switch is toggled
-  //   std::cout << "Switch state: " << (isSwitchOn ? "ON" : "OFF") <<
-  //   std::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::createThreeWaySwitch() {
-  // Button 1
-  option1 = tgui::Button::create("Statistics");
-  option1->setPosition(770, 20);
-  option1->setSize(80, 50);
-  option1->getRenderer()->setBackgroundColor(
-      sf::Color(255, 255, 160)); // Default "on"
-  option1->getRenderer()->setBackgroundColorHover(
-      sf::Color(255, 255, 160)); // Prevent white hover
-  option1->getRenderer()->setBackgroundColorDown(sf::Color(160, 160, 160));
-
-  option1->onPress([this]() {
-    toggleButtons(option1);
-    selectedOption1();
-  });
-
-  activeButton = option1;
-  gui.add(option1);
-
-  // Button 2
-  option2 = tgui::Button::create("Create flock");
-  option2->setPosition(860, 20);
-  option2->setSize(80, 50);
-  option2->getRenderer()->setBackgroundColor(
-      sf::Color(128, 128, 128)); // Default "off"
-  option2->getRenderer()->setBackgroundColorHover(
-      sf::Color(190, 190, 190)); // Prevent white hover
-  option2->getRenderer()->setBackgroundColorDown(sf::Color(160, 160, 160));
-
-  option2->onPress([this]() {
-    toggleButtons(option2);
-    selectedOption2();
-  });
-
-  gui.add(option2);
-
-  // Button 3
-  option3 = tgui::Button::create("Set\n"
-                                 "parameters");
-  option3->setPosition(950, 20);
-  option3->setSize(80, 50);
-  option3->getRenderer()->setBackgroundColor(
-      sf::Color(128, 128, 128)); // Default "off"
-  option3->getRenderer()->setBackgroundColorHover(
-      sf::Color(190, 190, 190)); // Prevent white hover
-  option3->getRenderer()->setBackgroundColorDown(sf::Color(160, 160, 160));
-
-  option3->onPress([this]() {
-    toggleButtons(option3);
-    selectedOption3();
-  });
-
-  gui.add(option3);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::toggleButtons(tgui::Button::Ptr pressedButton) {
-  // Set all buttons to "off" (gray background)
-  option1->getRenderer()->setBackgroundColor(sf::Color(128, 128, 128));
-  option2->getRenderer()->setBackgroundColor(sf::Color(128, 128, 128));
-  option3->getRenderer()->setBackgroundColor(sf::Color(128, 128, 128));
-  option1->getRenderer()->setBackgroundColorHover(
-      sf::Color(190, 190, 190)); // Prevent white hover
-  option2->getRenderer()->setBackgroundColorHover(
-      sf::Color(190, 190, 190)); // Prevent white hover
-  option3->getRenderer()->setBackgroundColorHover(
-      sf::Color(190, 190, 190)); // Prevent white hover
-
-  // Set the active button to "on" (green background)
-  pressedButton->getRenderer()->setBackgroundColor(sf::Color(255, 255, 160));
-  pressedButton->getRenderer()->setBackgroundColorHover(
-      sf::Color(255, 255, 160));
-
-  activeButton = pressedButton;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Updates CONTINUOUSLY to the SELECTED OPTION
-
-void Egui::selectedOption() {
-  if (activeButton == option1) {
-    drawStatistics();
-
-  } else if (activeButton == option2) {
-
-  } else if (activeButton == option3) {
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::selectedOption1() {
-  // OPTION 1 TRUE
-
-  switchButton->setVisible(true);
-
-  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-    dynamicButtons[i]->setVisible(true);
-  }
-
-  for (auto &labels : dynamicLabels) {
-    for (size_t i{0}; i < 4; i++) {
-      labels[i]->setVisible(true);
-    }
-  }
-
-  // OPTION 2 FALSE
-
-  setVisibleOpt2(false);
-
-  // OPTION 3 FALSE
-
-  setVisibleOpt3(false);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::selectedOption2() {
-  // OPTION 1 FALSE
-  switchButton->setVisible(false);
-
-  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-    dynamicButtons[i]->setVisible(false);
-  }
-
-  for (auto &labels : dynamicLabels) {
-    for (size_t i{0}; i < 4; i++) {
-      labels[i]->setVisible(false);
-    }
-  }
-
-  // OPTION 2 TRUE
-
-  setVisibleOpt2(true);
-
-  // OPTION 3 FALSE
-
-  setVisibleOpt3(false);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::selectedOption3() {
-  // OPTION 1 FALSE
-  switchButton->setVisible(false);
-
-  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-    dynamicButtons[i]->setVisible(false);
-  }
-
-  for (auto &labels : dynamicLabels) {
-    for (size_t i{0}; i < 4; i++) {
-      labels[i]->setVisible(false);
-    }
-  }
-
-  // OPTION 2 FALSE
-
-  setVisibleOpt2(false);
-
-  // OPTION 3 TRUE
-
-  setVisibleOpt3(true);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
-// OPTION 1
 
 void Egui::drawStatistics() {
   for (unsigned i{0}; i < flockStack_.size(); i++) {
-    sf::RectangleShape rectangle1(sf::Vector2f(260, 110));
-    rectangle1.setPosition(770, 140 + static_cast<float>(i) * 120);
-    rectangle1.setFillColor(sf::Color::Black);
+    RectanglePar rectangle1par{constants::statsRectangle1};
+    rectangle1par.posY += static_cast<float>(i) * constants::distancePerIndex;
+    sf::RectangleShape rectangle1(getRectangle(rectangle1par));
+
+    RectanglePar rectangle2par{constants::statsRectangle2};
+    rectangle2par.posY += static_cast<float>(i) * constants::distancePerIndex;
+    sf::RectangleShape rectangle2(
+        getRectangle(rectangle2par, sf::Color::White));
+
+    RectanglePar rectangle3par{constants::statsRectangle3};
+    rectangle3par.posY += static_cast<float>(i) * constants::distancePerIndex;
+    sf::RectangleShape rectangle3(
+        getRectangle(rectangle3par, flockStack_[i].getFlockColor()));
+
     window.draw(rectangle1);
-
-    sf::RectangleShape rectangle(sf::Vector2f(250, 100));
-    rectangle.setPosition(775, 145 + static_cast<float>(i) * 120);
-    window.draw(rectangle);
-
-    sf::RectangleShape rectangle2(sf::Vector2f(15, 90));
-    rectangle2.setPosition(765, 150 + static_cast<float>(i) * 120);
-    rectangle2.setFillColor(flockStack_[i].getFlockColor());
     window.draw(rectangle2);
+    window.draw(rectangle3);
 
-    // sf::CircleShape circleBlack(18);
-    // circleBlack.setOrigin(18, 18);
-    // circleBlack.setPosition(805, 195 + static_cast<float>(i) * 120);
-    // circleBlack.setFillColor(sf::Color::Black);
-    // window.draw(circleBlack);
-
-    // sf::CircleShape circle(17);
-    // circle.setOrigin(17, 17);
-    // circle.setPosition(805, 195 + static_cast<float>(i) * 120);
-    // circle.setFillColor(flockStack_[i].getFlockColor());
-    // window.draw(circle);
-
-    printFlock(i);
+    printFlockStats(i);
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::createDeleteFlockButton(size_t index) {
+  float posX{constants::deleteFlockButton.posX};
+  float posY{constants::deleteFlockButton.posY};
+  float width{constants::deleteFlockButton.width};
+  float height{constants::deleteFlockButton.height};
+
   auto button = tgui::Button::create(std::to_string(index + 1));
-  button->setPosition(1020, 185 + index * 120);
-  button->setSize(15, 15);
+  button->setPosition(
+      posX, posY + static_cast<float>(index * constants::distancePerIndex));
+  button->setSize(width, height);
   button->getRenderer()->setBackgroundColor(sf::Color::Red);
   button->onPress([this, index = dynamicButtons.size()]() {
-    std::cout << "Button " << index + 1 << " pressed!\n";
     deleteFlock(index);
     deleteDeleteFlockButton(index);
   });
@@ -371,27 +307,93 @@ void Egui::createDeleteFlockButton(size_t index) {
   gui.add(button);
   dynamicButtons.push_back(button);
 
+  createStatisticsLabels(index);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::createStatisticsLabels(size_t index) {
+  float posX{constants::statisticsLabel.posX};
+  float posY{constants::statisticsLabel.posY};
+  unsigned textSize{constants::statisticsLabel.textSize};
+
   auto label0 = tgui::Label::create("Mean Distance: ");
-  label0->setTextSize(15);
-  label0->setPosition({825, 150 + index * 120});
+  label0->setTextSize(textSize);
+  label0->setPosition(
+      {posX, posY + static_cast<float>(index * constants::distancePerIndex)});
   gui.add(label0);
 
   auto label1 = tgui::Label::create("Distance std dev: ");
-  label1->setTextSize(15);
-  label1->setPosition({825, 170 + index * 120});
+  label1->setTextSize(textSize);
+  label1->setPosition(
+      {posX, posY + constants::labelsDistance +
+                 static_cast<float>(index * constants::distancePerIndex)});
   gui.add(label1);
 
   auto label2 = tgui::Label::create("Mean Speed: ");
-  label2->setTextSize(15);
-  label2->setPosition({825, 200 + index * 120});
+  label2->setTextSize(textSize);
+  label2->setPosition(
+      {posX, posY + 2 * constants::labelsDistance +
+                 static_cast<float>(index * constants::distancePerIndex)});
   gui.add(label2);
 
   auto label3 = tgui::Label::create("Speed std dev: ");
-  label3->setTextSize(15);
-  label3->setPosition({825, 220 + index * 120});
+  label3->setTextSize(textSize);
+  label3->setPosition(
+      {posX, posY + 3 * constants::labelsDistance +
+                 static_cast<float>(index * constants::distancePerIndex)});
   gui.add(label3);
 
   dynamicLabels.push_back({label0, label1, label2, label3});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::printValue(const LabelsPar &par, int value, size_t index) {
+  sf::Text text;
+
+  text.setString(std::to_string(value));
+  text.setFont(sans);
+  text.setCharacterSize(par.textSize);
+  text.setFillColor(sf::Color::Black);
+  text.setPosition(par.posX, par.posY + static_cast<float>(index) *
+                                            constants::distancePerIndex);
+
+  window.draw(text);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::printFlockStats(size_t index) {
+
+  int flockSize{static_cast<int>(flockStack_[index].getSize())};
+  printValue(constants::flockSizeLabel, flockSize, index);
+
+  LabelsPar par{constants::statisticsValueLabel};
+
+  float meanDistanceValue{calculateMean(
+      calculateDistances(flockStack_[index].getFlockPositions()))};
+  int meanDistance{static_cast<int>(meanDistanceValue)};
+  printValue(par, meanDistance, index);
+
+  par.posY += constants::labelsDistance;
+
+  int standardDeviation{static_cast<int>(calculateStandardDeviation(
+      calculateDistances(flockStack_[index].getFlockPositions()),
+      meanDistanceValue))};
+  printValue(par, standardDeviation, index);
+
+  par.posY += constants::labelsDistance;
+
+  float meanSpeedValue{flockStack_[index].getMeanSpeed()};
+  int meanSpeed{static_cast<int>(meanSpeedValue)};
+  printValue(par, meanSpeed, index);
+
+  par.posY += constants::labelsDistance;
+
+  int SpeedStandardDeviation{static_cast<int>(calculateStandardDeviation(
+      flockStack_[index].getSpeedVector(), meanSpeedValue))};
+  printValue(par, SpeedStandardDeviation, index);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -415,8 +417,6 @@ void Egui::deleteDeleteFlockButton(size_t index) {
   if (dynamicButtons.size() > 0) {
     repositionButtons();
   }
-
-  // std::cout << "Button " << index + 1 << " removed successfully.\n";
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -424,20 +424,48 @@ void Egui::deleteDeleteFlockButton(size_t index) {
 void Egui::repositionButtons() {
   for (size_t i = 0; i < dynamicButtons.size(); ++i) {
     dynamicButtons[i]->setText(std::to_string(i + 1));
-    dynamicButtons[i]->setPosition(1020, 185 + i * 120);
+    dynamicButtons[i]->setPosition(
+        constants::deleteFlockButton.posX,
+        constants::deleteFlockButton.posY +
+            static_cast<float>(i * constants::distancePerIndex));
     dynamicButtons[i]->onPress.disconnectAll();
     dynamicButtons[i]->onPress([this, index = i]() {
-      // std::cout << "Button " << index + 1 << " pressed!\n";
       deleteFlock(index);
       deleteDeleteFlockButton(index);
     });
 
-    // CREATE CONSTANTS, please
+    dynamicLabels[i][0]->setPosition(
+        {constants::statisticsLabel.posX,
+         constants::statisticsLabel.posY +
+             static_cast<float>(i * constants::distancePerIndex)});
+    dynamicLabels[i][1]->setPosition(
+        {constants::statisticsLabel.posX,
+         constants::statisticsLabel.posY +
+             static_cast<float>(i * constants::distancePerIndex)});
+    dynamicLabels[i][2]->setPosition(
+        {constants::statisticsLabel.posX,
+         constants::statisticsLabel.posY +
+             static_cast<float>(i * constants::distancePerIndex)});
+    dynamicLabels[i][3]->setPosition(
+        {constants::statisticsLabel.posX,
+         constants::statisticsLabel.posY +
+             static_cast<float>(i * constants::distancePerIndex)});
+  }
+}
 
-    dynamicLabels[i][0]->setPosition({825, 150 + i * 120});
-    dynamicLabels[i][1]->setPosition({825, 170 + i * 120});
-    dynamicLabels[i][2]->setPosition({825, 200 + i * 120});
-    dynamicLabels[i][3]->setPosition({825, 220 + i * 120});
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::setVisibleOpt1(bool visible) {
+  switchButton->setVisible(visible);
+
+  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
+    dynamicButtons[i]->setVisible(visible);
+  }
+
+  for (auto &labels : dynamicLabels) {
+    for (size_t i{0}; i < 4; i++) {
+      labels[i]->setVisible(visible);
+    }
   }
 }
 
@@ -445,7 +473,7 @@ void Egui::repositionButtons() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 2
 
-void Egui::createSliderOpt2(const SlidersParameters &sliderPar) {
+void Egui::createSliderOpt2(const SlidersPar &sliderPar) {
 
   auto slider = tgui::Slider::create(static_cast<float>(sliderPar.min),
                                      static_cast<float>(sliderPar.max));
@@ -459,7 +487,7 @@ void Egui::createSliderOpt2(const SlidersParameters &sliderPar) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createLabelOpt2(const LabelsParameters &labelsPar) {
+void Egui::createLabelOpt2(const LabelsPar &labelsPar) {
 
   auto label = tgui::Label::create();
   label->setPosition(labelsPar.posX, labelsPar.posY);
@@ -559,7 +587,7 @@ void Egui::handleColorSliderChange(tgui::Slider::Ptr changedSlider) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createAddFlockButton(const TguiParameters &par) {
+void Egui::createAddFlockButton(const TguiPar &par) {
   addFlockButton = tgui::Button::create("Create Flock");
   addFlockButton->setPosition(par.posX, par.posY);
   addFlockButton->setSize(par.width, par.height);
@@ -631,7 +659,7 @@ void Egui::enableCreateFlockButton() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 3
 
-void Egui::createSliderOpt3(const SlidersParameters &params) {
+void Egui::createSliderOpt3(const SlidersPar &params) {
   auto slider = tgui::EditBoxSlider::create();
   slider->setPosition(params.posX, params.posY);
   slider->setSize(params.width, params.height);
@@ -646,7 +674,7 @@ void Egui::createSliderOpt3(const SlidersParameters &params) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createLabelOpt3(const LabelsParameters &labelsPar,
+void Egui::createLabelOpt3(const LabelsPar &labelsPar,
                            const std::string &text) {
 
   auto label = tgui::Label::create();
@@ -705,20 +733,20 @@ void Egui::setVisibleOpt3(bool visible) {
 // Draw Interface
 
 void Egui::drawInterface() {
-  sf::RectangleShape topField(drawRectangle(constants::topMargin));
-  sf::RectangleShape bottomField(drawRectangle(constants::bottomMargin));
-  sf::RectangleShape leftField(drawRectangle(constants::leftMargin));
-  sf::RectangleShape rightField(drawRectangle(constants::rightMargin));
+  sf::RectangleShape topField(getRectangle(constants::topMargin));
+  sf::RectangleShape bottomField(getRectangle(constants::bottomMargin));
+  sf::RectangleShape leftField(getRectangle(constants::leftMargin));
+  sf::RectangleShape rightField(getRectangle(constants::rightMargin));
 
   window.draw(topField);
   window.draw(bottomField);
   window.draw(leftField);
   window.draw(rightField);
 
-  sf::RectangleShape topSettings(drawRectangle(constants::topSettingMargin));
-  sf::RectangleShape bottomSettings(drawRectangle(constants::topSettingMargin));
-  sf::RectangleShape leftSettings(drawRectangle(constants::topSettingMargin));
-  sf::RectangleShape rightSettings(drawRectangle(constants::topSettingMargin));
+  sf::RectangleShape topSettings(getRectangle(constants::topSettingMargin));
+  sf::RectangleShape bottomSettings(getRectangle(constants::topSettingMargin));
+  sf::RectangleShape leftSettings(getRectangle(constants::topSettingMargin));
+  sf::RectangleShape rightSettings(getRectangle(constants::topSettingMargin));
 
   window.draw(topSettings);
   window.draw(bottomSettings);
@@ -789,75 +817,10 @@ void Egui::drawFlocks() {
 
     for (size_t j{0}; j < flockStack_[i].getSize(); j++) {
       bodyStack_[i].emplace_back(
-          drawTriangleBoid(flockStack_[i].getBoid(j), color));
+          getTriangleBoid(flockStack_[i].getBoid(j), color));
       window.draw(bodyStack_[i][j]);
     }
   }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::printFlock(size_t i) {
-
-  sf::Text flockSize;
-
-  flockSize.setString(
-      std::to_string(static_cast<int>(flockStack_[i].getSize())));
-  flockSize.setFont(sans);
-  flockSize.setCharacterSize(20);
-  flockSize.setOrigin(10, 10);
-  flockSize.setFillColor(sf::Color::Black);
-  flockSize.setPosition(800, 190 + static_cast<float>(i) * 120);
-
-  window.draw(flockSize);
-
-  sf::Text meanDistance;
-
-  float meanDistanceValue{
-      calculateMean(calculateDistances(flockStack_[i].getFlockPositions()))};
-  meanDistance.setString(std::to_string(static_cast<int>(meanDistanceValue)));
-  meanDistance.setFont(sans);
-  meanDistance.setCharacterSize(20);
-  meanDistance.setFillColor(sf::Color::Black);
-  meanDistance.setPosition(975, 145.f + static_cast<float>(i) * 120);
-
-  window.draw(meanDistance);
-
-  sf::Text standardDeviation;
-
-  standardDeviation.setString(
-      std::to_string(static_cast<int>(calculateStandardDeviation(
-          calculateDistances(flockStack_[i].getFlockPositions()),
-          meanDistanceValue))));
-  standardDeviation.setFont(sans);
-  standardDeviation.setCharacterSize(20);
-  standardDeviation.setFillColor(sf::Color::Black);
-  standardDeviation.setPosition(975, 165.f + static_cast<float>(i) * 120);
-
-  window.draw(standardDeviation);
-
-  sf::Text meanSpeed;
-
-  float meanSpeedValue{flockStack_[i].getMeanSpeed()};
-  meanSpeed.setString(std::to_string(static_cast<int>(meanSpeedValue)));
-  meanSpeed.setFont(sans);
-  meanSpeed.setCharacterSize(20);
-  meanSpeed.setFillColor(sf::Color::Black);
-  meanSpeed.setPosition(975, 195.f + static_cast<float>(i) * 120);
-
-  window.draw(meanSpeed);
-
-  sf::Text SpeedStandardDeviation;
-
-  SpeedStandardDeviation.setString(
-      std::to_string(static_cast<int>(calculateStandardDeviation(
-          flockStack_[i].getSpeedVector(), meanSpeedValue))));
-  SpeedStandardDeviation.setFont(sans);
-  SpeedStandardDeviation.setCharacterSize(20);
-  SpeedStandardDeviation.setFillColor(sf::Color::Black);
-  SpeedStandardDeviation.setPosition(975, 215.f + static_cast<float>(i) * 120);
-
-  window.draw(SpeedStandardDeviation);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
