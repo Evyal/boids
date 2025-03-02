@@ -264,17 +264,19 @@ void Egui::toggleSwitch() {
 
 void Egui::drawStatistics() {
   for (unsigned i{0}; i < flockStack_.size(); i++) {
+    float posIndex{static_cast<float>(i) * constants::distancePerIndex};
+
     RectanglePar rectangle1par{constants::statsRectangle1};
-    rectangle1par.posY += static_cast<float>(i) * constants::distancePerIndex;
+    rectangle1par.posY += posIndex;
     sf::RectangleShape rectangle1(getRectangle(rectangle1par));
 
     RectanglePar rectangle2par{constants::statsRectangle2};
-    rectangle2par.posY += static_cast<float>(i) * constants::distancePerIndex;
+    rectangle2par.posY += posIndex;
     sf::RectangleShape rectangle2(
         getRectangle(rectangle2par, sf::Color::White));
 
     RectanglePar rectangle3par{constants::statsRectangle3};
-    rectangle3par.posY += static_cast<float>(i) * constants::distancePerIndex;
+    rectangle3par.posY += posIndex;
     sf::RectangleShape rectangle3(
         getRectangle(rectangle3par, flockStack_[i].getFlockColor()));
 
@@ -316,32 +318,26 @@ void Egui::createStatisticsLabels(size_t index) {
   float posX{constants::statisticsLabel.posX};
   float posY{constants::statisticsLabel.posY};
   unsigned textSize{constants::statisticsLabel.textSize};
+  float posIndex{static_cast<float>(index * constants::distancePerIndex)};
 
   auto label0 = tgui::Label::create("Mean Distance: ");
   label0->setTextSize(textSize);
-  label0->setPosition(
-      {posX, posY + static_cast<float>(index * constants::distancePerIndex)});
+  label0->setPosition({posX, posY + posIndex});
   gui.add(label0);
 
   auto label1 = tgui::Label::create("Distance std dev: ");
   label1->setTextSize(textSize);
-  label1->setPosition(
-      {posX, posY + constants::labelsDistance +
-                 static_cast<float>(index * constants::distancePerIndex)});
+  label1->setPosition({posX, posY + constants::labelsDistance + posIndex});
   gui.add(label1);
 
   auto label2 = tgui::Label::create("Mean Speed: ");
   label2->setTextSize(textSize);
-  label2->setPosition(
-      {posX, posY + 2 * constants::labelsDistance +
-                 static_cast<float>(index * constants::distancePerIndex)});
+  label2->setPosition({posX, posY + 2 * constants::labelsDistance + posIndex});
   gui.add(label2);
 
   auto label3 = tgui::Label::create("Speed std dev: ");
   label3->setTextSize(textSize);
-  label3->setPosition(
-      {posX, posY + 3 * constants::labelsDistance +
-                 static_cast<float>(index * constants::distancePerIndex)});
+  label3->setPosition({posX, posY + 3 * constants::labelsDistance + posIndex});
   gui.add(label3);
 
   dynamicLabels.push_back({label0, label1, label2, label3});
@@ -399,7 +395,7 @@ void Egui::printFlockStats(size_t index) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::deleteDeleteFlockButton(size_t index) {
-  if (index >= static_cast<size_t>(dynamicButtons.size())) {
+  if (index >= dynamicButtons.size()) {
     std::cout << "Invalid button index: " << index << "\n";
     return;
   }
@@ -422,34 +418,30 @@ void Egui::deleteDeleteFlockButton(size_t index) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::repositionButtons() {
+
   for (size_t i = 0; i < dynamicButtons.size(); ++i) {
+    float posIndex{static_cast<float>(i * constants::distancePerIndex)};
+
     dynamicButtons[i]->setText(std::to_string(i + 1));
-    dynamicButtons[i]->setPosition(
-        constants::deleteFlockButton.posX,
-        constants::deleteFlockButton.posY +
-            static_cast<float>(i * constants::distancePerIndex));
+    dynamicButtons[i]->setPosition(constants::deleteFlockButton.posX,
+                                   constants::deleteFlockButton.posY +
+                                       posIndex);
     dynamicButtons[i]->onPress.disconnectAll();
-    dynamicButtons[i]->onPress([this, index = i]() {
-      deleteFlock(index);
-      deleteDeleteFlockButton(index);
+    dynamicButtons[i]->onPress([this, i]() {
+      deleteFlock(i);
+      deleteDeleteFlockButton(i);
     });
 
-    dynamicLabels[i][0]->setPosition(
-        {constants::statisticsLabel.posX,
-         constants::statisticsLabel.posY +
-             static_cast<float>(i * constants::distancePerIndex)});
+    float posX{constants::statisticsLabel.posX};
+    float posY{constants::statisticsLabel.posY};
+
+    dynamicLabels[i][0]->setPosition({posX, posY + posIndex});
     dynamicLabels[i][1]->setPosition(
-        {constants::statisticsLabel.posX,
-         constants::statisticsLabel.posY +
-             static_cast<float>(i * constants::distancePerIndex)});
+        {posX, posY + constants::labelsDistance + posIndex});
     dynamicLabels[i][2]->setPosition(
-        {constants::statisticsLabel.posX,
-         constants::statisticsLabel.posY +
-             static_cast<float>(i * constants::distancePerIndex)});
+        {posX, posY + constants::labelsDistance * 2 + posIndex});
     dynamicLabels[i][3]->setPosition(
-        {constants::statisticsLabel.posX,
-         constants::statisticsLabel.posY +
-             static_cast<float>(i * constants::distancePerIndex)});
+        {posX, posY + constants::labelsDistance * 3 + posIndex});
   }
 }
 
@@ -475,11 +467,10 @@ void Egui::setVisibleOpt1(bool visible) {
 
 void Egui::createSliderOpt2(const SlidersPar &sliderPar) {
 
-  auto slider = tgui::Slider::create(static_cast<float>(sliderPar.min),
-                                     static_cast<float>(sliderPar.max));
+  auto slider = tgui::Slider::create(sliderPar.min, sliderPar.max);
   slider->setPosition(sliderPar.posX, sliderPar.posY);
   slider->setSize(sliderPar.width, sliderPar.height);
-  slider->setValue(static_cast<float>(sliderPar.initialValue));
+  slider->setValue(sliderPar.initialValue);
   gui.add(slider);
 
   option2Sliders.emplace_back(slider);
