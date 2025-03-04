@@ -14,26 +14,46 @@ TEST_CASE("TESTING CLASS FLOCK") {
   //////////////////////////////////////////////////////////////////////////////////////////
   // GETTERS
 
-  SUBCASE("TESTING GETTERS") {
-    sf::Vector2f center{375, 375};
-    Boid b1{{0, 0}, {0, 0}};
-    Boid b2{{10, 10}, {0, 0}};
-    Boid b3{{20, 10}, {0, 0}};
-    Boid b4{{10, 20}, {0, 0}};
-    Boid b5{{20, 20}, {0, 0}};
+  SUBCASE("TESTING CONSTRUCTORS and GETTERS") {
+    // sf::Vector2f center{375, 375};
 
-    Flock flock{{b1, b2, b3, b4, b5}, sf::Color::Black};
+    Boid b1{{0.f, 0.f}, {0.f, 0.f}};
+    Boid b2{{10.f, 10.f}, {0.f, 0.f}};
+    Boid b3{{20.f, 10.f}, {0.f, 15.f}};
+    Boid b4{{10.f, 20.f}, {10.f, 0.f}};
+    Boid b5{{20.f, 20.f}, {0.f, 10.f}};
 
-    CHECK(flock.getBoid(0).getPosition().x == 0);
-    CHECK(flock.getBoid(0).getPosition().y == 0);
-    CHECK(flock.getBoid(1).getPosition().x == 10);
-    CHECK(flock.getBoid(1).getPosition().y == 10);
-    CHECK(flock.getBoid(2).getPosition().x == 20);
-    CHECK(flock.getBoid(2).getPosition().y == 10);
-    CHECK(flock.getBoid(3).getPosition().x == 10);
-    CHECK(flock.getBoid(3).getPosition().y == 20);
-    CHECK(flock.getBoid(4).getPosition().x == 20);
-    CHECK(flock.getBoid(4).getPosition().y == 20);
+    Flock flock1{};
+
+    CHECK(flock1.getSize() == 0);
+    CHECK(flock1.getFlockColor() == sf::Color::Black);
+
+    Flock flock2{{b1, b2}};
+
+    CHECK(flock2.getSize() == 2);
+    CHECK(flock2.getFlockColor() == sf::Color::Black);
+
+    Flock flock3{{b1, b2, b3, b4, b5}, sf::Color::Red};
+
+    CHECK(flock3.getBoid(0).getPosition().x == 0.f);
+    CHECK(flock3.getBoid(0).getPosition().y == 0.f);
+    CHECK(flock3.getBoid(1).getPosition().x == 10.f);
+    CHECK(flock3.getBoid(1).getPosition().y == 10.f);
+    CHECK(flock3.getBoid(2).getPosition().x == 20.f);
+    CHECK(flock3.getBoid(2).getPosition().y == 10.f);
+    CHECK(flock3.getBoid(3).getPosition().x == 10.f);
+    CHECK(flock3.getBoid(3).getPosition().y == 20.f);
+    CHECK(flock3.getBoid(4).getPosition().x == 20.f);
+    CHECK(flock3.getBoid(4).getPosition().y == 20.f);
+
+    CHECK(flock3.getSize() == 5);
+    CHECK(flock3.getFlockColor() == sf::Color::Red);
+
+    // CHECK(flock3.getMeanPosition().x == 12.f);
+    // CHECK(flock3.getMeanPosition().y == 12.f);
+    // CHECK(flock3.getMeanVelocity().x == 2.f);
+    // CHECK(flock3.getMeanVelocity().y == 5.f);
+    CHECK(flock3.getMeanSpeed() == 7.f);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////

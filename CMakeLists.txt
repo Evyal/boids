@@ -22,22 +22,12 @@ string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-o
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 find_package(TGUI 1 REQUIRED)
 
-# Create a library with all source files except main.cpp.
-set(SRC_FILES
-    egui.cpp
-    statistics.cpp
-    graphics.cpp
-    random.cpp
-    boid.cpp
-    flock.cpp
-)
-add_library(EvyalBoids_lib ${SRC_FILES})
-target_link_libraries(EvyalBoids_lib PUBLIC sfml-graphics TGUI::TGUI)
-target_include_directories(EvyalBoids_lib PUBLIC ${CMAKE_SOURCE_DIR})
+add_executable(EvyalBoids egui.cpp statistics.cpp graphics.cpp random.cpp boid.cpp flock.cpp main.cpp)
 
-# Build the main executable using the library and main.cpp.
-add_executable(boids main.cpp)
-target_link_libraries(boids PRIVATE EvyalBoids_lib)
+target_link_libraries(EvyalBoids sfml-graphics sfml-window sfml-system TGUI::TGUI)
 
 # Include the testing subdirectory.
-add_subdirectory(testing)
+option(BUILD_TESTS "Build the tests executable" ON)
+if(BUILD_TESTS)
+    add_subdirectory(testing)
+endif()

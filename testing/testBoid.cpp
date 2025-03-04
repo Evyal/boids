@@ -19,22 +19,22 @@ TEST_CASE("TESTING CLASS BOID") {
     Boid b1{{0, 0}, {0, 0}};
     Boid b2{{1, 2}, {3, 4}};
 
-    CHECK(b1.getPosition().x == 0);
-    CHECK(b1.getPosition().y == 0);
+    CHECK(b1.getPosition().x == 0.f);
+    CHECK(b1.getPosition().y == 0.f);
 
-    CHECK(b2.getPosition().x == 1);
-    CHECK(b2.getPosition().y == 2);
+    CHECK(b2.getPosition().x == 1.f);
+    CHECK(b2.getPosition().y == 2.f);
 
-    CHECK(b1.getVelocity().x == 0);
-    CHECK(b1.getVelocity().y == 0);
+    CHECK(b1.getVelocity().x == 0.f);
+    CHECK(b1.getVelocity().y == 0.f);
 
-    CHECK(b1.getVelocity().x == 0);
-    CHECK(b1.getVelocity().y == 0);
-    CHECK(b1.getSpeed() == 0);
+    CHECK(b1.getVelocity().x == 0.f);
+    CHECK(b1.getVelocity().y == 0.f);
+    CHECK(b1.getSpeed() == 0.f);
 
-    CHECK(b2.getVelocity().x == 3);
-    CHECK(b2.getVelocity().y == 4);
-    CHECK(b2.getSpeed() == 5);
+    CHECK(b2.getVelocity().x == 3.f);
+    CHECK(b2.getVelocity().y == 4.f);
+    CHECK(b2.getSpeed() == 5.f);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -48,33 +48,33 @@ TEST_CASE("TESTING CLASS BOID") {
     b1.setPosition({3, 3});
     b2.setPosition({3, 3});
 
-    CHECK(b1.getPosition().x == 3);
-    CHECK(b1.getPosition().y == 3);
+    CHECK(b1.getPosition().x == 3.f);
+    CHECK(b1.getPosition().y == 3.f);
 
-    CHECK(b2.getPosition().x == 3);
-    CHECK(b2.getPosition().y == 3);
+    CHECK(b2.getPosition().x == 3.f);
+    CHECK(b2.getPosition().y == 3.f);
 
     b1.setVelocity({3, 4});
     b2.setVelocity({0, 0});
 
-    CHECK(b1.getVelocity().x == 3);
-    CHECK(b1.getVelocity().y == 4);
-    CHECK(b1.getSpeed() == 5);
+    CHECK(b1.getVelocity().x == 3.f);
+    CHECK(b1.getVelocity().y == 4.f);
+    CHECK(b1.getSpeed() == 5.f);
 
-    CHECK(b2.getVelocity().x == 0);
-    CHECK(b2.getVelocity().y == 0);
-    CHECK(b2.getSpeed() == 0);
+    CHECK(b2.getVelocity().x == 0.f);
+    CHECK(b2.getVelocity().y == 0.f);
+    CHECK(b2.getSpeed() == 0.f);
 
     b1 += {2., 8};
     b2 += {3., 4};
 
-    CHECK(b1.getVelocity().x == 5);
-    CHECK(b1.getVelocity().y == 12);
-    CHECK(b1.getSpeed() == 13);
+    CHECK(b1.getVelocity().x == 5.f);
+    CHECK(b1.getVelocity().y == 12.f);
+    CHECK(b1.getSpeed() == 13.f);
 
-    CHECK(b2.getVelocity().x == 3);
-    CHECK(b2.getVelocity().y == 4);
-    CHECK(b2.getSpeed() == 5);
+    CHECK(b2.getVelocity().x == 3.f);
+    CHECK(b2.getVelocity().y == 4.f);
+    CHECK(b2.getSpeed() == 5.f);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -85,12 +85,12 @@ TEST_CASE("TESTING CLASS BOID") {
     Boid b1{{0, 0}, {0, 0}};
     Boid b2{{0, 0}, {0, 0}};
 
-    CHECK(distance(b1, b2) == 0);
+    CHECK(distance(b1, b2) == 0.f);
 
     b1.setPosition({0, 0});
     b2.setPosition({3, 4});
 
-    CHECK(distance(b1, b2) == 5);
+    CHECK(distance(b1, b2) == 5.f);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -108,10 +108,10 @@ TEST_CASE("TESTING CLASS BOID") {
     checkMinimumSpeed(b2);
 
     CHECK(b1.getVelocity().x == constants::maxBoidSpeed);
-    CHECK(b1.getVelocity().y == 0);
+    CHECK(b1.getVelocity().y == 0.f);
 
     CHECK(b2.getVelocity().x == constants::minBoidSpeed);
-    CHECK(b2.getVelocity().y == 0);
+    CHECK(b2.getVelocity().y == 0.f);
 
     b1.setVelocity({300, 400});
     b2.setVelocity({30, 40});
@@ -135,8 +135,8 @@ TEST_CASE("TESTING CLASS BOID") {
 
     checkMinimumSpeed(b2);
 
-    CHECK(b2.getVelocity().x == 0);
-    CHECK(b2.getVelocity().y == 0);
+    CHECK(b2.getVelocity().x == 0.f);
+    CHECK(b2.getVelocity().y == 0.f);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -159,17 +159,17 @@ TEST_CASE("TESTING CLASS BOID") {
     toroidalBorders(b3);
     toroidalBorders(b4);
 
-    CHECK(b1.getPosition().x == 720);
-    CHECK(b1.getPosition().y == 720);
+    CHECK(b1.getPosition().x == 720.f);
+    CHECK(b1.getPosition().y == 720.f);
 
-    CHECK(b2.getPosition().x == 375);
-    CHECK(b2.getPosition().y == 375);
+    CHECK(b2.getPosition().x == 375.f);
+    CHECK(b2.getPosition().y == 375.f);
 
-    CHECK(b3.getPosition().x == 30);
-    CHECK(b3.getPosition().y == 375);
+    CHECK(b3.getPosition().x == 30.f);
+    CHECK(b3.getPosition().y == 375.f);
 
-    CHECK(b4.getPosition().x == 375);
-    CHECK(b4.getPosition().y == 30);
+    CHECK(b4.getPosition().x == 375.f);
+    CHECK(b4.getPosition().y == 30.f);
 
     b1.setPosition({0, 0});
     b2.setPosition({375, 375});
@@ -193,13 +193,13 @@ TEST_CASE("TESTING CLASS BOID") {
     CHECK(b1.getVelocity().x == +100 + constants::speedBoostMirror);
     CHECK(b1.getVelocity().y == +150 + constants::speedBoostMirror);
 
-    CHECK(b2.getVelocity().x == 100);
-    CHECK(b2.getVelocity().y == 150);
+    CHECK(b2.getVelocity().x == 100.f);
+    CHECK(b2.getVelocity().y == 150.f);
 
     CHECK(b3.getVelocity().x == -100 - constants::speedBoostMirror);
-    CHECK(b3.getVelocity().y == 150);
+    CHECK(b3.getVelocity().y == 150.f);
 
-    CHECK(b4.getVelocity().x == -100);
+    CHECK(b4.getVelocity().x == -100.f);
     CHECK(b4.getVelocity().y == -150 - constants::speedBoostMirror);
   }
 

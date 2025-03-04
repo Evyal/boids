@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string>
 
-bool toroidal{false};
+extern bool toroidal;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -263,7 +263,7 @@ void Egui::toggleSwitch() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::drawStatistics() {
-  for (unsigned i{0}; i < flockStack_.size(); i++) {
+  for (size_t i{0}; i < flockStack_.size(); i++) {
     float posIndex{static_cast<float>(i) * constants::distancePerIndex};
 
     RectanglePar rectangle1par{constants::statsRectangle1};
@@ -609,7 +609,6 @@ void Egui::enableCreateFlockButton() {
     // index 0 is boids number
     // index 6 is boids max number
 
-    // option2Sliders[0]->setMaximum(5);
     option2Sliders[0]->setEnabled(false);
 
     option2Labels[0]->setText("Create N boids: Disabled");
@@ -735,9 +734,10 @@ void Egui::drawInterface() {
   window.draw(rightField);
 
   sf::RectangleShape topSettings(getRectangle(constants::topSettingMargin));
-  sf::RectangleShape bottomSettings(getRectangle(constants::topSettingMargin));
-  sf::RectangleShape leftSettings(getRectangle(constants::topSettingMargin));
-  sf::RectangleShape rightSettings(getRectangle(constants::topSettingMargin));
+  sf::RectangleShape bottomSettings(
+      getRectangle(constants::bottomSettingMargin));
+  sf::RectangleShape leftSettings(getRectangle(constants::leftSettingMargin));
+  sf::RectangleShape rightSettings(getRectangle(constants::rightSettingMargin));
 
   window.draw(topSettings);
   window.draw(bottomSettings);
@@ -783,29 +783,29 @@ void Egui::deleteFlock(size_t i) {
 void Egui::evolveFlock() {
   bodyStack_.resize(flockStack_.size());
   for (size_t i{0}; i < flockStack_.size(); i++) {
-    // flockStack_[i].updateFlock(
-    //     flockStack_[i].Separation(separationSlider->getValue() /
-    //                                   constants::scalingFactor,
-    //                               separationRangeSlider->getValue()),
-    //     flockStack_[i].Alignment(alignmentSlider->getValue() /
-    //                                  constants::scalingFactor,
-    //                              interactionSlider->getValue()),
-    //     flockStack_[i].Cohesion(cohesionSlider->getValue() /
-    //                                 constants::scalingFactor,
-    //                             interactionSlider->getValue()),
-    //     Repel(flockStack_, i,
-    //           repelSlider->getValue() / constants::scalingFactor,
-    //           repelRangeSlider->getValue()));
-
     flockStack_[i].updateFlock(
-        separationSlider->getValue() / constants::scalingFactor,
-        separationRangeSlider->getValue(),
-        alignmentSlider->getValue() / constants::scalingFactor,
-        cohesionSlider->getValue() / constants::scalingFactor,
-        interactionSlider->getValue(),
+        flockStack_[i].Separation(separationSlider->getValue() /
+                                      constants::scalingFactor,
+                                  separationRangeSlider->getValue()),
+        flockStack_[i].Alignment(alignmentSlider->getValue() /
+                                     constants::scalingFactor,
+                                 interactionSlider->getValue()),
+        flockStack_[i].Cohesion(cohesionSlider->getValue() /
+                                    constants::scalingFactor,
+                                interactionSlider->getValue()),
         Repel(flockStack_, i,
               repelSlider->getValue() / constants::scalingFactor,
               repelRangeSlider->getValue()));
+
+    //   flockStack_[i].updateFlock(
+    //       separationSlider->getValue() / constants::scalingFactor,
+    //       separationRangeSlider->getValue(),
+    //       alignmentSlider->getValue() / constants::scalingFactor,
+    //       cohesionSlider->getValue() / constants::scalingFactor,
+    //       interactionSlider->getValue(),
+    //       Repel(flockStack_, i,
+    //             repelSlider->getValue() / constants::scalingFactor,
+    //             repelRangeSlider->getValue()));
   }
 }
 

@@ -53,7 +53,7 @@ inline constexpr float maxRandomSpeed{300.f};
 inline constexpr float speedBoostMirror{15.f};
 
 // size of the boid
-inline constexpr float boidSize{3.6f};
+inline constexpr float boidSize{4.5f};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -72,13 +72,16 @@ inline constexpr size_t maxFlockNumber{5};
 
 // MAXIMUM VALUES
 inline constexpr float maxSeparationStrength{1.f};
-inline constexpr float maxSeparationRange{720.f};
-inline constexpr float maxAlignmentStrength{1.f};
-inline constexpr float maxCohesionStrength{1.f};
-inline constexpr float maxInteractionRange{720.f};
+inline constexpr float maxSeparationRange{360.f};
 
+// inline constexpr float maxAlignmentStrength{1.f};
+// inline constexpr float maxCohesionStrength{1.f};
+inline constexpr float maxAlignmentStrength{0.3f};
+inline constexpr float maxCohesionStrength{0.3f};
+
+inline constexpr float maxInteractionRange{360.f};
 inline constexpr float maxRepelStrenght{1.};
-inline constexpr float maxRepelRange{720.f};
+inline constexpr float maxRepelRange{360.f};
 
 // DEFAULT VALUES
 inline constexpr float defaultSeparationStrenght{0.5f};
@@ -91,10 +94,8 @@ inline constexpr float defaultAlignmentStrenght{0.015f};
 inline constexpr float defaultCohesionStrenght{0.015f};
 
 inline constexpr float defaultInteractionRange{300.f};
-
 inline constexpr float defaultRepelStrenght{0.3f};
 inline constexpr float defaultRepelRange{20.0f};
-
 inline constexpr float scalingFactor{1000.0f};
 
 // SELECT OPTION

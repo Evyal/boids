@@ -8,6 +8,7 @@
 #include <cstddef>
 #include <vector>
 
+extern bool toroidal;
 class Flock {
 
 private:
@@ -17,58 +18,55 @@ private:
 public:
   //////////////////////////////////////////////////////////////////////////////////////////
   // COSTRUTTORI
-  Flock(const std::vector<Boid> &flock, const sf::Color &color);
-  Flock(const std::vector<Boid> &flock);
   Flock();
+  Flock(const std::vector<Boid> &flock);
+  Flock(const std::vector<Boid> &flock, const sf::Color &color);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // GETTERS
   Boid getBoid(size_t i) const;
-  std::vector<Boid> getBoids() const;
   size_t getSize() const;
   sf::Color getFlockColor() const;
 
-  sf::Vector2f getMeanPosition() const;
-  sf::Vector2f getMeanVelocity() const;
+  // sf::Vector2f getMeanPosition() const;
+  // sf::Vector2f getMeanVelocity() const;
   float getMeanSpeed() const;
 
   std::vector<sf::Vector2f> getFlockPositions() const;
   std::vector<sf::Vector2f> getFlockVelocities() const;
   std::vector<float> getSpeedVector() const;
 
-  // //////////////////////////////////////////////////////////////////////////////////////////
-  // // RULES
-  // // SEPARATION
-  // std::vector<sf::Vector2f> Separation(float separation,
-  //                                      float separationRange) const;
-  // // ALIGNMENT
-  // std::vector<sf::Vector2f> Alignment(float alignment, float interaction)
-  // const;
-  // // COESION
-  // std::vector<sf::Vector2f> Cohesion(float cohesion, float interaction)
-  // const;
-
-  // //////////////////////////////////////////////////////////////////////////////////////////
-  // // UPDATE
-  // void updateFlock(const std::vector<sf::Vector2f> &separationSpeed,
-  //                  const std::vector<sf::Vector2f> &alignmentSpeed,
-  //                  const std::vector<sf::Vector2f> &coesionSpeed,
-  //                  const std::vector<sf::Vector2f> &repelSpeed);
-
   //////////////////////////////////////////////////////////////////////////////////////////
   // RULES
   // SEPARATION
-  void Separation(float separation, float separationRange);
+  std::vector<sf::Vector2f> Separation(float separation,
+                                       float separationRange) const;
   // ALIGNMENT
-  void Alignment(float alignment, float interaction);
+  std::vector<sf::Vector2f> Alignment(float alignment, float interaction) const;
   // COESION
-  void Cohesion(float cohesion, float interaction);
+  std::vector<sf::Vector2f> Cohesion(float cohesion, float interaction) const;
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // UPDATE
-  void updateFlock(float separation, float separationRange, float alignment,
-                   float cohesion, float interaction,
+  void updateFlock(const std::vector<sf::Vector2f> &separationSpeed,
+                   const std::vector<sf::Vector2f> &alignmentSpeed,
+                   const std::vector<sf::Vector2f> &coesionSpeed,
                    const std::vector<sf::Vector2f> &repelSpeed);
+
+  // //////////////////////////////////////////////////////////////////////////////////////////
+  // // RULES
+  // // SEPARATION
+  // void Separation(float separation, float separationRange);
+  // // ALIGNMENT
+  // void Alignment(float alignment, float interaction);
+  // // COESION
+  // void Cohesion(float cohesion, float interaction);
+
+  // //////////////////////////////////////////////////////////////////////////////////////////
+  // // UPDATE
+  // void updateFlock(float separation, float separationRange, float alignment,
+  //                  float cohesion, float interaction,
+  //                  const std::vector<sf::Vector2f> &repelSpeed);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////

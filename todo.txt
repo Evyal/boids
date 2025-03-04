@@ -1,20 +1,18 @@
 LIST OF THINGS TO DO:
 
     QUESTIONS
-- struct for slider and labels parameteres
-- void or typed methods for rules?
+> void or typed methods for rules?
 - which one is faster?
 
     CORRECTIONS
-- introduce algorithms  
+> introduce algorithms  
 
     GENERAL
-- preserve class invariants (cassert)
-- fix parameters sliders
-- section egui class
+- preserve class invariants 
+> introduce CASSERT
 
     TESTING
-- test all methods
+> test all methods
 - test all functions
 
     MAYBE    
@@ -22,4 +20,4 @@ LIST OF THINGS TO DO:
 - eventually make obstacles
 
     CONCLUDE
-- write report
+> write report
