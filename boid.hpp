@@ -8,13 +8,13 @@ class Boid {
   //////////////////////////////////////////////////////////////////////////////////////////
 private:
   sf::Vector2f position_{};
-  sf::Vector2f speed_{};
+  sf::Vector2f velocity_{};
 
 public:
   //////////////////////////////////////////////////////////////////////////////////////////
   // COSTRUTTORI di DEFAULT
 
-  Boid(sf::Vector2f position, sf::Vector2f speed);
+  Boid(sf::Vector2f position, sf::Vector2f velocity);
   Boid();
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -28,13 +28,13 @@ public:
   // SETTERS
 
   void setPosition(sf::Vector2f position);
-  void setVelocity(sf::Vector2f speed);
+  void setVelocity(sf::Vector2f velocity);
   void setPositionX(float x);
   void setPositionY(float y);
   void setVelocityX(float v_x);
   void setVelocityY(float v_y);
 
-  void operator+=(const sf::Vector2f &speed);
+  void operator+=(const sf::Vector2f &velocity);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -58,6 +58,6 @@ void mirrorBorders(Boid &boid);
 //////////////////////////////////////////////////////////////////////////////////////////
 // BUILD
 
-Boid buildBoid(sf::Vector2f center, float a);
+Boid buildBoid(sf::Vector2f center, float angle);
 
 #endif

@@ -1,7 +1,7 @@
 #include "flock.hpp"
 #include "boid.hpp"
-#include "egui.hpp"
 #include "constants.hpp"
+#include "egui.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -129,7 +129,6 @@ std::vector<sf::Vector2f> Flock::Separation(float separation,
 //////////////////////////////////////////////////////////////////////////////////////////
 // ALIGNMENT RULE
 
-// ALIGMENT WITHOUT TOROIDAL ADJUSTMENTS
 std::vector<sf::Vector2f> Flock::Alignment(float alignment,
                                            float interaction) const {
   std::vector<sf::Vector2f> alignSpeed{};

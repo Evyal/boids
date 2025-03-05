@@ -8,18 +8,18 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // COSTRUTTORI di DEFAULT
 
-Boid::Boid(sf::Vector2f position, sf::Vector2f speed)
-    : position_{position}, speed_{speed} {}
-Boid::Boid() : position_{0., 0.}, speed_{0., 0.} {}
+Boid::Boid(sf::Vector2f position, sf::Vector2f velocity)
+    : position_{position}, velocity_{velocity} {}
+Boid::Boid() : position_{0., 0.}, velocity_{0., 0.} {}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 // GETTERS
 
 sf::Vector2f Boid::getPosition() const { return position_; }
-sf::Vector2f Boid::getVelocity() const { return speed_; }
+sf::Vector2f Boid::getVelocity() const { return velocity_; }
 float Boid::getSpeed() const {
-  return sqrtf(powf(speed_.x, 2) + powf(speed_.y, 2));
+  return sqrtf(powf(velocity_.x, 2) + powf(velocity_.y, 2));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -30,14 +30,14 @@ void Boid::setPosition(sf::Vector2f position) {
   position_.x = position.x;
   position_.y = position.y;
 }
-void Boid::setVelocity(sf::Vector2f speed) {
-  speed_.x = speed.x;
-  speed_.y = speed.y;
+void Boid::setVelocity(sf::Vector2f velocity) {
+  velocity_.x = velocity.x;
+  velocity_.y = velocity.y;
 }
 void Boid::setPositionX(float x) { position_.x = x; }
 void Boid::setPositionY(float y) { position_.y = y; }
-void Boid::setVelocityX(float v_x) { speed_.x = v_x; }
-void Boid::setVelocityY(float v_y) { speed_.y = v_y; }
+void Boid::setVelocityX(float v_x) { velocity_.x = v_x; }
+void Boid::setVelocityY(float v_y) { velocity_.y = v_y; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ void checkMaximumSpeed(Boid &boid) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Boid::operator+=(const sf::Vector2f &speed) { speed_ += speed; }
+void Boid::operator+=(const sf::Vector2f &velocity) { velocity_ += velocity; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // CHECK BORDERS
