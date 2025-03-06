@@ -149,7 +149,9 @@ TEST_CASE("TESTING CLASS BOID") {
     Boid b3{};
     Boid b4{};
 
-    b1.setPosition({0, 0});
+    // TOROIDAL
+
+    b1.setPosition({-10, -10});
     b2.setPosition({375, 375});
     b3.setPosition({750, 375});
     b4.setPosition({375, 750});
@@ -159,8 +161,8 @@ TEST_CASE("TESTING CLASS BOID") {
     toroidalBorders(b3);
     toroidalBorders(b4);
 
-    CHECK(b1.getPosition().x == 720.f);
-    CHECK(b1.getPosition().y == 720.f);
+    CHECK(b1.getPosition().x == 710.f);
+    CHECK(b1.getPosition().y == 710.f);
 
     CHECK(b2.getPosition().x == 375.f);
     CHECK(b2.getPosition().y == 375.f);
@@ -171,7 +173,9 @@ TEST_CASE("TESTING CLASS BOID") {
     CHECK(b4.getPosition().x == 375.f);
     CHECK(b4.getPosition().y == 30.f);
 
-    b1.setPosition({0, 0});
+    // MIRROR
+
+    b1.setPosition({-15, -15});
     b2.setPosition({375, 375});
     b3.setPosition({750, 375});
     b4.setPosition({375, 750});
@@ -211,7 +215,7 @@ TEST_CASE("TESTING CLASS BOID") {
     sf::Vector2f center{400., 200.};
 
     for (size_t i{0}; i < 100; i++) {
-      Boid b5{buildBoid(center, 0)};
+      Boid b5{createBoid(center, 0)};
 
       CHECK(b5.getPosition().x <= center.x + constants::randomPositionRange);
       CHECK(b5.getPosition().x >= center.x - constants::randomPositionRange);
@@ -225,7 +229,7 @@ TEST_CASE("TESTING CLASS BOID") {
     sf::Vector2f center1{700., 360.};
 
     for (size_t i{0}; i < 100; i++) {
-      Boid b{buildBoid(center1, 0)};
+      Boid b{createBoid(center1, 0)};
       CHECK(b.getPosition().x <= center1.x + constants::randomPositionRange);
       CHECK(b.getPosition().x >= center1.x - constants::randomPositionRange);
       CHECK(b.getPosition().y <= center1.y + constants::randomPositionRange);

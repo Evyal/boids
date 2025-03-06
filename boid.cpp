@@ -3,6 +3,7 @@
 #include "random.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
+#include <cstdlib>
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -90,35 +91,26 @@ void Boid::operator+=(const sf::Vector2f &velocity) { velocity_ += velocity; }
 // CHECK BORDERS
 
 void toroidalBorders(Boid &boid) {
-  if (boid.getPosition().x > constants::fieldSide + constants::marginSize) {
-    boid.setPositionX(boid.getPosition().x - constants::fieldSide);
-  } else if (boid.getPosition().x < constants::marginSize) {
-    boid.setPositionX(boid.getPosition().x + constants::fieldSide);
-  }
-
-  if (boid.getPosition().y > constants::fieldSide + constants::marginSize) {
-    boid.setPositionY(boid.getPosition().y - constants::fieldSide);
-  } else if (boid.getPosition().y < constants::marginSize) {
-    boid.setPositionY(boid.getPosition().y + constants::fieldSide);
-  }
+  float s{constants::fieldSide};
+  boid.setPositionX(std::fmod(std::fmod(boid.getPosition().x, s) + s, s));
+  boid.setPositionY(std::fmod(std::fmod(boid.getPosition().y, s) + s, s));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void mirrorBorders(Boid &boid) {
-  if (boid.getPosition().x < constants::marginSize) {
+  if (boid.getPosition().x < 0.f) {
     boid.setVelocityX(std::abs(boid.getVelocity().x) +
                       constants::speedBoostMirror);
-  } else if (boid.getPosition().x >
-             constants::fieldSide + constants::marginSize) {
+  } else if (boid.getPosition().x > constants::fieldSide) {
     boid.setVelocityX(-std::abs(boid.getVelocity().x) -
                       constants::speedBoostMirror);
   }
-  if (boid.getPosition().y < constants::marginSize) {
+
+  if (boid.getPosition().y < 0.f) {
     boid.setVelocityY(std::abs(boid.getVelocity().y) +
                       constants::speedBoostMirror);
-  } else if (boid.getPosition().y >
-             constants::fieldSide + constants::marginSize) {
+  } else if (boid.getPosition().y > constants::fieldSide) {
     boid.setVelocityY(-std::abs(boid.getVelocity().y) -
                       constants::speedBoostMirror);
   }
@@ -128,6 +120,15 @@ void mirrorBorders(Boid &boid) {
 //////////////////////////////////////////////////////////////////////////////////////////
 // BUILD
 
-Boid buildBoid(sf::Vector2f center, float a) {
+Boid createBoid(sf::Vector2f center, float a) {
   return {{randomBoidPosition(center)}, {randomBoidSpeed(a)}};
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// DISTANCE FUNCTION NOT PROVIDED BY SFML :/
+
+float distance(const sf::Vector2f &a, const sf::Vector2f &b) {
+  float dx = b.x - a.x;
+  float dy = b.y - a.y;
+  return std::sqrt(dx * dx + dy * dy);
 }

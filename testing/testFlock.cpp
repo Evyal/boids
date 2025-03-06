@@ -1,5 +1,6 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <iostream>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include "../constants.hpp"
@@ -344,13 +345,133 @@ TEST_CASE("TESTING CLASS FLOCK") {
     CHECK(cohesion[5].y ==
           doctest::Approx(constants::defaultCohesionStrenght *
                           (boid6CenterMass.y - b6.getPosition().y)));
-
-    // CHECK RULES if some boids are OUT OF INTERACTION
-
-    // CHECK RULES on TOROIDAL
   }
 
-  SUBCASE("TESTING REPEL and UPDATE") {}
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+
+  SUBCASE("TESTING RULES on SPECIAL CASES") {
+
+    // REMEMBER TESTS MIGHT NEED TO BE CHANGED IF DEFAULT PARAMETERS OF
+    // INTERACTION ARE CHANGED!
+
+    Boid b1{{100.f, 500.f}, {200.f, 300.f}};
+    Boid b2{{150.f, 300.f}, {100.f, 200.f}};
+    Boid b3{{250.f, 300.f}, {400.f, 300.f}};
+
+    //     std::cout << distance(b1, b2) << '\n';
+    //     std::cout << distance(b2, b3) << '\n';
+    //     std::cout << distance(b1, b3) << '\n';
+
+    Flock flock{{b1, b2, b3}};
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // CHECKING RULES if some boids are OUT OF THE INTERACTION RANGE
+
+    std::vector<sf::Vector2f> separation{
+        flock.Separation(constants::defaultSeparationStrenght,
+                         constants::defaultSeparationRange)};
+
+    std::vector<sf::Vector2f> alignemnt{
+        flock.Alignment(constants::defaultAlignmentStrenght,
+                        constants::defaultInteractionRange)};
+
+    std::vector<sf::Vector2f> cohesion{
+        flock.Cohesion(constants::defaultCohesionStrenght,
+                       constants::defaultInteractionRange)};
+
+    CHECK(separation[0].x == 0.f);
+    CHECK(separation[0].y == 0.f);
+    CHECK(separation[1].x == 0.f);
+    CHECK(separation[1].y == 0.f);
+    CHECK(separation[2].x == 0.f);
+    CHECK(separation[2].y == 0.f);
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    CHECK(alignemnt[0].x == 0.f);
+    CHECK(alignemnt[0].y == 0.f);
+
+    CHECK(alignemnt[1].x == constants::defaultAlignmentStrenght *
+                                (b3.getVelocity().x - b2.getVelocity().x));
+    CHECK(alignemnt[1].y == constants::defaultAlignmentStrenght *
+                                (b3.getVelocity().y - b2.getVelocity().y));
+    CHECK(alignemnt[2].x == constants::defaultAlignmentStrenght *
+                                (b2.getVelocity().x - b3.getVelocity().x));
+    CHECK(alignemnt[2].y == constants::defaultAlignmentStrenght *
+                                (b2.getVelocity().y - b3.getVelocity().y));
+
+    CHECK(alignemnt[1].x == +4.5f);
+    CHECK(alignemnt[1].y == +1.5f);
+    CHECK(alignemnt[2].x == -4.5f);
+    CHECK(alignemnt[2].y == -1.5f);
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    CHECK(cohesion[0].x == 0.f);
+    CHECK(cohesion[0].y == 0.f);
+
+    CHECK(cohesion[1].x == +1.5f);
+    CHECK(cohesion[1].y == 0.f);
+    CHECK(cohesion[2].x == -1.5f);
+    CHECK(cohesion[2].y == 0.f);
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+
+  SUBCASE("TESTING UPDATE") {
+    Boid b1{{100.f, 500.f}, {200.f, 300.f}};
+    Boid b2{{150.f, 300.f}, {100.f, 200.f}};
+    Boid b3{{250.f, 300.f}, {400.f, 300.f}};
+
+    //     std::cout << distance(b1, b2) << '\n';
+    //     std::cout << distance(b2, b3) << '\n';
+    //     std::cout << distance(b1, b3) << '\n';
+
+    Flock flock{{b1, b2, b3}};
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+
+  SUBCASE("TESTING RULES on TOROIDAL MODE") {
+
+    toroidal = true;
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // CHECKING RULES on TOROIDAL MODE
+
+    Boid b1{{100.f, 500.f}, {200.f, 300.f}};
+    Boid b2{{150.f, 300.f}, {100.f, 200.f}};
+    Boid b3{{250.f, 300.f}, {400.f, 300.f}};
+
+    //     std::cout << distance(b1, b2) << '\n';
+    //     std::cout << distance(b2, b3) << '\n';
+    //     std::cout << distance(b1, b3) << '\n';
+
+    Flock flock{{b1, b2, b3}};
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // SEPARATION RULE is the SAME
+    // ALGINMENT RULE is the SAME
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // TESTING COHESION in TOROIDAL
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // TESTING UPDATE in TOROIDAL
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+
+  SUBCASE("TESTING REPEL") {
+    // REPEL
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING CREATE FLOCK") {}
 }

@@ -6,6 +6,8 @@
 #include "statistics.hpp"
 #include "structs.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <TGUI/TGUI.hpp>
 #include <array>
 #include <cassert>
@@ -44,15 +46,15 @@ void Egui::setup() {
 
   // GENERATE FLOCKS at the BEGINNING
 
-  addFlock(10, {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
            sf::Color{255, 0, 127}); // PINK
-  addFlock(20, {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
            sf::Color{255, 0, 0}); // RED
-  addFlock(30, {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
            sf::Color{255, 204, 0}); // YELLOW
-  addFlock(40, {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
            sf::Color{153, 255, 51}); // GREEN
-  addFlock(50, {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
            sf::Color{0, 204, 204}); // CYAN
 
   // OPTION 1
@@ -66,7 +68,7 @@ void Egui::setup() {
 void Egui::run() {
 
   window.setPosition({120, 50});
-  window.setFramerateLimit(60);
+  window.setFramerateLimit(constants::windowFrameRate);
   sf::Event event;
 
   while (window.isOpen()) {
@@ -85,10 +87,12 @@ void Egui::run() {
 
     window.clear(sf::Color::White);
 
-    drawFlocks();
-
     enableCreateFlockButton();
+
     drawInterface();
+    drawFlocks();
+    drawMargin();
+
     selectedOption();
 
     gui.draw();
@@ -568,11 +572,16 @@ void Egui::handleColorSliderChange(tgui::Slider::Ptr changedSlider) {
 
   // 3 is RED, 4 is GREEN, 5 is BLUE
 
-  // If the new total exceeds the cap of 510, adjust the current slider's value
-  if (newTotal > 510) {
-    // Restore the slider's value to prevent exceeding the total cap
-    changedSlider->setValue(changedSlider->getValue() -
-                            static_cast<float>((newTotal - 510)));
+  if (newTotal > constants::colorSliderTotalMax) {
+    // If the sum exceeds 765, lower the current slider to keep it in range
+    changedSlider->setValue(
+        changedSlider->getValue() -
+        static_cast<float>(newTotal - constants::colorSliderTotalMax));
+  } else if (newTotal < constants::colorSliderTotalMin) {
+    // If the sum is below 255, increase the slider to stay within bounds
+    changedSlider->setValue(
+        changedSlider->getValue() +
+        static_cast<float>(constants::colorSliderTotalMin - newTotal));
   }
 }
 
@@ -591,8 +600,7 @@ void Egui::createAddFlockButton(const TguiPar &par) {
 
   addFlockButton->onPress([this]() {
     addFlock(static_cast<size_t>(option2Sliders[0]->getValue()),
-             {option2Sliders[1]->getValue() + constants::marginSize,
-              option2Sliders[2]->getValue() + constants::marginSize},
+             {option2Sliders[1]->getValue(), option2Sliders[2]->getValue()},
              sf::Color(static_cast<uint8_t>(option2Sliders[3]->getValue()),
                        static_cast<uint8_t>(option2Sliders[4]->getValue()),
                        static_cast<uint8_t>(option2Sliders[5]->getValue())));
@@ -723,16 +731,6 @@ void Egui::setVisibleOpt3(bool visible) {
 // Draw Interface
 
 void Egui::drawInterface() {
-  sf::RectangleShape topField(getRectangle(constants::topMargin));
-  sf::RectangleShape bottomField(getRectangle(constants::bottomMargin));
-  sf::RectangleShape leftField(getRectangle(constants::leftMargin));
-  sf::RectangleShape rightField(getRectangle(constants::rightMargin));
-
-  window.draw(topField);
-  window.draw(bottomField);
-  window.draw(leftField);
-  window.draw(rightField);
-
   sf::RectangleShape topSettings(getRectangle(constants::topSettingMargin));
   sf::RectangleShape bottomSettings(
       getRectangle(constants::bottomSettingMargin));
@@ -743,6 +741,29 @@ void Egui::drawInterface() {
   window.draw(bottomSettings);
   window.draw(leftSettings);
   window.draw(rightSettings);
+
+  // BLACK BACKGROUND
+  sf::RectangleShape rectangle({constants::fieldSide, constants::fieldSide});
+  rectangle.setPosition(constants::marginSize, constants::marginSize);
+  rectangle.setFillColor(sf::Color::Black);
+
+  window.draw(rectangle);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::drawMargin() {
+  sf::Color color{constants::fieldColor};
+
+  sf::RectangleShape topField(getRectangle(constants::topMargin, color));
+  sf::RectangleShape bottomField(getRectangle(constants::bottomMargin, color));
+  sf::RectangleShape leftField(getRectangle(constants::leftMargin, color));
+  sf::RectangleShape rightField(getRectangle(constants::rightMargin, color));
+
+  window.draw(topField);
+  window.draw(bottomField);
+  window.draw(leftField);
+  window.draw(rightField);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

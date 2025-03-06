@@ -7,47 +7,29 @@
 
 namespace constants {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Window constanst
 inline constexpr float windowWidth{1050.f};
 inline constexpr float windowHeight{750.f};
+inline constexpr int windowFrameRate{60};
 
 // Size of the field where the boids can fly
 inline constexpr float fieldSide{720.f};
 inline constexpr float marginSize{15.f};
+inline const sf::Color fieldColor{sf::Color{48, 48, 48}};
 
 // A flock with 20 boids is generated at the beginning of the program.
 inline constexpr int initBoidNumber{20};
 inline constexpr int initFlockNumber{1};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Random generation constants
-inline constexpr float randomMinimumX{15.f};
-inline constexpr float randomMaximumX{735.f};
-inline constexpr float randomMinimumY{15.f};
-inline constexpr float randomMaximumY{735.f};
-inline constexpr float randomPositionRange{50.f};
-
-inline constexpr float randomMinimumSpeed{150.f};
-inline constexpr float randomMaximumSpeed{300.f};
-inline constexpr float randomSpeedRange{50.f};
-inline constexpr float randomAngleRange{0.002f};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // BOIDS CONSTANTS
 
 // minimum and maximum speed component of any boid
 inline constexpr float minBoidSpeed{150.f};
 inline constexpr float maxBoidSpeed{300.f};
-
-// minimum and maximum speed of randoml generated boid
-inline constexpr float minRandomSpeed{150.f};
-inline constexpr float maxRandomSpeed{300.f};
+inline constexpr float speedScale{150.f};
 
 // speed boost on mirror mode
 inline constexpr float speedBoostMirror{15.f};
@@ -56,7 +38,19 @@ inline constexpr float speedBoostMirror{15.f};
 inline constexpr float boidSize{4.5f};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Random generation constants
+inline constexpr float randomMinimumX{0.f};
+inline constexpr float randomMaximumX{fieldSide};
+inline constexpr float randomMinimumY{0.f};
+inline constexpr float randomMaximumY{fieldSide};
+inline constexpr float randomPositionRange{50.f};
 
+inline constexpr float randomMinimumSpeed{minBoidSpeed};
+inline constexpr float randomMaximumSpeed{maxBoidSpeed};
+inline constexpr float randomAngleRange{0.002f};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // FLOCKS CONSTANTS
 
@@ -66,7 +60,6 @@ inline constexpr size_t minFlockSize{5};
 inline constexpr size_t maxFlockNumber{5};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Values for PARAMETERS
 
@@ -93,11 +86,12 @@ inline constexpr float defaultSeparationRange{15.0f};
 inline constexpr float defaultAlignmentStrenght{0.015f};
 inline constexpr float defaultCohesionStrenght{0.015f};
 
-inline constexpr float defaultInteractionRange{300.f};
+inline constexpr float defaultInteractionRange{150.f};
 inline constexpr float defaultRepelStrenght{0.3f};
 inline constexpr float defaultRepelRange{20.0f};
 inline constexpr float scalingFactor{1000.0f};
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // SELECT OPTION
 
 inline constexpr TguiPar button1{770, 20, 80, 50};
@@ -112,6 +106,7 @@ inline const sf::Color offThreeWayBGColorHover{sf::Color(190, 190, 190)};
 
 inline const sf::Color threeWayBGColorDown{sf::Color(160, 160, 160)};
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 1
 
 inline constexpr TguiPar toroidalButton{770, 80, 260, 50};
@@ -139,14 +134,15 @@ inline constexpr int labelsDistance{25};
 inline constexpr LabelsPar flockSizeLabel{790, 180, 20};
 inline constexpr LabelsPar statisticsValueLabel{975, 145, 20};
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 2
 // SLIDERS
 
 inline constexpr int slidersPosX{775};
 inline constexpr int slidersWidth{250};
 inline constexpr int slidersHeight{20};
-inline constexpr int colorSliderMax{255};
-inline constexpr int colorSliderTotal{510};
+inline constexpr int colorSliderTotalMin{128};
+inline constexpr int colorSliderTotalMax{640};
 
 inline constexpr SlidersPar boidsNumberSlider{
     {slidersPosX, 190, slidersWidth, slidersHeight}, 5, 100, 10};
@@ -155,11 +151,11 @@ inline constexpr SlidersPar centerXSlider{
 inline constexpr SlidersPar centerYSlider{
     {slidersPosX, 330, slidersWidth, slidersHeight}, 0, 720, 360};
 inline constexpr SlidersPar redSlider{
-    {slidersPosX, 410, slidersWidth, slidersHeight}, 0, colorSliderMax, 0};
+    {slidersPosX, 410, slidersWidth, slidersHeight}, 0, 255, 128};
 inline constexpr SlidersPar greenSlider{
-    {slidersPosX, 470, slidersWidth, slidersHeight}, 0, colorSliderMax, 0};
+    {slidersPosX, 470, slidersWidth, slidersHeight}, 0, 255, 128};
 inline constexpr SlidersPar blueSlider{
-    {slidersPosX, 530, slidersWidth, slidersHeight}, 0, colorSliderMax, 0};
+    {slidersPosX, 530, slidersWidth, slidersHeight}, 0, 255, 128};
 
 inline constexpr LabelsPar boidsNumberSliderLabel{slidersPosX, 160, 15};
 inline constexpr LabelsPar centerXSliderLabel{slidersPosX, 240, 15};
@@ -172,6 +168,7 @@ inline constexpr LabelsPar maxBoidsNumberLabel{slidersPosX, 115, 19};
 inline constexpr TguiPar addFlockButton{775, 645, 250, 80};
 inline constexpr LabelsPar addFlockButtonLabel{775, 600, 20};
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 3
 
 inline constexpr SlidersPar separationSlider{
@@ -224,6 +221,7 @@ inline constexpr LabelsPar interactionSliderLabel{slidersPosX, 360, 15};
 inline constexpr LabelsPar repelSliderLabel{slidersPosX, 420, 15};
 inline constexpr LabelsPar repelRangeSliderLabel{slidersPosX, 480, 15};
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // INTERFACE
 
 inline const RectanglePar topMargin{0, 0, 750, 15};
