@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <TGUI/TGUI.hpp>
 #include <array>
 #include <cassert>
@@ -15,6 +16,7 @@
 #include <cstdint>
 #include <iostream>
 #include <string>
+#include <vector>
 
 extern bool toroidal;
 
@@ -83,7 +85,7 @@ void Egui::run() {
       }
     }
 
-    evolveFlock();
+    evolveFlocks();
 
     window.clear(sf::Color::White);
 
@@ -801,32 +803,36 @@ void Egui::deleteFlock(size_t i) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::evolveFlock() {
+void Egui::evolveFlocks() {
   bodyStack_.resize(flockStack_.size());
   for (size_t i{0}; i < flockStack_.size(); i++) {
-    flockStack_[i].updateFlock(
-        flockStack_[i].Separation(separationSlider->getValue() /
-                                      constants::scalingFactor,
-                                  separationRangeSlider->getValue()),
-        flockStack_[i].Alignment(alignmentSlider->getValue() /
-                                     constants::scalingFactor,
-                                 interactionSlider->getValue()),
-        flockStack_[i].Cohesion(cohesionSlider->getValue() /
-                                    constants::scalingFactor,
-                                interactionSlider->getValue()),
-        Repel(flockStack_, i,
-              repelSlider->getValue() / constants::scalingFactor,
-              repelRangeSlider->getValue()));
 
-    //   flockStack_[i].updateFlock(
-    //       separationSlider->getValue() / constants::scalingFactor,
-    //       separationRangeSlider->getValue(),
-    //       alignmentSlider->getValue() / constants::scalingFactor,
-    //       cohesionSlider->getValue() / constants::scalingFactor,
-    //       interactionSlider->getValue(),
-    //       Repel(flockStack_, i,
-    //             repelSlider->getValue() / constants::scalingFactor,
-    //             repelRangeSlider->getValue()));
+    const std::vector<sf::Vector2f> &separate{flockStack_[i].Separation(
+        separationSlider->getValue() / constants::scalingFactor,
+        separationRangeSlider->getValue())};
+
+    const std::vector<sf::Vector2f> &align{flockStack_[i].Alignment(
+        alignmentSlider->getValue() / constants::scalingFactor,
+        interactionSlider->getValue())};
+
+    const std::vector<sf::Vector2f> &repel{Repel(
+        flockStack_, i, repelSlider->getValue() / constants::scalingFactor,
+        repelRangeSlider->getValue())};
+
+    if (toroidal) {
+      const std::vector<sf::Vector2f> &cohesion{flockStack_[i].toroidalCohesion(
+          cohesionSlider->getValue() / constants::scalingFactor,
+          interactionSlider->getValue())};
+
+      flockStack_[i].toroidalUpdate(separate, align, cohesion, repel);
+
+    } else {
+      const std::vector<sf::Vector2f> &cohesion{flockStack_[i].Cohesion(
+          cohesionSlider->getValue() / constants::scalingFactor,
+          interactionSlider->getValue())};
+
+      flockStack_[i].updateFlock(separate, align, cohesion, repel);
+    }
   }
 }
 

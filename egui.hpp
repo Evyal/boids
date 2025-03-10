@@ -160,7 +160,7 @@ private:
   void addFlock(size_t n = 20, sf::Vector2f center = {360, 360},
                 sf::Color color = sf::Color::Black);
   void deleteFlock(size_t i);
-  void evolveFlock();
+  void evolveFlocks();
   void drawFlocks();
 
   ////////////////////////////////////////////////////////////////////////////////

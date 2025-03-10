@@ -38,12 +38,9 @@ public:
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // RULES
-  // SEPARATION
   std::vector<sf::Vector2f> Separation(float separation,
                                        float separationRange) const;
-  // ALIGNMENT
   std::vector<sf::Vector2f> Alignment(float alignment, float interaction) const;
-  // COESION
   std::vector<sf::Vector2f> Cohesion(float cohesion, float interaction) const;
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -53,20 +50,14 @@ public:
                    const std::vector<sf::Vector2f> &coesionSpeed,
                    const std::vector<sf::Vector2f> &repelSpeed);
 
-  // //////////////////////////////////////////////////////////////////////////////////////////
-  // // RULES
-  // // SEPARATION
-  // void Separation(float separation, float separationRange);
-  // // ALIGNMENT
-  // void Alignment(float alignment, float interaction);
-  // // COESION
-  // void Cohesion(float cohesion, float interaction);
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // TOROIDAL MODE
 
-  // //////////////////////////////////////////////////////////////////////////////////////////
-  // // UPDATE
-  // void updateFlock(float separation, float separationRange, float alignment,
-  //                  float cohesion, float interaction,
-  //                  const std::vector<sf::Vector2f> &repelSpeed);
+  std::vector<sf::Vector2f> toroidalCohesion(float cohesion, float interaction);
+  void toroidalUpdate(const std::vector<sf::Vector2f> &separationSpeed,
+                      const std::vector<sf::Vector2f> &alignmentSpeed,
+                      const std::vector<sf::Vector2f> &coesionSpeed,
+                      const std::vector<sf::Vector2f> &repelSpeed);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
