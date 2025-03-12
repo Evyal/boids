@@ -9,13 +9,13 @@
 #include <cstddef>
 #include <vector>
 
-extern bool toroidal;
 class Flock {
 
 private:
   std::vector<Boid> flock_;
   sf::Color color_;
   static FlockPar parameters_;
+  static bool toroidal_;
 
 public:
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -36,18 +36,21 @@ public:
   std::vector<float> getSpeedVector() const;
 
   static FlockPar getParameters();
+  static bool getToroidalMode();
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
   static void setParameters(const FlockPar &par);
 
-  static void setSeparationStrength(float value);
-  static void setSeparationRange(float value);
-  static void setAlignmentStrength(float value);
-  static void setCohesionStrength(float value);
-  static void setInteractionRange(float value);
-  static void setRepelStrength(float value);
-  static void setRepelRange(float value);
+  static void setSeparationStrength(float p);
+  static void setSeparationRange(float p);
+  static void setAlignmentStrength(float p);
+  static void setCohesionStrength(float p);
+  static void setInteractionRange(float p);
+  static void setRepelStrength(float p);
+  static void setRepelRange(float p);
+  
+  static void setToroidalMode(bool p);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // RULES

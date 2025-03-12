@@ -1,23 +1,22 @@
 LIST OF THINGS TO DO:
 
-    QUESTIONS
-> void or typed methods for rules?
-- which one is faster?
-
-    CORRECTIONS
-> introduce algorithms  
+> Add toroidal in flockparameters
+> Make it possible to change background colour
 
     GENERAL
-- preserve class invariants 
+> introduce algorithms  
+
+    SAFETY
+> preserve class invariants 
 > introduce CASSERT
 
     TESTING
 > test all methods
-- test all functions
+> test all functions
+
+    CONCLUDE
+> write report
 
     MAYBE    
 - make predator class
 - eventually make obstacles
-
-    CONCLUDE
-> write report

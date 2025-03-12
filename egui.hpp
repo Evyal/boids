@@ -4,6 +4,7 @@
 #include "flock.hpp"
 #include "structs.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <array>
@@ -11,7 +12,6 @@
 #include <string>
 #include <vector>
 
-extern bool toroidal;
 class Egui {
 public:
   ////////////////////////////////////////////////////////////////////////////////
@@ -34,6 +34,14 @@ private:
   std::vector<std::vector<sf::CircleShape>> bodyStack_;
 
   ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  // INTERFACE
+
+  sf::Color backgroundColour_{sf::Color::Black};
+
+  void drawMargin();
+  void drawInterface();
+
   ////////////////////////////////////////////////////////////////////////////////
   // THREE WAY SWITCH, SELECT OPTION
 
@@ -85,6 +93,7 @@ private:
 
   ////////////////////////////////////////////////////////////////////////////////
 
+  void setupOpt1();
   void setVisibleOpt1(bool visible);
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -101,6 +110,7 @@ private:
 
   void handleColorSliderChange(tgui::Slider::Ptr changedSlider);
 
+  // OPTION TO CREATE NEW FLOCKS
   tgui::Button::Ptr addFlockButton;
   tgui::Label::Ptr addFlockButtonLabel;
 
@@ -135,6 +145,8 @@ private:
   tgui::EditBoxSlider::Ptr repelSlider;
   tgui::EditBoxSlider::Ptr repelRangeSlider;
 
+  tgui::EditBoxSlider::Ptr frameRateLimitSlider;
+
   void createParametersSliders();
 
   void createSliderOpt3(const SlidersPar &sliderPar);
@@ -142,16 +154,19 @@ private:
 
   ////////////////////////////////////////////////////////////////////////////////
 
+  // ON OFF BUTTON, for MIRROR or TOROIDAL MODE
+  tgui::Button::Ptr toroidalButton;
+  bool isToroidalOn = false;
+
+  void createToroidalButton(const TguiPar &par);
+  void toggleToroidal();
+
+  ////////////////////////////////////////////////////////////////////////////////
+
   void setupOpt3();
   void setVisibleOpt3(bool visible);
 
   ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  // INTERFACE
-
-  void drawMargin();
-  void drawInterface();
-
   ////////////////////////////////////////////////////////////////////////////////
   // FLOCKS and DRAWING
 

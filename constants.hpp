@@ -80,7 +80,7 @@ inline constexpr FlockPar maxFlockParameters{
 
 // DEFAULT VALUES
 inline constexpr float defaultSeparationStrength{0.5f};
-inline constexpr float defaultSeparationRange{12.0f};
+inline constexpr float defaultSeparationRange{14.0f};
 inline constexpr float defaultAlignmentStrength{0.03f};
 inline constexpr float defaultCohesionStrength{0.015f};
 
@@ -114,15 +114,10 @@ inline const sf::Color threeWayBGColorDown{sf::Color(160, 160, 160)};
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 1
 
-inline constexpr TguiPar toroidalButton{770, 80, 260, 50};
+inline constexpr TguiPar graphicsButton{770, 80, 260, 50};
 
-inline const sf::Color onToroidalColor{sf::Color(204, 255, 153)};
-inline const sf::Color onToroidalHover{sf::Color(229, 255, 204)};
-inline const sf::Color onToroidalDown{sf::Color(229, 255, 204)};
-
-inline const sf::Color offToroidalColor{sf::Color(153, 255, 255)};
-inline const sf::Color offToroidalHover{sf::Color(204, 255, 255)};
-inline const sf::Color offToroidalDown{sf::Color(204, 255, 255)};
+inline const sf::Color onGraphicsColor{sf::Color(224, 224, 224)};
+inline const sf::Color offGraphicsColor{sf::Color(32, 32, 32)};
 
 // DRAW STATISTICS
 
@@ -218,6 +213,9 @@ inline constexpr SlidersPar repelRangeSlider{
     maxRepelRange,
     defaultRepelRange};
 
+inline constexpr SlidersPar frameRateLimitSlider{
+    {slidersPosX, 640, slidersWidth, slidersHeight}, 10, 100, windowFrameRate};
+
 inline constexpr LabelsPar separationSliderLabel{slidersPosX, 120, 15};
 inline constexpr LabelsPar separationRangeSliderLabel{slidersPosX, 180, 15};
 inline constexpr LabelsPar alignmentSliderLabel{slidersPosX, 240, 15};
@@ -225,6 +223,22 @@ inline constexpr LabelsPar cohesionSliderLabel{slidersPosX, 300, 15};
 inline constexpr LabelsPar interactionSliderLabel{slidersPosX, 360, 15};
 inline constexpr LabelsPar repelSliderLabel{slidersPosX, 420, 15};
 inline constexpr LabelsPar repelRangeSliderLabel{slidersPosX, 480, 15};
+inline constexpr LabelsPar frameRateLimitSliderLabel{slidersPosX, 610, 15};
+
+inline constexpr LabelsPar parametersLabel{slidersPosX, 90, 18};
+inline constexpr LabelsPar extraLabel{slidersPosX, 560, 18};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+inline constexpr TguiPar toroidalButton{770, 675, 260, 50};
+
+inline const sf::Color onToroidalColor{sf::Color(204, 255, 153)};
+inline const sf::Color onToroidalHover{sf::Color(229, 255, 204)};
+inline const sf::Color onToroidalDown{sf::Color(229, 255, 204)};
+
+inline const sf::Color offToroidalColor{sf::Color(153, 255, 255)};
+inline const sf::Color offToroidalHover{sf::Color(204, 255, 255)};
+inline const sf::Color offToroidalDown{sf::Color(204, 255, 255)};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // INTERFACE

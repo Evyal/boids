@@ -1,7 +1,6 @@
 #include "flock.hpp"
 #include "boid.hpp"
 #include "constants.hpp"
-#include "egui.hpp"
 #include "structs.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -13,9 +12,9 @@
 #include <vector>
 
 extern std::default_random_engine rng;
-bool toroidal{false};
 
 FlockPar Flock::parameters_ = constants::defaultFlockParameters;
+bool Flock::toroidal_ = false;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -94,25 +93,23 @@ FlockPar Flock::getParameters() { return parameters_; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Flock::setParameters(const FlockPar &par) { parameters_ = par; }
+bool Flock::getToroidalMode() { return toroidal_; }
 
-void Flock::setSeparationStrength(float value) {
-  parameters_.separationStrength = value;
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Flock::setParameters(const FlockPar &p) { parameters_ = p; }
+
+void Flock::setSeparationStrength(float p) {
+  parameters_.separationStrength = p;
 }
-void Flock::setSeparationRange(float value) {
-  parameters_.separationRange = value;
-}
-void Flock::setAlignmentStrength(float value) {
-  parameters_.alignmentStrength = value;
-}
-void Flock::setCohesionStrength(float value) {
-  parameters_.cohesionStrength = value;
-}
-void Flock::setInteractionRange(float value) {
-  parameters_.interactionRange = value;
-}
-void Flock::setRepelStrength(float value) { parameters_.repelStrength = value; }
-void Flock::setRepelRange(float value) { parameters_.repelRange = value; }
+void Flock::setSeparationRange(float p) { parameters_.separationRange = p; }
+void Flock::setAlignmentStrength(float p) { parameters_.alignmentStrength = p; }
+void Flock::setCohesionStrength(float p) { parameters_.cohesionStrength = p; }
+void Flock::setInteractionRange(float p) { parameters_.interactionRange = p; }
+void Flock::setRepelStrength(float p) { parameters_.repelStrength = p; }
+void Flock::setRepelRange(float p) { parameters_.repelRange = p; }
+
+void Flock::setToroidalMode(bool p) { toroidal_ = p; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -218,18 +215,21 @@ void Flock::updateFlock(const std::vector<sf::Vector2f> &repelSpeed) {
   const std::vector<sf::Vector2f> &separationSpeed{Separation()};
   const std::vector<sf::Vector2f> &alignmentSpeed{Alignment()};
   const std::vector<sf::Vector2f> &cohesionSpeed =
-      toroidal ? toroidalCohesion() : Cohesion();
+      toroidal_ ? toroidalCohesion() : Cohesion();
+
+  assert(flock_.size() == separationSpeed.size());
+  assert(flock_.size() == alignmentSpeed.size());
+  assert(flock_.size() == cohesionSpeed.size());
+  assert(flock_.size() == repelSpeed.size());
 
   for (size_t i{0}; i < flock_.size(); ++i) {
     flock_[i].setPosition(flock_[i].getPosition() +
                           flock_[i].getVelocity() / constants::speedScale);
 
-    assert(flock_.size() == repelSpeed.size());
-
     flock_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i] +
                   repelSpeed[i]);
 
-    if (toroidal) {
+    if (toroidal_) {
       toroidalBorders(flock_[i]);
     } else {
       mirrorBorders(flock_[i]);

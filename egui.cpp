@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <TGUI/Color.hpp>
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Widgets/EditBoxSlider.hpp>
 #include <array>
@@ -16,8 +17,6 @@
 #include <cstdint>
 #include <iostream>
 #include <string>
-
-extern bool toroidal;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -60,8 +59,7 @@ void Egui::setup() {
 
   // OPTION 1
 
-  createSwitchButton(constants::toroidalButton);
-  setVisibleOpt1(true);
+  setupOpt1();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -99,6 +97,47 @@ void Egui::run() {
     gui.draw();
     window.display();
   }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+// Draw Interface
+
+void Egui::drawInterface() {
+  sf::RectangleShape topSettings(getRectangle(constants::topSettingMargin));
+  sf::RectangleShape bottomSettings(
+      getRectangle(constants::bottomSettingMargin));
+  sf::RectangleShape leftSettings(getRectangle(constants::leftSettingMargin));
+  sf::RectangleShape rightSettings(getRectangle(constants::rightSettingMargin));
+
+  window.draw(topSettings);
+  window.draw(bottomSettings);
+  window.draw(leftSettings);
+  window.draw(rightSettings);
+
+  // BLACK BACKGROUND
+
+  sf::RectangleShape rectangle({constants::fieldSide, constants::fieldSide});
+  rectangle.setPosition(constants::marginSize, constants::marginSize);
+  rectangle.setFillColor(backgroundColour_);
+
+  window.draw(rectangle);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::drawMargin() {
+  sf::Color color{constants::fieldColor};
+
+  sf::RectangleShape topField(getRectangle(constants::topMargin, color));
+  sf::RectangleShape bottomField(getRectangle(constants::bottomMargin, color));
+  sf::RectangleShape leftField(getRectangle(constants::leftMargin, color));
+  sf::RectangleShape rightField(getRectangle(constants::rightMargin, color));
+
+  window.draw(topField);
+  window.draw(bottomField);
+  window.draw(leftField);
+  window.draw(rightField);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -224,14 +263,18 @@ void Egui::selectedOption3() {
 // OPTION 1
 
 void Egui::createSwitchButton(const TguiPar &par) {
-  switchButton = tgui::Button::create("Mirror Mode");
+  switchButton = tgui::Button::create("Black Mode");
+  switchButton->getRenderer()->setTextColor(sf::Color::White);
+  switchButton->getRenderer()->setTextColorHover(sf::Color::White);
+  switchButton->getRenderer()->setTextColorDown(sf::Color::White);
+
   switchButton->setPosition(par.posX, par.posY);
   switchButton->setSize(par.width, par.height);
-  switchButton->getRenderer()->setBackgroundColor(constants::offToroidalColor);
+  switchButton->getRenderer()->setBackgroundColor(constants::offGraphicsColor);
   switchButton->getRenderer()->setBackgroundColorHover(
-      constants::offToroidalHover);
+      constants::offGraphicsColor);
   switchButton->getRenderer()->setBackgroundColorDown(
-      constants::offToroidalDown);
+      constants::offGraphicsColor);
 
   // Attach the toggleSwitch action to the button
   switchButton->onPress([this]() { toggleSwitch(); });
@@ -243,24 +286,30 @@ void Egui::createSwitchButton(const TguiPar &par) {
 
 void Egui::toggleSwitch() {
   isSwitchOn = !isSwitchOn;
+  switchButton->getRenderer()->setTextColor(backgroundColour_);
+  switchButton->getRenderer()->setTextColorHover(backgroundColour_);
+  switchButton->getRenderer()->setTextColorDown(backgroundColour_);
 
   if (isSwitchOn) {
-    switchButton->setText("Toroidal Mode");
-    switchButton->getRenderer()->setBackgroundColor(constants::onToroidalColor);
+    switchButton->setText("White Mode");
+
+    switchButton->getRenderer()->setBackgroundColor(constants::onGraphicsColor);
     switchButton->getRenderer()->setBackgroundColorHover(
-        constants::onToroidalHover);
+        constants::onGraphicsColor);
     switchButton->getRenderer()->setBackgroundColorDown(
-        constants::onToroidalDown);
-    toroidal = true;
+        constants::onGraphicsColor);
+
+    backgroundColour_ = sf::Color::White;
   } else {
-    switchButton->setText("Mirror Mode");
+    switchButton->setText("Black Mode");
     switchButton->getRenderer()->setBackgroundColor(
-        constants::offToroidalColor);
+        constants::offGraphicsColor);
     switchButton->getRenderer()->setBackgroundColorHover(
-        constants::offToroidalHover);
+        constants::offGraphicsColor);
     switchButton->getRenderer()->setBackgroundColorDown(
-        constants::offToroidalDown);
-    toroidal = false;
+        constants::offGraphicsColor);
+
+    backgroundColour_ = sf::Color::Black;
   }
 }
 
@@ -448,6 +497,13 @@ void Egui::repositionButtons() {
     dynamicLabels[i][3]->setPosition(
         {posX, posY + constants::labelsDistance * 3 + posIndex});
   }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::setupOpt1() {
+  createSwitchButton(constants::graphicsButton);
+  setVisibleOpt1(true);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -687,6 +743,54 @@ void Egui::createLabelOpt3(const LabelsPar &labelsPar,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// TOROIDAL SWITCH BUTTON
+
+void Egui::createToroidalButton(const TguiPar &par) {
+  toroidalButton = tgui::Button::create("Mirror Mode");
+  toroidalButton->setPosition(par.posX, par.posY);
+  toroidalButton->setSize(par.width, par.height);
+  toroidalButton->getRenderer()->setBackgroundColor(
+      constants::offToroidalColor);
+  toroidalButton->getRenderer()->setBackgroundColorHover(
+      constants::offToroidalHover);
+  toroidalButton->getRenderer()->setBackgroundColorDown(
+      constants::offToroidalDown);
+
+  // Attach the toggleSwitch action to the button
+  toroidalButton->onPress([this]() { toggleToroidal(); });
+
+  gui.add(toroidalButton);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Egui::toggleToroidal() {
+  isToroidalOn = !isToroidalOn;
+
+  if (isToroidalOn) {
+    toroidalButton->setText("Toroidal Mode");
+    toroidalButton->getRenderer()->setBackgroundColor(
+        constants::onToroidalColor);
+    toroidalButton->getRenderer()->setBackgroundColorHover(
+        constants::onToroidalHover);
+    toroidalButton->getRenderer()->setBackgroundColorDown(
+        constants::onToroidalDown);
+
+    Flock::setToroidalMode(true);
+  } else {
+    toroidalButton->setText("Mirror Mode");
+    toroidalButton->getRenderer()->setBackgroundColor(
+        constants::offToroidalColor);
+    toroidalButton->getRenderer()->setBackgroundColorHover(
+        constants::offToroidalHover);
+    toroidalButton->getRenderer()->setBackgroundColorDown(
+        constants::offToroidalDown);
+
+    Flock::setToroidalMode(false);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::setupOpt3() {
   createSliderOpt3(constants::separationSlider);
@@ -696,6 +800,7 @@ void Egui::setupOpt3() {
   createSliderOpt3(constants::interactionSlider);
   createSliderOpt3(constants::repelSlider);
   createSliderOpt3(constants::repelRangeSlider);
+  createSliderOpt3(constants::frameRateLimitSlider);
 
   createLabelOpt3(constants::separationSliderLabel, "Separation Strength");
   createLabelOpt3(constants::separationRangeSliderLabel, "Separation Range");
@@ -704,6 +809,10 @@ void Egui::setupOpt3() {
   createLabelOpt3(constants::interactionSliderLabel, "Interaction Range");
   createLabelOpt3(constants::repelSliderLabel, "Repel Strength");
   createLabelOpt3(constants::repelRangeSliderLabel, "Repel Range");
+  createLabelOpt3(constants::frameRateLimitSliderLabel, "Frame Rate Limit");
+  createLabelOpt3(constants::parametersLabel, "INTERACTION PARAMETERS");
+  createLabelOpt3(constants::extraLabel, "ADDITIONAL OPTIONS");
+
 
   separationSlider = option3Sliders[0];
   separationRangeSlider = option3Sliders[1];
@@ -712,6 +821,7 @@ void Egui::setupOpt3() {
   interactionSlider = option3Sliders[4];
   repelSlider = option3Sliders[5];
   repelRangeSlider = option3Sliders[6];
+  frameRateLimitSlider = option3Sliders[7];
 
   separationSlider->onValueChange([this]() {
     Flock::setSeparationStrength(separationSlider->getValue() /
@@ -742,6 +852,13 @@ void Egui::setupOpt3() {
   repelRangeSlider->onValueChange(
       [this]() { Flock::setRepelRange(repelRangeSlider->getValue()); });
 
+  frameRateLimitSlider->onValueChange([this]() {
+    window.setFramerateLimit(
+        static_cast<unsigned>(frameRateLimitSlider->getValue()));
+  });
+
+  createToroidalButton(constants::toroidalButton);
+
   setVisibleOpt3(false);
 }
 
@@ -754,46 +871,7 @@ void Egui::setVisibleOpt3(bool visible) {
   for (auto &i : option3Labels) {
     i->setVisible(visible);
   }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
-// Draw Interface
-
-void Egui::drawInterface() {
-  sf::RectangleShape topSettings(getRectangle(constants::topSettingMargin));
-  sf::RectangleShape bottomSettings(
-      getRectangle(constants::bottomSettingMargin));
-  sf::RectangleShape leftSettings(getRectangle(constants::leftSettingMargin));
-  sf::RectangleShape rightSettings(getRectangle(constants::rightSettingMargin));
-
-  window.draw(topSettings);
-  window.draw(bottomSettings);
-  window.draw(leftSettings);
-  window.draw(rightSettings);
-
-  // BLACK BACKGROUND
-  sf::RectangleShape rectangle({constants::fieldSide, constants::fieldSide});
-  rectangle.setPosition(constants::marginSize, constants::marginSize);
-  rectangle.setFillColor(sf::Color::Black);
-
-  window.draw(rectangle);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::drawMargin() {
-  sf::Color color{constants::fieldColor};
-
-  sf::RectangleShape topField(getRectangle(constants::topMargin, color));
-  sf::RectangleShape bottomField(getRectangle(constants::bottomMargin, color));
-  sf::RectangleShape leftField(getRectangle(constants::leftMargin, color));
-  sf::RectangleShape rightField(getRectangle(constants::rightMargin, color));
-
-  window.draw(topField);
-  window.draw(bottomField);
-  window.draw(leftField);
-  window.draw(rightField);
+  toroidalButton->setVisible(visible);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -835,7 +913,7 @@ void Egui::evolveFlocks() {
   bodyStack_.resize(flockStack_.size());
   for (size_t i{0}; i < flockStack_.size(); i++) {
     flockStack_[i].updateFlock(Repel(flockStack_, i));
-  } 
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
