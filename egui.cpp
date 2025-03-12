@@ -154,7 +154,8 @@ void Egui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
   sf::Color b = constants::offThreeWayBGColorHover;
   sf::Color c = constants::threeWayBGColorDown;
 
-  option1 = tgui::Button::create("Statistics");
+  option1 = tgui::Button::create("Graphics &\n"
+                                 "statistics");
   option1->setPosition(button1.posX, button1.posY);
   option1->setSize(button1.width, button1.height);
   option1->getRenderer()->setBackgroundColor(
@@ -171,7 +172,8 @@ void Egui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
   gui.add(option1);
 
   // Button 2
-  option2 = tgui::Button::create("Create flock");
+  option2 = tgui::Button::create("Create\n"
+                                 "flocks");
   option2->setPosition(button2.posX, button2.posY);
   option2->setSize(button2.width, button2.height);
   option2->getRenderer()->setBackgroundColor(a); // Default "off"
@@ -186,7 +188,7 @@ void Egui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
   gui.add(option2);
 
   // Button 3
-  option3 = tgui::Button::create("Set\n"
+  option3 = tgui::Button::create("Simulation\n"
                                  "parameters");
   option3->setPosition(button3.posX, button3.posY);
   option3->setSize(button3.width, button3.height);

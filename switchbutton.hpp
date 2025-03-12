@@ -8,7 +8,12 @@
 
 class SwitchButton : public tgui::Button {
 private:
-  bool isOn_{false}; // Internal state
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  // ON OFF SWITCH
+  bool isOn_{false};
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Initialize Values
   std::string onText_;
   std::string offText_;
 
@@ -18,16 +23,24 @@ private:
   std::function<void()> onAction_;
   std::function<void()> offAction_;
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  // INITIALIZE
   void init(const SwitchButtonPar &par);
   void toggle();
 
 public:
+  // DEFAULT CONSTRUCTOR
   SwitchButton(const SwitchButtonPar &par);
+  // CREATE FUNCTION that returns a SHARED POINTER - Following TGUI conventions.
   static std::shared_ptr<SwitchButton> create(const SwitchButtonPar &par);
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  // SETTER and GETTER for the STATE
   void setState(bool state);
   bool getState() const;
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  // SETTERS to implement specific action for a button to perform
   void setOnAction(std::function<void()> &&action);
   void setOffAction(std::function<void()> &&action);
 };

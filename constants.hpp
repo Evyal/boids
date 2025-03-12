@@ -103,13 +103,12 @@ inline constexpr TguiPar button1{770, 20, 80, 50};
 inline constexpr TguiPar button2{860, 20, 80, 50};
 inline constexpr TguiPar button3{950, 20, 80, 50};
 
-inline const sf::Color onThreeWayBGColor{sf::Color(255, 255, 160)};
-inline const sf::Color onThreeWayBGColorHover{sf::Color(255, 255, 160)};
+inline const sf::Color onThreeWayBGColor{sf::Color(255, 255, 204)};
+inline const sf::Color onThreeWayBGColorHover{sf::Color(255, 255, 204)};
 
-inline const sf::Color offThreeWayBGColor{sf::Color(128, 128, 128)};
-inline const sf::Color offThreeWayBGColorHover{sf::Color(190, 190, 190)};
-
-inline const sf::Color threeWayBGColorDown{sf::Color(160, 160, 160)};
+inline const sf::Color offThreeWayBGColor{sf::Color(204, 204, 204)};
+inline const sf::Color offThreeWayBGColorHover{sf::Color(204, 204, 204)};
+inline const sf::Color threeWayBGColorDown{sf::Color(224, 224, 224)};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 1
