@@ -28,4 +28,14 @@ struct RectanglePar {
   float height{};
 };
 
+struct FlockPar {
+  float separationStrength{};
+  float separationRange{};
+  float alignmentStrength{};
+  float cohesionStrength{};
+  float interactionRange{};
+  float repelStrength{};
+  float repelRange{};
+};
+
 #endif

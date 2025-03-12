@@ -8,15 +8,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/System/Vector2.hpp>
 #include <TGUI/TGUI.hpp>
+#include <TGUI/Widgets/EditBoxSlider.hpp>
 #include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
 #include <string>
-#include <vector>
 
 extern bool toroidal;
 
@@ -698,12 +697,12 @@ void Egui::setupOpt3() {
   createSliderOpt3(constants::repelSlider);
   createSliderOpt3(constants::repelRangeSlider);
 
-  createLabelOpt3(constants::separationSliderLabel, "Separation Strenght");
+  createLabelOpt3(constants::separationSliderLabel, "Separation Strength");
   createLabelOpt3(constants::separationRangeSliderLabel, "Separation Range");
-  createLabelOpt3(constants::alignmentSliderLabel, "Alignment Strenght");
-  createLabelOpt3(constants::cohesionSliderLabel, "Cohesion Strenght");
+  createLabelOpt3(constants::alignmentSliderLabel, "Alignment Strength");
+  createLabelOpt3(constants::cohesionSliderLabel, "Cohesion Strength");
   createLabelOpt3(constants::interactionSliderLabel, "Interaction Range");
-  createLabelOpt3(constants::repelSliderLabel, "Repel Strenght");
+  createLabelOpt3(constants::repelSliderLabel, "Repel Strength");
   createLabelOpt3(constants::repelRangeSliderLabel, "Repel Range");
 
   separationSlider = option3Sliders[0];
@@ -713,6 +712,35 @@ void Egui::setupOpt3() {
   interactionSlider = option3Sliders[4];
   repelSlider = option3Sliders[5];
   repelRangeSlider = option3Sliders[6];
+
+  separationSlider->onValueChange([this]() {
+    Flock::setSeparationStrength(separationSlider->getValue() /
+                                 constants::scalingFactor);
+  });
+
+  separationRangeSlider->onValueChange([this]() {
+    Flock::setSeparationRange(separationRangeSlider->getValue());
+  });
+
+  alignmentSlider->onValueChange([this]() {
+    Flock::setAlignmentStrength(alignmentSlider->getValue() /
+                                constants::scalingFactor);
+  });
+
+  cohesionSlider->onValueChange([this]() {
+    Flock::setCohesionStrength(cohesionSlider->getValue() /
+                               constants::scalingFactor);
+  });
+
+  interactionSlider->onValueChange(
+      [this]() { Flock::setInteractionRange(interactionSlider->getValue()); });
+
+  repelSlider->onValueChange([this]() {
+    Flock::setRepelStrength(repelSlider->getValue() / constants::scalingFactor);
+  });
+
+  repelRangeSlider->onValueChange(
+      [this]() { Flock::setRepelRange(repelRangeSlider->getValue()); });
 
   setVisibleOpt3(false);
 }
@@ -806,34 +834,8 @@ void Egui::deleteFlock(size_t i) {
 void Egui::evolveFlocks() {
   bodyStack_.resize(flockStack_.size());
   for (size_t i{0}; i < flockStack_.size(); i++) {
-
-    const std::vector<sf::Vector2f> &separate{flockStack_[i].Separation(
-        separationSlider->getValue() / constants::scalingFactor,
-        separationRangeSlider->getValue())};
-
-    const std::vector<sf::Vector2f> &align{flockStack_[i].Alignment(
-        alignmentSlider->getValue() / constants::scalingFactor,
-        interactionSlider->getValue())};
-
-    const std::vector<sf::Vector2f> &repel{Repel(
-        flockStack_, i, repelSlider->getValue() / constants::scalingFactor,
-        repelRangeSlider->getValue())};
-
-    if (toroidal) {
-      const std::vector<sf::Vector2f> &cohesion{flockStack_[i].toroidalCohesion(
-          cohesionSlider->getValue() / constants::scalingFactor,
-          interactionSlider->getValue())};
-
-      flockStack_[i].toroidalUpdate(separate, align, cohesion, repel);
-
-    } else {
-      const std::vector<sf::Vector2f> &cohesion{flockStack_[i].Cohesion(
-          cohesionSlider->getValue() / constants::scalingFactor,
-          interactionSlider->getValue())};
-
-      flockStack_[i].updateFlock(separate, align, cohesion, repel);
-    }
-  }
+    flockStack_[i].updateFlock(Repel(flockStack_, i));
+  } 
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -2,6 +2,7 @@
 #define FLOCK_H
 
 #include "boid.hpp"
+#include "structs.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
@@ -14,6 +15,7 @@ class Flock {
 private:
   std::vector<Boid> flock_;
   sf::Color color_;
+  static FlockPar parameters_;
 
 public:
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -27,43 +29,43 @@ public:
   Boid getBoid(size_t i) const;
   size_t getSize() const;
   sf::Color getFlockColor() const;
-
-  // sf::Vector2f getMeanPosition() const;
-  // sf::Vector2f getMeanVelocity() const;
   float getMeanSpeed() const;
 
   std::vector<sf::Vector2f> getFlockPositions() const;
   std::vector<sf::Vector2f> getFlockVelocities() const;
   std::vector<float> getSpeedVector() const;
 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // RULES
-  std::vector<sf::Vector2f> Separation(float separation,
-                                       float separationRange) const;
-  std::vector<sf::Vector2f> Alignment(float alignment, float interaction) const;
-  std::vector<sf::Vector2f> Cohesion(float cohesion, float interaction) const;
+  static FlockPar getParameters();
 
   //////////////////////////////////////////////////////////////////////////////////////////
+
+  static void setParameters(const FlockPar &par);
+
+  static void setSeparationStrength(float value);
+  static void setSeparationRange(float value);
+  static void setAlignmentStrength(float value);
+  static void setCohesionStrength(float value);
+  static void setInteractionRange(float value);
+  static void setRepelStrength(float value);
+  static void setRepelRange(float value);
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // RULES
+  std::vector<sf::Vector2f> Separation() const;
+  std::vector<sf::Vector2f> Alignment() const;
+  std::vector<sf::Vector2f> Cohesion() const;
+
   // UPDATE
-  void updateFlock(const std::vector<sf::Vector2f> &separationSpeed,
-                   const std::vector<sf::Vector2f> &alignmentSpeed,
-                   const std::vector<sf::Vector2f> &coesionSpeed,
-                   const std::vector<sf::Vector2f> &repelSpeed);
+  void updateFlock(const std::vector<sf::Vector2f> &repelSpeed);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // TOROIDAL MODE
-
-  std::vector<sf::Vector2f> toroidalCohesion(float cohesion, float interaction);
-  void toroidalUpdate(const std::vector<sf::Vector2f> &separationSpeed,
-                      const std::vector<sf::Vector2f> &alignmentSpeed,
-                      const std::vector<sf::Vector2f> &coesionSpeed,
-                      const std::vector<sf::Vector2f> &repelSpeed);
+  std::vector<sf::Vector2f> toroidalCohesion();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // REPEL
-std::vector<sf::Vector2f> Repel(const std::vector<Flock> &flockstack, size_t i,
-                                float repel, float repelRange);
+std::vector<sf::Vector2f> Repel(const std::vector<Flock> &flockstack, size_t i);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE FLOCKS

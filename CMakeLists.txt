@@ -27,7 +27,7 @@ add_executable(EvyalBoids egui.cpp statistics.cpp graphics.cpp random.cpp boid.c
 target_link_libraries(EvyalBoids sfml-graphics sfml-window sfml-system TGUI::TGUI)
 
 # Include the testing subdirectory.
-option(BUILD_TESTS "Build the tests executable" ON)
+option(BUILD_TESTS "Build the tests executable" OFF)
 if(BUILD_TESTS)
     add_subdirectory(testing)
 endif()

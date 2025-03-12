@@ -66,30 +66,35 @@ inline constexpr size_t maxFlockNumber{5};
 // MAXIMUM VALUES
 inline constexpr float maxSeparationStrength{1.f};
 inline constexpr float maxSeparationRange{360.f};
-
-// inline constexpr float maxAlignmentStrength{1.f};
-// inline constexpr float maxCohesionStrength{1.f};
 inline constexpr float maxAlignmentStrength{0.3f};
 inline constexpr float maxCohesionStrength{0.3f};
 
 inline constexpr float maxInteractionRange{360.f};
-inline constexpr float maxRepelStrenght{1.};
+inline constexpr float maxRepelStrength{1.};
 inline constexpr float maxRepelRange{360.f};
 
-// DEFAULT VALUES
-inline constexpr float defaultSeparationStrenght{0.5f};
+inline constexpr FlockPar maxFlockParameters{
+    maxSeparationStrength, maxSeparationRange,  maxAlignmentStrength,
+    maxCohesionStrength,   maxInteractionRange, maxRepelStrength,
+    maxRepelRange};
 
-// inline constexpr float defaultSeparationRange{12.0f};
-// inline constexpr float defaultAlignmentStrenght{0.03f};
-// inline constexpr float defaultCohesionStrenght{0.015f};
-inline constexpr float defaultSeparationRange{15.0f};
-inline constexpr float defaultAlignmentStrenght{0.015f};
-inline constexpr float defaultCohesionStrenght{0.015f};
+// DEFAULT VALUES
+inline constexpr float defaultSeparationStrength{0.5f};
+inline constexpr float defaultSeparationRange{12.0f};
+inline constexpr float defaultAlignmentStrength{0.03f};
+inline constexpr float defaultCohesionStrength{0.015f};
 
 inline constexpr float defaultInteractionRange{150.f};
-inline constexpr float defaultRepelStrenght{0.3f};
+inline constexpr float defaultRepelStrength{0.3f};
 inline constexpr float defaultRepelRange{20.0f};
+
 inline constexpr float scalingFactor{1000.0f};
+
+inline constexpr FlockPar defaultFlockParameters{
+    defaultSeparationStrength, defaultSeparationRange,
+    defaultAlignmentStrength,  defaultCohesionStrength,
+    defaultInteractionRange,   defaultRepelStrength,
+    defaultRepelRange};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // SELECT OPTION
@@ -175,7 +180,7 @@ inline constexpr SlidersPar separationSlider{
     {slidersPosX, 150, slidersWidth, slidersHeight},
     0,
     maxSeparationStrength *constants::scalingFactor,
-    defaultSeparationStrenght *constants::scalingFactor};
+    defaultSeparationStrength *constants::scalingFactor};
 
 inline constexpr SlidersPar separationRangeSlider{
     {slidersPosX, 210, slidersWidth, slidersHeight},
@@ -187,13 +192,13 @@ inline constexpr SlidersPar alignmentSlider{
     {slidersPosX, 270, slidersWidth, slidersHeight},
     0,
     maxAlignmentStrength *constants::scalingFactor,
-    defaultAlignmentStrenght *constants::scalingFactor};
+    defaultAlignmentStrength *constants::scalingFactor};
 
 inline constexpr SlidersPar cohesionSlider{
     {slidersPosX, 330, slidersWidth, slidersHeight},
     0,
     maxCohesionStrength *constants::scalingFactor,
-    defaultCohesionStrenght *constants::scalingFactor};
+    defaultCohesionStrength *constants::scalingFactor};
 
 inline constexpr SlidersPar interactionSlider{
     {slidersPosX, 390, slidersWidth, slidersHeight},
@@ -204,8 +209,8 @@ inline constexpr SlidersPar interactionSlider{
 inline constexpr SlidersPar repelSlider{
     {slidersPosX, 450, slidersWidth, slidersHeight},
     0,
-    maxRepelStrenght *constants::scalingFactor,
-    defaultRepelStrenght *constants::scalingFactor};
+    maxRepelStrength *constants::scalingFactor,
+    defaultRepelStrength *constants::scalingFactor};
 
 inline constexpr SlidersPar repelRangeSlider{
     {slidersPosX, 510, slidersWidth, slidersHeight},
