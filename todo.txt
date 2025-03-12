@@ -1,8 +1,5 @@
 LIST OF THINGS TO DO:
 
-> Add toroidal in flockparameters
-> Make it possible to change background colour
-
     GENERAL
 > introduce algorithms  
 

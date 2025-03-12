@@ -5,6 +5,7 @@
 #include "random.hpp"
 #include "statistics.hpp"
 #include "structs.hpp"
+#include "switchbutton.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -73,6 +74,7 @@ void Egui::run() {
   while (window.isOpen()) {
     while (window.pollEvent(event)) {
       gui.handleEvent(event);
+
       switch (event.type) {
       case sf::Event::Closed:
         window.close();
@@ -82,6 +84,7 @@ void Egui::run() {
       }
     }
 
+    interactWithFlocks();
     evolveFlocks();
 
     window.clear(sf::Color::White);
@@ -261,60 +264,6 @@ void Egui::selectedOption3() {
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 1
-
-void Egui::createSwitchButton(const TguiPar &par) {
-  switchButton = tgui::Button::create("Black Mode");
-  switchButton->getRenderer()->setTextColor(sf::Color::White);
-  switchButton->getRenderer()->setTextColorHover(sf::Color::White);
-  switchButton->getRenderer()->setTextColorDown(sf::Color::White);
-
-  switchButton->setPosition(par.posX, par.posY);
-  switchButton->setSize(par.width, par.height);
-  switchButton->getRenderer()->setBackgroundColor(constants::offGraphicsColor);
-  switchButton->getRenderer()->setBackgroundColorHover(
-      constants::offGraphicsColor);
-  switchButton->getRenderer()->setBackgroundColorDown(
-      constants::offGraphicsColor);
-
-  // Attach the toggleSwitch action to the button
-  switchButton->onPress([this]() { toggleSwitch(); });
-
-  gui.add(switchButton);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::toggleSwitch() {
-  isSwitchOn = !isSwitchOn;
-  switchButton->getRenderer()->setTextColor(backgroundColour_);
-  switchButton->getRenderer()->setTextColorHover(backgroundColour_);
-  switchButton->getRenderer()->setTextColorDown(backgroundColour_);
-
-  if (isSwitchOn) {
-    switchButton->setText("White Mode");
-
-    switchButton->getRenderer()->setBackgroundColor(constants::onGraphicsColor);
-    switchButton->getRenderer()->setBackgroundColorHover(
-        constants::onGraphicsColor);
-    switchButton->getRenderer()->setBackgroundColorDown(
-        constants::onGraphicsColor);
-
-    backgroundColour_ = sf::Color::White;
-  } else {
-    switchButton->setText("Black Mode");
-    switchButton->getRenderer()->setBackgroundColor(
-        constants::offGraphicsColor);
-    switchButton->getRenderer()->setBackgroundColorHover(
-        constants::offGraphicsColor);
-    switchButton->getRenderer()->setBackgroundColorDown(
-        constants::offGraphicsColor);
-
-    backgroundColour_ = sf::Color::Black;
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::drawStatistics() {
   for (size_t i{0}; i < flockStack_.size(); i++) {
@@ -502,14 +451,37 @@ void Egui::repositionButtons() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::setupOpt1() {
-  createSwitchButton(constants::graphicsButton);
+  graphicButton = SwitchButton::create(constants::graphicsButton);
+  // COLOR for the BACKGROUND and TEXT of the BUTTON are INVERTED
+  const sf::Color &textOff{constants::onGraphicsButtonColor};
+  const sf::Color &textOn{constants::offGraphicsButtonColor};
+
+  graphicButton->getRenderer()->setTextColor(textOff);
+  graphicButton->getRenderer()->setTextColorHover(textOff);
+  graphicButton->getRenderer()->setTextColorDown(textOff);
+
+  graphicButton->setOffAction([this]() -> void {
+    backgroundColour_ = sf::Color::Black;
+    graphicButton->getRenderer()->setTextColor(textOff);
+    graphicButton->getRenderer()->setTextColorHover(textOff);
+    graphicButton->getRenderer()->setTextColorDown(textOff);
+  });
+  graphicButton->setOnAction([this]() -> void {
+    backgroundColour_ = sf::Color::White;
+    graphicButton->getRenderer()->setTextColor(textOn);
+    graphicButton->getRenderer()->setTextColorHover(textOn);
+    graphicButton->getRenderer()->setTextColorDown(textOn);
+  });
+
+  gui.add(graphicButton);
+
   setVisibleOpt1(true);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::setVisibleOpt1(bool visible) {
-  switchButton->setVisible(visible);
+  graphicButton->setVisible(visible);
 
   for (size_t i = 0; i < dynamicButtons.size(); ++i) {
     dynamicButtons[i]->setVisible(visible);
@@ -743,53 +715,6 @@ void Egui::createLabelOpt3(const LabelsPar &labelsPar,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// TOROIDAL SWITCH BUTTON
-
-void Egui::createToroidalButton(const TguiPar &par) {
-  toroidalButton = tgui::Button::create("Mirror Mode");
-  toroidalButton->setPosition(par.posX, par.posY);
-  toroidalButton->setSize(par.width, par.height);
-  toroidalButton->getRenderer()->setBackgroundColor(
-      constants::offToroidalColor);
-  toroidalButton->getRenderer()->setBackgroundColorHover(
-      constants::offToroidalHover);
-  toroidalButton->getRenderer()->setBackgroundColorDown(
-      constants::offToroidalDown);
-
-  // Attach the toggleSwitch action to the button
-  toroidalButton->onPress([this]() { toggleToroidal(); });
-
-  gui.add(toroidalButton);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Egui::toggleToroidal() {
-  isToroidalOn = !isToroidalOn;
-
-  if (isToroidalOn) {
-    toroidalButton->setText("Toroidal Mode");
-    toroidalButton->getRenderer()->setBackgroundColor(
-        constants::onToroidalColor);
-    toroidalButton->getRenderer()->setBackgroundColorHover(
-        constants::onToroidalHover);
-    toroidalButton->getRenderer()->setBackgroundColorDown(
-        constants::onToroidalDown);
-
-    Flock::setToroidalMode(true);
-  } else {
-    toroidalButton->setText("Mirror Mode");
-    toroidalButton->getRenderer()->setBackgroundColor(
-        constants::offToroidalColor);
-    toroidalButton->getRenderer()->setBackgroundColorHover(
-        constants::offToroidalHover);
-    toroidalButton->getRenderer()->setBackgroundColorDown(
-        constants::offToroidalDown);
-
-    Flock::setToroidalMode(false);
-  }
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::setupOpt3() {
@@ -800,6 +725,7 @@ void Egui::setupOpt3() {
   createSliderOpt3(constants::interactionSlider);
   createSliderOpt3(constants::repelSlider);
   createSliderOpt3(constants::repelRangeSlider);
+  createSliderOpt3(constants::clickStrengthSlider);
   createSliderOpt3(constants::frameRateLimitSlider);
 
   createLabelOpt3(constants::separationSliderLabel, "Separation Strength");
@@ -809,10 +735,10 @@ void Egui::setupOpt3() {
   createLabelOpt3(constants::interactionSliderLabel, "Interaction Range");
   createLabelOpt3(constants::repelSliderLabel, "Repel Strength");
   createLabelOpt3(constants::repelRangeSliderLabel, "Repel Range");
+  createLabelOpt3(constants::clickStrengthSliderLabel, "Click Strength");
   createLabelOpt3(constants::frameRateLimitSliderLabel, "Frame Rate Limit");
   createLabelOpt3(constants::parametersLabel, "INTERACTION PARAMETERS");
   createLabelOpt3(constants::extraLabel, "ADDITIONAL OPTIONS");
-
 
   separationSlider = option3Sliders[0];
   separationRangeSlider = option3Sliders[1];
@@ -821,7 +747,8 @@ void Egui::setupOpt3() {
   interactionSlider = option3Sliders[4];
   repelSlider = option3Sliders[5];
   repelRangeSlider = option3Sliders[6];
-  frameRateLimitSlider = option3Sliders[7];
+  clickStrengthSlider = option3Sliders[7];
+  frameRateLimitSlider = option3Sliders[8];
 
   separationSlider->onValueChange([this]() {
     Flock::setSeparationStrength(separationSlider->getValue() /
@@ -852,12 +779,29 @@ void Egui::setupOpt3() {
   repelRangeSlider->onValueChange(
       [this]() { Flock::setRepelRange(repelRangeSlider->getValue()); });
 
+  clickStrengthSlider->onValueChange([this]() {
+    Flock::setClickStrength(clickStrengthSlider->getValue() /
+                            constants::scalingFactor);
+  });
+
   frameRateLimitSlider->onValueChange([this]() {
     window.setFramerateLimit(
         static_cast<unsigned>(frameRateLimitSlider->getValue()));
   });
 
-  createToroidalButton(constants::toroidalButton);
+  toroidalButton = SwitchButton::create(constants::toroidalButton);
+  toroidalButton->setOffAction([]() -> void { Flock::setToroidalMode(false); });
+  toroidalButton->setOnAction([]() -> void { Flock::setToroidalMode(true); });
+
+  repulsiveClickButton =
+      SwitchButton::create(constants::clickInteractionButton);
+  repulsiveClickButton->setOffAction(
+      []() -> void { Flock::setRepulsiveClick(false); });
+  repulsiveClickButton->setOnAction(
+      []() -> void { Flock::setRepulsiveClick(true); });
+
+  gui.add(toroidalButton);
+  gui.add(repulsiveClickButton);
 
   setVisibleOpt3(false);
 }
@@ -872,6 +816,7 @@ void Egui::setVisibleOpt3(bool visible) {
     i->setVisible(visible);
   }
   toroidalButton->setVisible(visible);
+  repulsiveClickButton->setVisible(visible);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -939,6 +884,25 @@ size_t Egui::getActiveBoids() {
     activeBoids += flock.getSize();
   }
   return activeBoids;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Interact with left click
+
+void Egui::interactWithFlocks() {
+
+  int max{static_cast<int>(constants::fieldSide + 2 * constants::marginSize)};
+
+  if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    for (auto &i : flockStack_) {
+      if ((mousePos.x > 0) && (mousePos.x < max) && (mousePos.y > 0) &&
+          (mousePos.y < max))
+        i.RepelOnClick(
+            {static_cast<float>(mousePos.x) - constants::marginSize,
+             static_cast<float>(mousePos.y) - constants::marginSize});
+    }
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

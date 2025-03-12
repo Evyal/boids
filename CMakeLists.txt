@@ -22,7 +22,7 @@ string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-o
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 find_package(TGUI 1 REQUIRED)
 
-add_executable(EvyalBoids egui.cpp statistics.cpp graphics.cpp random.cpp boid.cpp flock.cpp main.cpp)
+add_executable(EvyalBoids egui.cpp switchbutton.cpp statistics.cpp graphics.cpp random.cpp boid.cpp flock.cpp main.cpp)
 
 target_link_libraries(EvyalBoids sfml-graphics sfml-window sfml-system TGUI::TGUI)
 

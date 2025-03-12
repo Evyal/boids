@@ -16,6 +16,7 @@ private:
   sf::Color color_;
   static FlockPar parameters_;
   static bool toroidal_;
+  static bool repulsiveClick_;
 
 public:
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -37,6 +38,7 @@ public:
 
   static FlockPar getParameters();
   static bool getToroidalMode();
+  static bool getRepulsiveClick();
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -49,14 +51,17 @@ public:
   static void setInteractionRange(float p);
   static void setRepelStrength(float p);
   static void setRepelRange(float p);
-  
+  static void setClickStrength(float p);
+
   static void setToroidalMode(bool p);
+  static void setRepulsiveClick(bool p);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // RULES
   std::vector<sf::Vector2f> Separation() const;
   std::vector<sf::Vector2f> Alignment() const;
   std::vector<sf::Vector2f> Cohesion() const;
+  void RepelOnClick(const sf::Vector2f &pos);
 
   // UPDATE
   void updateFlock(const std::vector<sf::Vector2f> &repelSpeed);

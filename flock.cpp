@@ -15,6 +15,7 @@ extern std::default_random_engine rng;
 
 FlockPar Flock::parameters_ = constants::defaultFlockParameters;
 bool Flock::toroidal_ = false;
+bool Flock::repulsiveClick_ = false;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -90,10 +91,8 @@ std::vector<float> Flock::getSpeedVector() const {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 FlockPar Flock::getParameters() { return parameters_; }
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
 bool Flock::getToroidalMode() { return toroidal_; }
+bool Flock::getRepulsiveClick() { return repulsiveClick_; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -108,8 +107,10 @@ void Flock::setCohesionStrength(float p) { parameters_.cohesionStrength = p; }
 void Flock::setInteractionRange(float p) { parameters_.interactionRange = p; }
 void Flock::setRepelStrength(float p) { parameters_.repelStrength = p; }
 void Flock::setRepelRange(float p) { parameters_.repelRange = p; }
+void Flock::setClickStrength(float p) { parameters_.clickStrength = p; }
 
 void Flock::setToroidalMode(bool p) { toroidal_ = p; }
+void Flock::setRepulsiveClick(bool p) { repulsiveClick_ = p; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -229,14 +230,14 @@ void Flock::updateFlock(const std::vector<sf::Vector2f> &repelSpeed) {
     flock_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i] +
                   repelSpeed[i]);
 
+    checkMinimumSpeed(flock_[i]);
+    checkMaximumSpeed(flock_[i]);
+
     if (toroidal_) {
       toroidalBorders(flock_[i]);
     } else {
       mirrorBorders(flock_[i]);
     }
-
-    checkMinimumSpeed(flock_[i]);
-    checkMaximumSpeed(flock_[i]);
   }
 }
 
@@ -290,6 +291,23 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
     }
   }
   return cohesionSpeed;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// REPEL ON CLICK
+
+void Flock::RepelOnClick(const sf::Vector2f &pos) {
+  assert((flock_.size() > 1));
+
+  for (size_t i{0}; i < flock_.size(); ++i) {
+    if (distance(flock_[i].getPosition(), pos) < parameters_.interactionRange) {
+      repulsiveClick_
+          ? flock_[i] +=
+            ((flock_[i].getPosition() - pos) * (parameters_.clickStrength))
+          : flock_[i] +=
+            -((flock_[i].getPosition() - pos) * (parameters_.clickStrength));
+    }
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

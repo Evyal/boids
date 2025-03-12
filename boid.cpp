@@ -102,17 +102,21 @@ void mirrorBorders(Boid &boid) {
   if (boid.getPosition().x < 0.f) {
     boid.setVelocityX(std::abs(boid.getVelocity().x) +
                       constants::speedBoostMirror);
+    boid.setPositionX(0);
   } else if (boid.getPosition().x > constants::fieldSide) {
     boid.setVelocityX(-std::abs(boid.getVelocity().x) -
                       constants::speedBoostMirror);
+    boid.setPositionX(constants::fieldSide);
   }
 
   if (boid.getPosition().y < 0.f) {
     boid.setVelocityY(std::abs(boid.getVelocity().y) +
                       constants::speedBoostMirror);
+    boid.setPositionY(0);
   } else if (boid.getPosition().y > constants::fieldSide) {
     boid.setVelocityY(-std::abs(boid.getVelocity().y) -
                       constants::speedBoostMirror);
+    boid.setPositionY(constants::fieldSide);
   }
 }
 

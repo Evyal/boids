@@ -68,10 +68,10 @@ inline constexpr float maxSeparationStrength{1.f};
 inline constexpr float maxSeparationRange{360.f};
 inline constexpr float maxAlignmentStrength{0.3f};
 inline constexpr float maxCohesionStrength{0.3f};
-
 inline constexpr float maxInteractionRange{360.f};
 inline constexpr float maxRepelStrength{1.};
 inline constexpr float maxRepelRange{360.f};
+inline constexpr float maxClickStrenght{1.f};
 
 inline constexpr FlockPar maxFlockParameters{
     maxSeparationStrength, maxSeparationRange,  maxAlignmentStrength,
@@ -83,10 +83,10 @@ inline constexpr float defaultSeparationStrength{0.5f};
 inline constexpr float defaultSeparationRange{14.0f};
 inline constexpr float defaultAlignmentStrength{0.03f};
 inline constexpr float defaultCohesionStrength{0.015f};
-
 inline constexpr float defaultInteractionRange{150.f};
 inline constexpr float defaultRepelStrength{0.3f};
 inline constexpr float defaultRepelRange{20.0f};
+inline constexpr float defaultClickStrenght{0.3f};
 
 inline constexpr float scalingFactor{1000.0f};
 
@@ -94,7 +94,7 @@ inline constexpr FlockPar defaultFlockParameters{
     defaultSeparationStrength, defaultSeparationRange,
     defaultAlignmentStrength,  defaultCohesionStrength,
     defaultInteractionRange,   defaultRepelStrength,
-    defaultRepelRange};
+    defaultRepelRange,         defaultClickStrenght};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // SELECT OPTION
@@ -114,7 +114,16 @@ inline const sf::Color threeWayBGColorDown{sf::Color(160, 160, 160)};
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 1
 
-inline constexpr TguiPar graphicsButton{770, 80, 260, 50};
+// BUTTON to change the COLOUR of the BACKGROUND
+inline const std::string onGraphicsButtonText{"White Mode"};
+inline const std::string offGraphicsButtonText{"Black Mode"};
+inline const sf::Color onGraphicsButtonColor{sf::Color(224, 224, 224)};
+inline const sf::Color offGraphicsButtonColor{sf::Color(32, 32, 32)};
+inline const SwitchButtonPar graphicsButton{{770, 80, 260, 50},
+                                                onGraphicsButtonText,
+                                                offGraphicsButtonText,
+                                                onGraphicsButtonColor,
+                                                offGraphicsButtonColor};
 
 inline const sf::Color onGraphicsColor{sf::Color(224, 224, 224)};
 inline const sf::Color offGraphicsColor{sf::Color(32, 32, 32)};
@@ -178,67 +187,86 @@ inline constexpr SlidersPar separationSlider{
     defaultSeparationStrength *constants::scalingFactor};
 
 inline constexpr SlidersPar separationRangeSlider{
-    {slidersPosX, 210, slidersWidth, slidersHeight},
+    {slidersPosX, 200, slidersWidth, slidersHeight},
     0,
     maxSeparationRange,
     defaultSeparationRange};
 
 inline constexpr SlidersPar alignmentSlider{
-    {slidersPosX, 270, slidersWidth, slidersHeight},
+    {slidersPosX, 250, slidersWidth, slidersHeight},
     0,
     maxAlignmentStrength *constants::scalingFactor,
     defaultAlignmentStrength *constants::scalingFactor};
 
 inline constexpr SlidersPar cohesionSlider{
-    {slidersPosX, 330, slidersWidth, slidersHeight},
+    {slidersPosX, 300, slidersWidth, slidersHeight},
     0,
     maxCohesionStrength *constants::scalingFactor,
     defaultCohesionStrength *constants::scalingFactor};
 
 inline constexpr SlidersPar interactionSlider{
-    {slidersPosX, 390, slidersWidth, slidersHeight},
+    {slidersPosX, 350, slidersWidth, slidersHeight},
     0,
     maxInteractionRange,
     defaultInteractionRange};
 
 inline constexpr SlidersPar repelSlider{
-    {slidersPosX, 450, slidersWidth, slidersHeight},
+    {slidersPosX, 400, slidersWidth, slidersHeight},
     0,
     maxRepelStrength *constants::scalingFactor,
     defaultRepelStrength *constants::scalingFactor};
 
 inline constexpr SlidersPar repelRangeSlider{
-    {slidersPosX, 510, slidersWidth, slidersHeight},
+    {slidersPosX, 450, slidersWidth, slidersHeight},
     0,
     maxRepelRange,
     defaultRepelRange};
 
-inline constexpr SlidersPar frameRateLimitSlider{
-    {slidersPosX, 640, slidersWidth, slidersHeight}, 10, 100, windowFrameRate};
+inline constexpr SlidersPar clickStrengthSlider{
+    {slidersPosX, 500, slidersWidth, slidersHeight},
+    0,
+    maxClickStrenght *constants::scalingFactor,
+    defaultClickStrenght *constants::scalingFactor};
 
-inline constexpr LabelsPar separationSliderLabel{slidersPosX, 120, 15};
-inline constexpr LabelsPar separationRangeSliderLabel{slidersPosX, 180, 15};
-inline constexpr LabelsPar alignmentSliderLabel{slidersPosX, 240, 15};
-inline constexpr LabelsPar cohesionSliderLabel{slidersPosX, 300, 15};
-inline constexpr LabelsPar interactionSliderLabel{slidersPosX, 360, 15};
-inline constexpr LabelsPar repelSliderLabel{slidersPosX, 420, 15};
-inline constexpr LabelsPar repelRangeSliderLabel{slidersPosX, 480, 15};
-inline constexpr LabelsPar frameRateLimitSliderLabel{slidersPosX, 610, 15};
+inline constexpr SlidersPar frameRateLimitSlider{
+    {slidersPosX, 600, slidersWidth, slidersHeight}, 10, 100, windowFrameRate};
 
 inline constexpr LabelsPar parametersLabel{slidersPosX, 90, 18};
-inline constexpr LabelsPar extraLabel{slidersPosX, 560, 18};
+
+inline constexpr LabelsPar separationSliderLabel{slidersPosX, 125, 15};
+inline constexpr LabelsPar separationRangeSliderLabel{slidersPosX, 175, 15};
+inline constexpr LabelsPar alignmentSliderLabel{slidersPosX, 225, 15};
+inline constexpr LabelsPar cohesionSliderLabel{slidersPosX, 275, 15};
+inline constexpr LabelsPar interactionSliderLabel{slidersPosX, 325, 15};
+inline constexpr LabelsPar repelSliderLabel{slidersPosX, 375, 15};
+inline constexpr LabelsPar repelRangeSliderLabel{slidersPosX, 425, 15};
+inline constexpr LabelsPar clickStrengthSliderLabel{slidersPosX, 475, 15};
+
+inline constexpr LabelsPar extraLabel{slidersPosX, 540, 18};
+
+inline constexpr LabelsPar frameRateLimitSliderLabel{slidersPosX, 575, 15};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline constexpr TguiPar toroidalButton{770, 675, 260, 50};
+inline const std::string onToroidalButtonText{"Toroidal Mode"};
+inline const std::string offToroidalButtonText{"Mirror Mode"};
+inline const sf::Color onToroidalButtonColor{sf::Color(255, 255, 153)};
+inline const sf::Color offToroidalButtonColor{sf::Color(204, 255, 153)};
+inline const SwitchButtonPar toroidalButton{{770, 640, 260, 40},
+                                            onToroidalButtonText,
+                                            offToroidalButtonText,
+                                            onToroidalButtonColor,
+                                            offToroidalButtonColor};
 
-inline const sf::Color onToroidalColor{sf::Color(204, 255, 153)};
-inline const sf::Color onToroidalHover{sf::Color(229, 255, 204)};
-inline const sf::Color onToroidalDown{sf::Color(229, 255, 204)};
-
-inline const sf::Color offToroidalColor{sf::Color(153, 255, 255)};
-inline const sf::Color offToroidalHover{sf::Color(204, 255, 255)};
-inline const sf::Color offToroidalDown{sf::Color(204, 255, 255)};
+inline const std::string onInteractionButtonText{"Repulsive Mode"};
+inline const std::string offInteractionButtonText{"Attractive Mode"};
+inline const sf::Color onInteractionButtonColor{sf::Color(255, 153, 153)};
+inline const sf::Color offInteractionButtonColor{sf::Color(153, 255, 255)};
+inline const SwitchButtonPar clickInteractionButton{{770, 690, 260, 40},
+                                                    onInteractionButtonText,
+                                                    offInteractionButtonText,
+                                                    onInteractionButtonColor,
+                                                    offInteractionButtonColor};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // INTERFACE

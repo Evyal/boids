@@ -3,6 +3,7 @@
 
 #include "flock.hpp"
 #include "structs.hpp"
+#include "switchbutton.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
@@ -67,11 +68,7 @@ private:
   // OPTION 1
 
   // ON OFF BUTTON, for MIRROR or TOROIDAL MODE
-  tgui::Button::Ptr switchButton;
-  bool isSwitchOn = false;
-
-  void createSwitchButton(const TguiPar &par);
-  void toggleSwitch();
+  std::shared_ptr<SwitchButton> graphicButton;
 
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -144,6 +141,7 @@ private:
   tgui::EditBoxSlider::Ptr interactionSlider;
   tgui::EditBoxSlider::Ptr repelSlider;
   tgui::EditBoxSlider::Ptr repelRangeSlider;
+  tgui::EditBoxSlider::Ptr clickStrengthSlider;
 
   tgui::EditBoxSlider::Ptr frameRateLimitSlider;
 
@@ -155,11 +153,8 @@ private:
   ////////////////////////////////////////////////////////////////////////////////
 
   // ON OFF BUTTON, for MIRROR or TOROIDAL MODE
-  tgui::Button::Ptr toroidalButton;
-  bool isToroidalOn = false;
-
-  void createToroidalButton(const TguiPar &par);
-  void toggleToroidal();
+  std::shared_ptr<SwitchButton> toroidalButton;
+  std::shared_ptr<SwitchButton> repulsiveClickButton;
 
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -181,6 +176,10 @@ private:
   ////////////////////////////////////////////////////////////////////////////////
 
   size_t getActiveBoids();
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+
+  void interactWithFlocks();
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
