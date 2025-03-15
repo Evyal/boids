@@ -13,7 +13,9 @@
 sf::CircleShape getCircleBoid(const Boid &boid, const sf::Color &color) {
   sf::CircleShape boidBody{constants::boidSize};
   boidBody.setOrigin(constants::boidSize, constants::boidSize);
-  boidBody.setPosition(boid.getPosition().x, boid.getPosition().y);
+  sf::Vector2f offSet{constants::marginSize, constants::marginSize};
+
+  boidBody.setPosition(boid.getPosition() + offSet);
   boidBody.setFillColor(color);
   return boidBody;
 }
@@ -27,6 +29,7 @@ sf::CircleShape getTriangleBoid(const Boid &boid, const sf::Color &color) {
   boidBody.setFillColor(color);
   boidBody.setOrigin(constants::boidSize, constants::boidSize);
   sf::Vector2f offSet{constants::marginSize, constants::marginSize};
+
   boidBody.setPosition(boid.getPosition() + offSet);
 
   boidBody.rotate(

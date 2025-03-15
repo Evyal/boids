@@ -73,19 +73,30 @@ void Egui::run() {
 
   while (window.isOpen()) {
     while (window.pollEvent(event)) {
+
+      if (event.type == sf::Event::KeyPressed &&
+          event.key.code == sf::Keyboard::Space) {
+        pause = !pause;
+        continue;
+      }
+      
       gui.handleEvent(event);
 
       switch (event.type) {
-      case sf::Event::Closed:
+      case sf::Event::Closed: {
         window.close();
         break;
+      }
+
       default:
         break;
       }
     }
 
-    interactWithFlocks();
-    evolveFlocks();
+    if (!pause) {
+      interactWithFlocks();
+      evolveFlocks();
+    }
 
     window.clear(sf::Color::White);
 
@@ -859,7 +870,7 @@ void Egui::deleteFlock(size_t i) {
 void Egui::evolveFlocks() {
   bodyStack_.resize(flockStack_.size());
   for (size_t i{0}; i < flockStack_.size(); i++) {
-    flockStack_[i].updateFlock(Repel(flockStack_, i));
+    flockStack_[i].updateFlock(repel(flockStack_, i));
   }
 }
 
@@ -900,7 +911,7 @@ void Egui::interactWithFlocks() {
     for (auto &i : flockStack_) {
       if ((mousePos.x > 0) && (mousePos.x < max) && (mousePos.y > 0) &&
           (mousePos.y < max))
-        i.RepelOnClick(
+        i.repelOnClick(
             {static_cast<float>(mousePos.x) - constants::marginSize,
              static_cast<float>(mousePos.y) - constants::marginSize});
     }

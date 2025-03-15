@@ -12,10 +12,7 @@
 
 TEST_CASE("TESTING CLASS BOID") {
 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // GETTERS
-
-  SUBCASE("TESTING SPEED CONTROL") {
+  SUBCASE("TESTING GETTERS") {
     Boid b1{{0, 0}, {0, 0}};
     Boid b2{{1, 2}, {3, 4}};
 
@@ -38,9 +35,8 @@ TEST_CASE("TESTING CLASS BOID") {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // SETTERS
 
-  SUBCASE("TESTING SPEED CONTROL") {
+  SUBCASE("TESTING SETTERS") {
 
     Boid b1{{0, 0}, {0, 0}};
     Boid b2{{1, 2}, {3, 4}};
@@ -76,11 +72,28 @@ TEST_CASE("TESTING CLASS BOID") {
     CHECK(b2.getVelocity().y == 4.f);
     CHECK(b2.getSpeed() == 5.f);
   }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("TESTING FUNCTIONS") {
+
+  SUBCASE("TESTING DISTANCE BETWEEN SFML 2D VECTORS") {
+    sf::Vector2f pos1{0, 0};
+    sf::Vector2f pos2{-3, 4};
+    sf::Vector2f pos3{-3, 0};
+    sf::Vector2f pos4{1, 1};
+
+    CHECK(distance(pos1, pos2) == 5.f);
+    CHECK(distance(pos1, pos3) == 3.f);
+    CHECK(distance(pos2, pos3) == 4.f);
+    CHECK(distance(pos1, pos4) == doctest::Approx(sqrtf(2.f)));
+  }
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // DISTANCE
 
-  SUBCASE("TESTING SPEED CONTROL") {
+  SUBCASE("TESTING DISTANCE BETWEEN BOIDS") {
 
     Boid b1{{0, 0}, {0, 0}};
     Boid b2{{0, 0}, {0, 0}};
@@ -94,7 +107,6 @@ TEST_CASE("TESTING CLASS BOID") {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // SPEED CONTROL
 
   SUBCASE("TESTING SPEED CONTROL") {
 
@@ -140,7 +152,6 @@ TEST_CASE("TESTING CLASS BOID") {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // CHECK BORDERS
 
   SUBCASE("TESTING CHECK BORDERS") {
 
@@ -205,43 +216,55 @@ TEST_CASE("TESTING CLASS BOID") {
 
     CHECK(b4.getVelocity().x == -100.f);
     CHECK(b4.getVelocity().y == -150 - constants::speedBoostMirror);
+
+    CHECK(b1.getPosition().x == 0.f);
+    CHECK(b1.getPosition().y == 0.f);
+
+    CHECK(b2.getPosition().x == 375.f);
+    CHECK(b2.getPosition().y == 375.f);
+
+    CHECK(b3.getPosition().x == 720.f);
+    CHECK(b3.getPosition().y == 375.f);
+
+    CHECK(b4.getPosition().x == 375.f);
+    CHECK(b4.getPosition().y == 720.f);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("TESTING BUILD BOID") {
+
+  sf::Vector2f center{400., 200.};
+
+  for (size_t i{0}; i < 100; i++) {
+    Boid b5{createBoid(center, 0)};
+
+    CHECK(b5.getPosition().x <= center.x + constants::randomPositionRange);
+    CHECK(b5.getPosition().x >= center.x - constants::randomPositionRange);
+    CHECK(b5.getPosition().y <= center.y + constants::randomPositionRange);
+    CHECK(b5.getPosition().y >= center.y - constants::randomPositionRange);
+
+    CHECK(b5.getSpeed() >= constants::randomMinimumSpeed);
+    CHECK(b5.getSpeed() <= constants::randomMaximumSpeed);
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // BUILD
+  sf::Vector2f center1{700., 360.};
 
-  SUBCASE("TESTING BUILD") {
+  for (size_t i{0}; i < 100; i++) {
+    Boid b{createBoid(center1, 0)};
+    CHECK(b.getPosition().x <= center1.x + constants::randomPositionRange);
+    CHECK(b.getPosition().x >= center1.x - constants::randomPositionRange);
+    CHECK(b.getPosition().y <= center1.y + constants::randomPositionRange);
+    CHECK(b.getPosition().y >= center1.y - constants::randomPositionRange);
 
-    sf::Vector2f center{400., 200.};
+    CHECK(b.getSpeed() >= constants::randomMinimumSpeed);
+    CHECK(b.getSpeed() <= constants::randomMaximumSpeed);
 
-    for (size_t i{0}; i < 100; i++) {
-      Boid b5{createBoid(center, 0)};
-
-      CHECK(b5.getPosition().x <= center.x + constants::randomPositionRange);
-      CHECK(b5.getPosition().x >= center.x - constants::randomPositionRange);
-      CHECK(b5.getPosition().y <= center.y + constants::randomPositionRange);
-      CHECK(b5.getPosition().y >= center.y - constants::randomPositionRange);
-
-      CHECK(b5.getSpeed() >= constants::randomMinimumSpeed);
-      CHECK(b5.getSpeed() <= constants::randomMaximumSpeed);
-    }
-
-    sf::Vector2f center1{700., 360.};
-
-    for (size_t i{0}; i < 100; i++) {
-      Boid b{createBoid(center1, 0)};
-      CHECK(b.getPosition().x <= center1.x + constants::randomPositionRange);
-      CHECK(b.getPosition().x >= center1.x - constants::randomPositionRange);
-      CHECK(b.getPosition().y <= center1.y + constants::randomPositionRange);
-      CHECK(b.getPosition().y >= center1.y - constants::randomPositionRange);
-
-      CHECK(b.getSpeed() >= constants::randomMinimumSpeed);
-      CHECK(b.getSpeed() <= constants::randomMaximumSpeed);
-
-      CHECK(b.getPosition().x <= 735.f);
-      CHECK(b.getPosition().x >= 15.f);
-      CHECK(b.getPosition().y <= 735.f);
-      CHECK(b.getPosition().y >= 15.f);
-    }
+    CHECK(b.getPosition().x <= 720.f);
+    CHECK(b.getPosition().x >= 0.f);
+    CHECK(b.getPosition().y <= 720.f);
+    CHECK(b.getPosition().y >= 0.f);
   }
 }

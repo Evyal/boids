@@ -14,6 +14,10 @@ class Flock {
 private:
   std::vector<Boid> flock_;
   sf::Color color_;
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // STATIC VARIABLES
+
   static FlockPar parameters_;
   static bool toroidal_;
   static bool repulsiveClick_;
@@ -27,6 +31,7 @@ public:
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // GETTERS
+
   Boid getBoid(size_t i) const;
   size_t getSize() const;
   sf::Color getFlockColor() const;
@@ -36,11 +41,15 @@ public:
   std::vector<sf::Vector2f> getFlockVelocities() const;
   std::vector<float> getSpeedVector() const;
 
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // GETTERS for STATIC VARIABLES
+
   static FlockPar getParameters();
   static bool getToroidalMode();
   static bool getRepulsiveClick();
 
   //////////////////////////////////////////////////////////////////////////////////////////
+  // SETTERS for STATIC VARIABLES
 
   static void setParameters(const FlockPar &par);
 
@@ -58,25 +67,31 @@ public:
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // RULES
-  std::vector<sf::Vector2f> Separation() const;
-  std::vector<sf::Vector2f> Alignment() const;
-  std::vector<sf::Vector2f> Cohesion() const;
-  void RepelOnClick(const sf::Vector2f &pos);
+
+  std::vector<sf::Vector2f> separation() const;
+  std::vector<sf::Vector2f> alignment() const;
+  std::vector<sf::Vector2f> cohesion() const;
 
   // UPDATE
+
+  void updateFlock();
   void updateFlock(const std::vector<sf::Vector2f> &repelSpeed);
+  void repelOnClick(const sf::Vector2f &pos);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // TOROIDAL MODE
+
   std::vector<sf::Vector2f> toroidalCohesion();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// REPEL
-std::vector<sf::Vector2f> Repel(const std::vector<Flock> &flockstack, size_t i);
+// REPEL between different flocks
+
+std::vector<sf::Vector2f> repel(const std::vector<Flock> &flockstack, size_t i);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE FLOCKS
+
 Flock createFlock(size_t n, sf::Vector2f center, sf::Color color);
 
 #endif

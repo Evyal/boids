@@ -45,4 +45,4 @@ public:
   void setOffAction(std::function<void()> &&action);
 };
 
-#endif // SWITCHBUTTON_HPP
+#endif

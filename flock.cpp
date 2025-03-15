@@ -119,7 +119,7 @@ void Flock::setRepulsiveClick(bool p) { repulsiveClick_ = p; }
 //////////////////////////////////////////////////////////////////////////////////////////
 // SEPARATION RULE
 
-std::vector<sf::Vector2f> Flock::Separation() const {
+std::vector<sf::Vector2f> Flock::separation() const {
   std::vector<sf::Vector2f> separationSpeed{};
   assert((flock_.size() > 1));
   separationSpeed.clear();
@@ -128,18 +128,13 @@ std::vector<sf::Vector2f> Flock::Separation() const {
     separationSpeed.emplace_back();
 
     for (size_t j{0}; j < flock_.size(); ++j) {
-      if (j != i &&
-          (distance(flock_[j], flock_[i]) < parameters_.separationRange)) {
-        if ((flock_[j].getPosition().x - flock_[i].getPosition().x) != 0) {
-          separationSpeed[i].x +=
-              (1 * (flock_[j].getPosition().x - flock_[i].getPosition().x) *
-               (-parameters_.separationStrength));
-        }
-        if ((flock_[j].getPosition().y - flock_[i].getPosition().y) != 0) {
-          separationSpeed[i].y +=
-              (1 * (flock_[j].getPosition().y - flock_[i].getPosition().y) *
-               (-parameters_.separationStrength));
-        }
+      if (j == i) {
+        continue;
+      }
+      if ((distance(flock_[j], flock_[i]) < parameters_.separationRange)) {
+        separationSpeed[i] +=
+            (flock_[j].getPosition() - flock_[i].getPosition()) *
+            -parameters_.separationStrength;
       }
     }
   }
@@ -149,18 +144,21 @@ std::vector<sf::Vector2f> Flock::Separation() const {
 //////////////////////////////////////////////////////////////////////////////////////////
 // ALIGNMENT RULE
 
-std::vector<sf::Vector2f> Flock::Alignment() const {
+std::vector<sf::Vector2f> Flock::alignment() const {
   std::vector<sf::Vector2f> alignSpeed{};
   assert((flock_.size() > 1));
   alignSpeed.clear();
 
   for (size_t i{0}; i < flock_.size(); ++i) {
     alignSpeed.emplace_back();
-    int count{0};
+    int count{0}; // amount of boid[j] interacting with boid[i]
 
     for (size_t j{0}; j < flock_.size(); ++j) {
-      if (j != i &&
-          distance(flock_[i], flock_[j]) < parameters_.interactionRange) {
+      if (j == i) {
+        continue;
+      }
+
+      if (distance(flock_[i], flock_[j]) < parameters_.interactionRange) {
         alignSpeed[i] += ((flock_[j].getVelocity() - flock_[i].getVelocity()) *
                           (parameters_.alignmentStrength));
         count++;
@@ -177,7 +175,7 @@ std::vector<sf::Vector2f> Flock::Alignment() const {
 //////////////////////////////////////////////////////////////////////////////////////////
 // COHESION RULE
 
-std::vector<sf::Vector2f> Flock::Cohesion() const {
+std::vector<sf::Vector2f> Flock::cohesion() const {
 
   std::vector<sf::Vector2f> cohesionSpeed{};
   assert((flock_.size() > 1));
@@ -186,11 +184,13 @@ std::vector<sf::Vector2f> Flock::Cohesion() const {
   for (size_t i{0}; i < flock_.size(); i++) {
     cohesionSpeed.emplace_back();
     sf::Vector2f massCenter{0, 0};
-    int count{0};
+    int count{0}; // number of boid[j] interacting with boid[i]
 
     for (size_t j{0}; j < flock_.size(); j++) {
-      if (j != i &&
-          distance(flock_[i], flock_[j]) < parameters_.interactionRange) {
+      if (j == i) {
+        continue;
+      }
+      if (distance(flock_[i], flock_[j]) < parameters_.interactionRange) {
         massCenter += (flock_[j].getPosition());
         count += 1;
       }
@@ -209,14 +209,47 @@ std::vector<sf::Vector2f> Flock::Cohesion() const {
 //////////////////////////////////////////////////////////////////////////////////////////
 // UPDATE
 
+void Flock::updateFlock() {
+
+  assert(flock_.size() > 1);
+
+  const std::vector<sf::Vector2f> &separationSpeed{separation()};
+  const std::vector<sf::Vector2f> &alignmentSpeed{alignment()};
+  const std::vector<sf::Vector2f> &cohesionSpeed =
+      toroidal_ ? toroidalCohesion() : cohesion();
+
+  assert(flock_.size() == separationSpeed.size());
+  assert(flock_.size() == alignmentSpeed.size());
+  assert(flock_.size() == cohesionSpeed.size());
+
+  for (size_t i{0}; i < flock_.size(); ++i) {
+    flock_[i].setPosition(flock_[i].getPosition() +
+                          flock_[i].getVelocity() / constants::speedScale);
+
+    flock_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i]);
+
+    checkMinimumSpeed(flock_[i]);
+    checkMaximumSpeed(flock_[i]);
+
+    if (toroidal_) {
+      toroidalBorders(flock_[i]);
+    } else {
+      mirrorBorders(flock_[i]);
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Update with repel between flocks
+
 void Flock::updateFlock(const std::vector<sf::Vector2f> &repelSpeed) {
 
   assert(flock_.size() > 1);
 
-  const std::vector<sf::Vector2f> &separationSpeed{Separation()};
-  const std::vector<sf::Vector2f> &alignmentSpeed{Alignment()};
+  const std::vector<sf::Vector2f> &separationSpeed{separation()};
+  const std::vector<sf::Vector2f> &alignmentSpeed{alignment()};
   const std::vector<sf::Vector2f> &cohesionSpeed =
-      toroidal_ ? toroidalCohesion() : Cohesion();
+      toroidal_ ? toroidalCohesion() : cohesion();
 
   assert(flock_.size() == separationSpeed.size());
   assert(flock_.size() == alignmentSpeed.size());
@@ -242,6 +275,23 @@ void Flock::updateFlock(const std::vector<sf::Vector2f> &repelSpeed) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// REPEL ON CLICK
+
+void Flock::repelOnClick(const sf::Vector2f &pos) {
+  assert((flock_.size() > 1));
+
+  for (size_t i{0}; i < flock_.size(); ++i) {
+    if (distance(flock_[i].getPosition(), pos) < parameters_.interactionRange) {
+      repulsiveClick_
+          ? flock_[i] +=
+            -((pos - flock_[i].getPosition()) * (parameters_.clickStrength))
+          : flock_[i] +=
+            ((pos - flock_[i].getPosition()) * (parameters_.clickStrength));
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 // TOROIDAL RULES
 
@@ -253,7 +303,7 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
   for (size_t i{0}; i < flock_.size(); i++) {
     cohesionSpeed.emplace_back();
     sf::Vector2f massCenter{0, 0};
-    int count{};
+    int count{0}; // number of boid[j] interacting with boid[i]
 
     for (size_t j{0}; j < flock_.size(); j++) {
       if (j == i) {
@@ -262,6 +312,7 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
       // TEMPORARY VARIABLE NEEDED for the LOGIC
       sf::Vector2f tempMassCenter{};
 
+      // CHECK for TOROIDAL GEOMETRY
       if (distanceX(flock_[j], flock_[i]) > constants::fieldSide / 2) {
         tempMassCenter.x += (flock_[j].getPosition().x - constants::fieldSide);
       } else if (distanceX(flock_[j], flock_[i]) < -constants::fieldSide / 2) {
@@ -280,7 +331,7 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
       if (distance(tempMassCenter, flock_[i].getPosition()) <
           parameters_.interactionRange) {
         count++;
-        massCenter += {tempMassCenter.x, tempMassCenter.y};
+        massCenter += tempMassCenter;
       }
     }
 
@@ -294,53 +345,32 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// REPEL ON CLICK
-
-void Flock::RepelOnClick(const sf::Vector2f &pos) {
-  assert((flock_.size() > 1));
-
-  for (size_t i{0}; i < flock_.size(); ++i) {
-    if (distance(flock_[i].getPosition(), pos) < parameters_.interactionRange) {
-      repulsiveClick_
-          ? flock_[i] +=
-            ((flock_[i].getPosition() - pos) * (parameters_.clickStrength))
-          : flock_[i] +=
-            -((flock_[i].getPosition() - pos) * (parameters_.clickStrength));
-    }
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 // REPEL between FLOCKS
 
-std::vector<sf::Vector2f> Repel(const std::vector<Flock> &flockstack,
+std::vector<sf::Vector2f> repel(const std::vector<Flock> &flockstack,
                                 size_t i) {
   std::vector<sf::Vector2f> repelSpeed;
   repelSpeed.clear();
 
-  for (size_t j{0}; j < flockstack[i].getSize();
-       j++) { // PER TUTTI gli ELEMENTI del PRIMO FLOCK
+  // for all the boids of the selected flock
+  for (size_t j{0}; j < flockstack[i].getSize(); j++) {
     repelSpeed.emplace_back();
+    // for all the other flocks
     for (size_t k{0}; k < flockstack.size(); k++) {
-      if (i != k) // PER TUTTI gli ALTRI FLOCK
-        for (size_t l{0}; l < flockstack[k].getSize();
-             l++) { // SOMMA SU TUTTI I BOID di OGNI SINGOLO FLOCK
-          if (distance(flockstack[i].getBoid(j), flockstack[k].getBoid(l)) <
-                  Flock::getParameters().repelRange &&
-              (flockstack[i].getBoid(j).getPosition().x -
-                   flockstack[k].getBoid(l).getPosition().x !=
-               0) &&
-              (flockstack[i].getBoid(j).getPosition().y -
-                   flockstack[k].getBoid(l).getPosition().y !=
-               0)) { // TALI che la DISTANZA è MINORE del
-            // PARAMETRO
-            repelSpeed[j] +=
-                ((flockstack[k].getBoid(l).getPosition() -
-                  flockstack[i].getBoid(j).getPosition()) *
-                 (-Flock::getParameters().repelStrength)); // AGGIUNGI VELOCITà
-          }
+      if (i == k) {
+        continue;
+      }
+      // iterate on all the elements of the flock
+      for (size_t l{0}; l < flockstack[k].getSize(); l++) {
+        // such that the distance is less than repel range
+        if (distance(flockstack[i].getBoid(j), flockstack[k].getBoid(l)) <
+            Flock::getParameters().repelRange) {
+          repelSpeed[j] += ((flockstack[k].getBoid(l).getPosition() -
+                             flockstack[i].getBoid(j).getPosition()) *
+                            (-Flock::getParameters().repelStrength));
         }
+      }
     }
   }
 

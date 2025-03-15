@@ -44,6 +44,17 @@ void Boid::setVelocityY(float v_y) { velocity_.y = v_y; }
 //////////////////////////////////////////////////////////////////////////////////////////
 // FUNCTIONS
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Distance function between 2D vectors
+
+float distance(const sf::Vector2f &a, const sf::Vector2f &b) {
+  float dx = b.x - a.x;
+  float dy = b.y - a.y;
+  return std::sqrt(dx * dx + dy * dy);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
 float distance(const Boid &boid1, const Boid &boid2) {
   return sqrtf(powf((boid1.getPosition().x - boid2.getPosition().x), 2) +
                powf((boid1.getPosition().y - boid2.getPosition().y), 2));
@@ -126,13 +137,4 @@ void mirrorBorders(Boid &boid) {
 
 Boid createBoid(sf::Vector2f center, float a) {
   return {{randomBoidPosition(center)}, {randomBoidSpeed(a)}};
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// DISTANCE FUNCTION NOT PROVIDED BY SFML :/
-
-float distance(const sf::Vector2f &a, const sf::Vector2f &b) {
-  float dx = b.x - a.x;
-  float dy = b.y - a.y;
-  return std::sqrt(dx * dx + dy * dy);
 }

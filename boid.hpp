@@ -40,6 +40,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 // FUNCTIONS
 
+float distance(const sf::Vector2f &a, const sf::Vector2f &b);
 float distance(const Boid &boid1, const Boid &boid2);
 float distanceX(const Boid &boid1, const Boid &boid2);
 float distanceY(const Boid &boid1, const Boid &boid2);
@@ -59,10 +60,5 @@ void mirrorBorders(Boid &boid);
 // BUILD
 
 Boid createBoid(sf::Vector2f center, float angle);
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// SFML VECTORS DISTANCE
-
-float distance(const sf::Vector2f &a, const sf::Vector2f &b);
 
 #endif

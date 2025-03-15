@@ -29,13 +29,15 @@ inline constexpr int initFlockNumber{1};
 // minimum and maximum speed component of any boid
 inline constexpr float minBoidSpeed{150.f};
 inline constexpr float maxBoidSpeed{300.f};
+
+// sets a scale on the distance moved per frame
 inline constexpr float speedScale{150.f};
 
 // speed boost on mirror mode
 inline constexpr float speedBoostMirror{15.f};
 
 // size of the boid
-inline constexpr float boidSize{4.5f};
+inline constexpr float boidSize{4.3f};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,17 +78,17 @@ inline constexpr float maxClickStrenght{1.f};
 inline constexpr FlockPar maxFlockParameters{
     maxSeparationStrength, maxSeparationRange,  maxAlignmentStrength,
     maxCohesionStrength,   maxInteractionRange, maxRepelStrength,
-    maxRepelRange};
+    maxRepelRange,         maxClickStrenght};
 
 // DEFAULT VALUES
-inline constexpr float defaultSeparationStrength{0.5f};
-inline constexpr float defaultSeparationRange{14.0f};
+inline constexpr float defaultSeparationStrength{0.48f};
+inline constexpr float defaultSeparationRange{15.0f};
 inline constexpr float defaultAlignmentStrength{0.03f};
 inline constexpr float defaultCohesionStrength{0.015f};
 inline constexpr float defaultInteractionRange{150.f};
-inline constexpr float defaultRepelStrength{0.3f};
-inline constexpr float defaultRepelRange{20.0f};
-inline constexpr float defaultClickStrenght{0.3f};
+inline constexpr float defaultRepelStrength{0.15f};
+inline constexpr float defaultRepelRange{30.0f};
+inline constexpr float defaultClickStrenght{0.15f};
 
 inline constexpr float scalingFactor{1000.0f};
 
@@ -119,10 +121,10 @@ inline const std::string offGraphicsButtonText{"Black Mode"};
 inline const sf::Color onGraphicsButtonColor{sf::Color(224, 224, 224)};
 inline const sf::Color offGraphicsButtonColor{sf::Color(32, 32, 32)};
 inline const SwitchButtonPar graphicsButton{{770, 80, 260, 50},
-                                                onGraphicsButtonText,
-                                                offGraphicsButtonText,
-                                                onGraphicsButtonColor,
-                                                offGraphicsButtonColor};
+                                            onGraphicsButtonText,
+                                            offGraphicsButtonText,
+                                            onGraphicsButtonColor,
+                                            offGraphicsButtonColor};
 
 inline const sf::Color onGraphicsColor{sf::Color(224, 224, 224)};
 inline const sf::Color offGraphicsColor{sf::Color(32, 32, 32)};
@@ -228,7 +230,7 @@ inline constexpr SlidersPar clickStrengthSlider{
     defaultClickStrenght *constants::scalingFactor};
 
 inline constexpr SlidersPar frameRateLimitSlider{
-    {slidersPosX, 600, slidersWidth, slidersHeight}, 10, 100, windowFrameRate};
+    {slidersPosX, 600, slidersWidth, slidersHeight}, 10, 120, windowFrameRate};
 
 inline constexpr LabelsPar parametersLabel{slidersPosX, 90, 18};
 
@@ -247,8 +249,8 @@ inline constexpr LabelsPar frameRateLimitSliderLabel{slidersPosX, 575, 15};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline const std::string onToroidalButtonText{"Toroidal Mode"};
-inline const std::string offToroidalButtonText{"Mirror Mode"};
+inline const std::string onToroidalButtonText{"Border Toroidal Mode"};
+inline const std::string offToroidalButtonText{"Border Mirror Mode"};
 inline const sf::Color onToroidalButtonColor{sf::Color(255, 255, 153)};
 inline const sf::Color offToroidalButtonColor{sf::Color(204, 255, 153)};
 inline const SwitchButtonPar toroidalButton{{770, 640, 260, 40},
@@ -257,8 +259,8 @@ inline const SwitchButtonPar toroidalButton{{770, 640, 260, 40},
                                             onToroidalButtonColor,
                                             offToroidalButtonColor};
 
-inline const std::string onInteractionButtonText{"Repulsive Mode"};
-inline const std::string offInteractionButtonText{"Attractive Mode"};
+inline const std::string onInteractionButtonText{"Click Repulsive Mode"};
+inline const std::string offInteractionButtonText{"Click Attractive Mode"};
 inline const sf::Color onInteractionButtonColor{sf::Color(255, 153, 153)};
 inline const sf::Color offInteractionButtonColor{sf::Color(153, 255, 255)};
 inline const SwitchButtonPar clickInteractionButton{{770, 690, 260, 40},
