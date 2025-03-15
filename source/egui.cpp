@@ -1,11 +1,5 @@
 #include "../include/egui.hpp"
-#include "../include/constants.hpp"
-#include "../include/flock.hpp"
-#include "../include/graphics.hpp"
-#include "../include/random.hpp"
-#include "../include/statistics.hpp"
-#include "../include/structs.hpp"
-#include "../include/switchbutton.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -19,6 +13,14 @@
 #include <iostream>
 #include <string>
 
+#include "../include/constants.hpp"
+#include "../include/flock.hpp"
+#include "../include/graphics.hpp"
+#include "../include/random.hpp"
+#include "../include/statistics.hpp"
+#include "../include/structs.hpp"
+#include "../include/switchbutton.hpp"
+
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,7 +29,6 @@ Egui::Egui() : window(sf::VideoMode(1050, 750), "Egui"), gui(window) {}
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::setup() {
-
   // THE ORDER in WHICH OPTIONS are SET UP is IMPORTANT!!!
 
   sans.loadFromFile("../assets/OpenSans-Regular.ttf");
@@ -48,15 +49,15 @@ void Egui::setup() {
   // GENERATE FLOCKS at the BEGINNING
 
   addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
-           sf::Color{255, 0, 127}); // PINK
+           sf::Color{255, 0, 127});  // PINK
   addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
-           sf::Color{255, 0, 0}); // RED
+           sf::Color{255, 0, 0});  // RED
   addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
-           sf::Color{255, 204, 0}); // YELLOW
+           sf::Color{255, 204, 0});  // YELLOW
   addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
-           sf::Color{153, 255, 51}); // GREEN
+           sf::Color{153, 255, 51});  // GREEN
   addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
-           sf::Color{0, 204, 204}); // CYAN
+           sf::Color{0, 204, 204});  // CYAN
 
   // OPTION 1
 
@@ -66,14 +67,12 @@ void Egui::setup() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::run() {
-
   window.setPosition({120, 50});
   window.setFramerateLimit(constants::windowFrameRate);
   sf::Event event;
 
   while (window.isOpen()) {
     while (window.pollEvent(event)) {
-
       if (event.type == sf::Event::KeyPressed &&
           event.key.code == sf::Keyboard::Space) {
         pause = !pause;
@@ -83,13 +82,13 @@ void Egui::run() {
       gui.handleEvent(event);
 
       switch (event.type) {
-      case sf::Event::Closed: {
-        window.close();
-        break;
-      }
+        case sf::Event::Closed: {
+          window.close();
+          break;
+        }
 
-      default:
-        break;
+        default:
+          break;
       }
     }
 
@@ -165,12 +164,13 @@ void Egui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
   sf::Color b = constants::offThreeWayBGColorHover;
   sf::Color c = constants::threeWayBGColorDown;
 
-  option1 = tgui::Button::create("Graphics &\n"
-                                 "statistics");
+  option1 = tgui::Button::create(
+      "Graphics &\n"
+      "statistics");
   option1->setPosition(button1.posX, button1.posY);
   option1->setSize(button1.width, button1.height);
   option1->getRenderer()->setBackgroundColor(
-      constants::onThreeWayBGColor); // Default "on"
+      constants::onThreeWayBGColor);  // Default "on"
   option1->getRenderer()->setBackgroundColorHover(
       constants::onThreeWayBGColorHover);
   option1->getRenderer()->setBackgroundColorDown(c);
@@ -183,11 +183,12 @@ void Egui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
   gui.add(option1);
 
   // Button 2
-  option2 = tgui::Button::create("Create\n"
-                                 "flocks");
+  option2 = tgui::Button::create(
+      "Create\n"
+      "flocks");
   option2->setPosition(button2.posX, button2.posY);
   option2->setSize(button2.width, button2.height);
-  option2->getRenderer()->setBackgroundColor(a); // Default "off"
+  option2->getRenderer()->setBackgroundColor(a);  // Default "off"
   option2->getRenderer()->setBackgroundColorHover(b);
   option2->getRenderer()->setBackgroundColorDown(c);
 
@@ -199,11 +200,12 @@ void Egui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
   gui.add(option2);
 
   // Button 3
-  option3 = tgui::Button::create("Simulation\n"
-                                 "parameters");
+  option3 = tgui::Button::create(
+      "Simulation\n"
+      "parameters");
   option3->setPosition(button3.posX, button3.posY);
   option3->setSize(button3.width, button3.height);
-  option3->getRenderer()->setBackgroundColor(a); // Default "off"
+  option3->getRenderer()->setBackgroundColor(a);  // Default "off"
   option3->getRenderer()->setBackgroundColorHover(b);
   option3->getRenderer()->setBackgroundColorDown(c);
 
@@ -377,7 +379,6 @@ void Egui::printValue(const LabelsPar &par, int value, size_t index) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::printFlockStats(size_t index) {
-
   int flockSize{static_cast<int>(flockStack_[index].getSize())};
   printValue(constants::flockSizeLabel, flockSize, index);
 
@@ -434,14 +435,13 @@ void Egui::deleteDeleteFlockButton(size_t index) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::repositionButtons() {
-
   for (size_t i = 0; i < dynamicButtons.size(); ++i) {
     float posIndex{static_cast<float>(i * constants::distancePerIndex)};
 
     dynamicButtons[i]->setText(std::to_string(i + 1));
-    dynamicButtons[i]->setPosition(constants::deleteFlockButton.posX,
-                                   constants::deleteFlockButton.posY +
-                                       posIndex);
+    dynamicButtons[i]->setPosition(
+        constants::deleteFlockButton.posX,
+        constants::deleteFlockButton.posY + posIndex);
     dynamicButtons[i]->onPress.disconnectAll();
     dynamicButtons[i]->onPress([this, i]() {
       deleteFlock(i);
@@ -512,7 +512,6 @@ void Egui::setVisibleOpt1(bool visible) {
 // OPTION 2
 
 void Egui::createSliderOpt2(const SlidersPar &sliderPar) {
-
   auto slider = tgui::Slider::create(sliderPar.min, sliderPar.max);
   slider->setPosition(sliderPar.posX, sliderPar.posY);
   slider->setSize(sliderPar.width, sliderPar.height);
@@ -525,7 +524,6 @@ void Egui::createSliderOpt2(const SlidersPar &sliderPar) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::createLabelOpt2(const LabelsPar &labelsPar) {
-
   auto label = tgui::Label::create();
   label->setPosition(labelsPar.posX, labelsPar.posY);
   label->getRenderer()->setTextColor(sf::Color::White);
@@ -564,7 +562,7 @@ void Egui::setupOpt2() {
   createLabelOpt2(constants::redSliderLabel);
   createLabelOpt2(constants::greenSliderLabel);
   createLabelOpt2(constants::blueSliderLabel);
-  createLabelOpt2(constants::maxBoidsNumberLabel); // INDEX 6
+  createLabelOpt2(constants::maxBoidsNumberLabel);  // INDEX 6
 
   // VALUE SHOULD CHANGE when FLOCK are created or destructed
   option2Labels[6]->setText("Number of boids: " + std::to_string(10) + "/250");
@@ -585,7 +583,7 @@ void Egui::setupOpt2() {
       [&]() { handleColorSliderChange(option2Sliders[5]); });
 
   createAddFlockButton(constants::addFlockButton);
-  createLabelOpt2(constants::addFlockButtonLabel); // LABEL with INDEX 7
+  createLabelOpt2(constants::addFlockButtonLabel);  // LABEL with INDEX 7
   addFlockButtonLabel = option2Labels[7];
   addFlockButtonLabel->setText(
       "Number of flocks: " + std::to_string(flockStack_.size()) + "/5");
@@ -634,9 +632,9 @@ void Egui::createAddFlockButton(const TguiPar &par) {
   addFlockButton->setPosition(par.posX, par.posY);
   addFlockButton->setSize(par.width, par.height);
   addFlockButton->getRenderer()->setBackgroundColor(
-      sf::Color(128, 128, 128)); // Default "off"
+      sf::Color(128, 128, 128));  // Default "off"
   addFlockButton->getRenderer()->setBackgroundColorHover(
-      sf::Color(128, 128, 128)); // Prevent white hover
+      sf::Color(128, 128, 128));  // Prevent white hover
   addFlockButton->getRenderer()->setBackgroundColorDown(
       sf::Color(255, 255, 204));
 
@@ -655,7 +653,6 @@ void Egui::createAddFlockButton(const TguiPar &par) {
 
 void Egui::enableCreateFlockButton() {
   if (flockStack_.size() == 5 || getActiveBoids() > 245) {
-
     // index 0 is boids number
     // index 6 is boids max number
 
@@ -716,7 +713,6 @@ void Egui::createSliderOpt3(const SlidersPar &params) {
 
 void Egui::createLabelOpt3(const LabelsPar &labelsPar,
                            const std::string &text) {
-
   auto label = tgui::Label::create();
   label->setPosition(labelsPar.posX, labelsPar.posY);
   label->setTextSize(labelsPar.textSize);
@@ -903,7 +899,6 @@ size_t Egui::getActiveBoids() {
 // Interact with left click
 
 void Egui::interactWithFlocks() {
-
   int max{static_cast<int>(constants::fieldSide + 2 * constants::marginSize)};
 
   if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {

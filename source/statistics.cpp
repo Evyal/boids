@@ -1,14 +1,16 @@
 #include "../include/statistics.hpp"
-#include "../include/boid.hpp"
+
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <numeric>
 #include <vector>
 
+#include "../include/boid.hpp"
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<float>
-calculateDistances(const std::vector<sf::Vector2f> &positions) {
+std::vector<float> calculateDistances(
+    const std::vector<sf::Vector2f> &positions) {
   std::vector<float> distances;
 
   // iterate over all the possible pairs

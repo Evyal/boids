@@ -1,13 +1,14 @@
 #ifndef SWITCHBUTTON_HPP
 #define SWITCHBUTTON_HPP
 
-#include "structs.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <TGUI/TGUI.hpp>
 #include <memory>
 
+#include "structs.hpp"
+
 class SwitchButton : public tgui::Button {
-private:
+ private:
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   // ON OFF SWITCH
   bool isOn_{false};
@@ -28,7 +29,7 @@ private:
   void init(const SwitchButtonPar &par);
   void toggle();
 
-public:
+ public:
   // DEFAULT CONSTRUCTOR
   SwitchButton(const SwitchButtonPar &par);
   // CREATE FUNCTION that returns a SHARED POINTER - Following TGUI conventions.

@@ -1,19 +1,19 @@
 #include "../include/boid.hpp"
-#include "../include/constants.hpp"
-#include "../include/random.hpp"
+
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <cstdlib>
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
-// COSTRUTTORI di DEFAULT
+#include "../include/constants.hpp"
+#include "../include/random.hpp"
 
-Boid::Boid(sf::Vector2f position, sf::Vector2f velocity)
-    : position_{position}, velocity_{velocity} {}
+//////////////////////////////////////////////////////////////////////////////////////////
+// COSTRUTTORI
+
 Boid::Boid() : position_{0., 0.}, velocity_{0., 0.} {}
+Boid::Boid(const sf::Vector2f &position, const sf::Vector2f &velocity)
+    : position_{position}, velocity_{velocity} {}
 
-//////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 // GETTERS
 
@@ -24,14 +24,13 @@ float Boid::getSpeed() const {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
 // SETTERS
 
-void Boid::setPosition(sf::Vector2f position) {
+void Boid::setPosition(const sf::Vector2f &position) {
   position_.x = position.x;
   position_.y = position.y;
 }
-void Boid::setVelocity(sf::Vector2f velocity) {
+void Boid::setVelocity(const sf::Vector2f &velocity) {
   velocity_.x = velocity.x;
   velocity_.y = velocity.y;
 }
@@ -54,6 +53,7 @@ float distance(const sf::Vector2f &a, const sf::Vector2f &b) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// Distance function between 2D boids
 
 float distance(const Boid &boid1, const Boid &boid2) {
   return sqrtf(powf((boid1.getPosition().x - boid2.getPosition().x), 2) +
@@ -61,6 +61,7 @@ float distance(const Boid &boid1, const Boid &boid2) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// Distance function between 2D vectors
 
 float distanceX(const Boid &boid1, const Boid &boid2) {
   return boid1.getPosition().x - boid2.getPosition().x;
@@ -102,9 +103,15 @@ void Boid::operator+=(const sf::Vector2f &velocity) { velocity_ += velocity; }
 // CHECK BORDERS
 
 void toroidalBorders(Boid &boid) {
-  float s{constants::fieldSide};
-  boid.setPositionX(std::fmod(std::fmod(boid.getPosition().x, s) + s, s));
-  boid.setPositionY(std::fmod(std::fmod(boid.getPosition().y, s) + s, s));
+  // this makes fmod output only positive numbers
+  boid.setPositionX(
+      std::fmod(std::fmod(boid.getPosition().x, constants::fieldSide) +
+                    constants::fieldSide,
+                constants::fieldSide));
+  boid.setPositionY(
+      std::fmod(std::fmod(boid.getPosition().y, constants::fieldSide) +
+                    constants::fieldSide,
+                constants::fieldSide));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

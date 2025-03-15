@@ -1,12 +1,13 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "boid.hpp"
-#include "constants.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <cmath>
+
+#include "boid.hpp"
+#include "structs.hpp"
 
 // DRAW BOID
 

@@ -5,17 +5,16 @@
 #include <cmath>
 
 class Boid {
-  //////////////////////////////////////////////////////////////////////////////////////////
-private:
+ private:
   sf::Vector2f position_{};
   sf::Vector2f velocity_{};
 
-public:
+ public:
   //////////////////////////////////////////////////////////////////////////////////////////
-  // COSTRUTTORI di DEFAULT
+  // COSTRUTTORI
 
-  Boid(sf::Vector2f position, sf::Vector2f velocity);
   Boid();
+  Boid(const sf::Vector2f &position, const sf::Vector2f &velocity);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // GETTERS
@@ -27,12 +26,15 @@ public:
   //////////////////////////////////////////////////////////////////////////////////////////
   // SETTERS
 
-  void setPosition(sf::Vector2f position);
-  void setVelocity(sf::Vector2f velocity);
+  void setPosition(const sf::Vector2f &position);
+  void setVelocity(const sf::Vector2f &velocity);
   void setPositionX(float x);
   void setPositionY(float y);
   void setVelocityX(float v_x);
   void setVelocityY(float v_y);
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // OPERATORS
 
   void operator+=(const sf::Vector2f &velocity);
 };
@@ -53,6 +55,7 @@ void checkMaximumSpeed(Boid &boid);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // CHECK BORDERS
+
 void toroidalBorders(Boid &boid);
 void mirrorBorders(Boid &boid);
 

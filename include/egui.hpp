@@ -1,9 +1,6 @@
 #ifndef EGUI_HPP
 #define EGUI_HPP
 
-#include "flock.hpp"
-#include "structs.hpp"
-#include "switchbutton.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
@@ -13,15 +10,19 @@
 #include <string>
 #include <vector>
 
+#include "flock.hpp"
+#include "structs.hpp"
+#include "switchbutton.hpp"
+
 class Egui {
-public:
+ public:
   ////////////////////////////////////////////////////////////////////////////////
 
-  Egui();       // Constructor
-  void setup(); // Sets up the application
-  void run();   // Runs the application
+  Egui();        // Constructor
+  void setup();  // Sets up the application
+  void run();    // Runs the application
 
-private:
+ private:
   ////////////////////////////////////////////////////////////////////////////////
   // WINDOW
 
@@ -52,7 +53,7 @@ private:
   tgui::Button::Ptr option1;
   tgui::Button::Ptr option2;
   tgui::Button::Ptr option3;
-  tgui::Button::Ptr activeButton = nullptr; // Track the active button
+  tgui::Button::Ptr activeButton = nullptr;  // Track the active button
 
   void createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
                             const TguiPar &button3);

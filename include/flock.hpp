@@ -1,17 +1,17 @@
 #ifndef FLOCK_H
 #define FLOCK_H
 
-#include "boid.hpp"
-#include "structs.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <cstddef>
 #include <vector>
 
-class Flock {
+#include "boid.hpp"
+#include "structs.hpp"
 
-private:
+class Flock {
+ private:
   std::vector<Boid> flock_;
   sf::Color color_;
 
@@ -22,7 +22,7 @@ private:
   static bool toroidal_;
   static bool repulsiveClick_;
 
-public:
+ public:
   //////////////////////////////////////////////////////////////////////////////////////////
   // COSTRUTTORI
   Flock();

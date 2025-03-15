@@ -1,11 +1,13 @@
 #include "../include/graphics.hpp"
-#include "../include/boid.hpp"
-#include "../include/constants.hpp"
-#include "../include/structs.hpp"
+
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
+
+#include "../include/boid.hpp"
+#include "../include/constants.hpp"
+#include "../include/structs.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE BOIDS as TRIANGLES

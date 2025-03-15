@@ -1,7 +1,5 @@
 #include "../include/flock.hpp"
-#include "../include/boid.hpp"
-#include "../include/constants.hpp"
-#include "../include/structs.hpp"
+
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -10,6 +8,10 @@
 #include <cstddef>
 #include <random>
 #include <vector>
+
+#include "../include/boid.hpp"
+#include "../include/constants.hpp"
+#include "../include/structs.hpp"
 
 extern std::default_random_engine rng;
 
@@ -151,7 +153,7 @@ std::vector<sf::Vector2f> Flock::alignment() const {
 
   for (size_t i{0}; i < flock_.size(); ++i) {
     alignSpeed.emplace_back();
-    int count{0}; // amount of boid[j] interacting with boid[i]
+    int count{0};  // amount of boid[j] interacting with boid[i]
 
     for (size_t j{0}; j < flock_.size(); ++j) {
       if (j == i) {
@@ -176,7 +178,6 @@ std::vector<sf::Vector2f> Flock::alignment() const {
 // COHESION RULE
 
 std::vector<sf::Vector2f> Flock::cohesion() const {
-
   std::vector<sf::Vector2f> cohesionSpeed{};
   assert((flock_.size() > 1));
   cohesionSpeed.clear();
@@ -184,7 +185,7 @@ std::vector<sf::Vector2f> Flock::cohesion() const {
   for (size_t i{0}; i < flock_.size(); i++) {
     cohesionSpeed.emplace_back();
     sf::Vector2f massCenter{0, 0};
-    int count{0}; // number of boid[j] interacting with boid[i]
+    int count{0};  // number of boid[j] interacting with boid[i]
 
     for (size_t j{0}; j < flock_.size(); j++) {
       if (j == i) {
@@ -210,7 +211,6 @@ std::vector<sf::Vector2f> Flock::cohesion() const {
 // UPDATE
 
 void Flock::updateFlock() {
-
   assert(flock_.size() > 1);
 
   const std::vector<sf::Vector2f> &separationSpeed{separation()};
@@ -243,7 +243,6 @@ void Flock::updateFlock() {
 // Update with repel between flocks
 
 void Flock::updateFlock(const std::vector<sf::Vector2f> &repelSpeed) {
-
   assert(flock_.size() > 1);
 
   const std::vector<sf::Vector2f> &separationSpeed{separation()};
@@ -303,7 +302,7 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
   for (size_t i{0}; i < flock_.size(); i++) {
     cohesionSpeed.emplace_back();
     sf::Vector2f massCenter{0, 0};
-    int count{0}; // number of boid[j] interacting with boid[i]
+    int count{0};  // number of boid[j] interacting with boid[i]
 
     for (size_t j{0}; j < flock_.size(); j++) {
       if (j == i) {
