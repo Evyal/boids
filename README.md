@@ -42,7 +42,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 ```
 
-## Running the Game
+## Running the program
 
 ```bash
 ./boids
