@@ -1,8 +1,6 @@
 # Boids
 
-A simulation of birds flying in flocks made with C++ using SFML and TGUI for graphics and UI.
-
-## Features
+A simulation of the behaviour of flocks made with C++ using SFML and TGUI for graphics and UI.
 
 ### Prerequisites
 
