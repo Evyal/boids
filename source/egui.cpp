@@ -1,11 +1,11 @@
-#include "egui.hpp"
-#include "constants.hpp"
-#include "flock.hpp"
-#include "graphics.hpp"
-#include "random.hpp"
-#include "statistics.hpp"
-#include "structs.hpp"
-#include "switchbutton.hpp"
+#include "../include/egui.hpp"
+#include "../include/constants.hpp"
+#include "../include/flock.hpp"
+#include "../include/graphics.hpp"
+#include "../include/random.hpp"
+#include "../include/statistics.hpp"
+#include "../include/structs.hpp"
+#include "../include/switchbutton.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -30,7 +30,7 @@ void Egui::setup() {
 
   // THE ORDER in WHICH OPTIONS are SET UP is IMPORTANT!!!
 
-  sans.loadFromFile("../OpenSans-Regular.ttf");
+  sans.loadFromFile("../assets/OpenSans-Regular.ttf");
 
   // CREATE OPTIONS
 
@@ -79,7 +79,7 @@ void Egui::run() {
         pause = !pause;
         continue;
       }
-      
+
       gui.handleEvent(event);
 
       switch (event.type) {

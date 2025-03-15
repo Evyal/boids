@@ -3,7 +3,7 @@
 #include <vector>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "../statistics.hpp"
+#include "../include/statistics.hpp"
 #include "doctest.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>

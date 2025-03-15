@@ -1,6 +1,6 @@
-#include "boid.hpp"
-#include "constants.hpp"
-#include "random.hpp"
+#include "../include/boid.hpp"
+#include "../include/constants.hpp"
+#include "../include/random.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <cstdlib>

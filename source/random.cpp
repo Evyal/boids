@@ -1,5 +1,5 @@
-#include "random.hpp"
-#include "constants.hpp"
+#include "../include/random.hpp"
+#include "../include/constants.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <chrono>
 #include <cmath>

@@ -1,5 +1,5 @@
-#include "switchbutton.hpp"
-#include "structs.hpp"
+#include "../include/switchbutton.hpp"
+#include "../include/structs.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // CONSTRUCTOR

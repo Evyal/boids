@@ -1,5 +1,5 @@
-#include "statistics.hpp"
-#include "boid.hpp"
+#include "../include/statistics.hpp"
+#include "../include/boid.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <numeric>

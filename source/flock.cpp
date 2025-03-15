@@ -1,7 +1,7 @@
-#include "flock.hpp"
-#include "boid.hpp"
-#include "constants.hpp"
-#include "structs.hpp"
+#include "../include/flock.hpp"
+#include "../include/boid.hpp"
+#include "../include/constants.hpp"
+#include "../include/structs.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/System/Vector2.hpp>

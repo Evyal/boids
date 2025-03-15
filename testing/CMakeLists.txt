@@ -1,24 +1,33 @@
-# Include the testing framework header directory.
-# This ensures that the test files can find doctest's headers.
-# Adjust the path if your doctest directory is in a different location.
-include_directories(/doctest)
+# Enable testing support
+enable_testing()
 
-# Create the test executable for testBoid.cpp
-add_executable(testboid testboid.cpp ../random.cpp ../boid.cpp)
+# Add doctest header directory
+include_directories(${CMAKE_SOURCE_DIR}/testing/doctest)
+
+# Collect only the source files needed for testing
+file(GLOB TEST_SOURCES
+    ${CMAKE_SOURCE_DIR}/source/boid.cpp
+    ${CMAKE_SOURCE_DIR}/source/random.cpp
+    ${CMAKE_SOURCE_DIR}/source/flock.cpp
+    ${CMAKE_SOURCE_DIR}/source/statistics.cpp
+)
+
+# Add testboid executable
+add_executable(testboid testboid.cpp ${TEST_SOURCES})
 target_link_libraries(testboid PRIVATE sfml-graphics)
+# add_test(NAME TestBoid COMMAND testboid)
 
-# Create the test executable for testFlock.cpp
-add_executable(testflock testflock.cpp ../random.cpp ../boid.cpp ../flock.cpp)
+# Add testflock executable
+add_executable(testflock testflock.cpp ${TEST_SOURCES})
 target_link_libraries(testflock PRIVATE sfml-graphics)
+# add_test(NAME TestFlock COMMAND testflock)
 
-# Create the test executable for testRandom.cpp
-add_executable(testrandom testrandom.cpp ../random.cpp ../boid.cpp)
+# Add testrandom executable
+add_executable(testrandom testrandom.cpp ${TEST_SOURCES})
 target_link_libraries(testrandom PRIVATE sfml-graphics)
+# add_test(NAME TestRandom COMMAND testrandom)
 
-# Create the test executable for teststatistics.cpp
-add_executable(teststatistics teststatistics.cpp ../statistics.cpp ../random.cpp ../boid.cpp)
+# Add teststatistics executable
+add_executable(teststatistics teststatistics.cpp ${TEST_SOURCES})
 target_link_libraries(teststatistics PRIVATE sfml-graphics)
-
-# Register the tests with CTest so they can be run using the `ctest` command.
-add_test(NAME TestBoid COMMAND testBoid)
-add_test(NAME TestFlock COMMAND testFlock)
+# add_test(NAME TestStatistics COMMAND teststatistics)

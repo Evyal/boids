@@ -1,4 +1,4 @@
-#include "egui.hpp"
+#include "../include/egui.hpp"
 #include <SFML/Graphics.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>

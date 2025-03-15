@@ -2,8 +2,8 @@
 #include <cstddef>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "../boid.hpp"
-#include "../constants.hpp"
+#include "../include/boid.hpp"
+#include "../include/constants.hpp"
 #include "doctest.h"
 #include <SFML/Graphics.hpp>
 

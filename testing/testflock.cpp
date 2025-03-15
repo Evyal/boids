@@ -3,9 +3,9 @@
 #include <iostream>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "../boid.hpp"
-#include "../constants.hpp"
-#include "../flock.hpp"
+#include "../include/boid.hpp"
+#include "../include/constants.hpp"
+#include "../include/flock.hpp"
 #include "doctest.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>

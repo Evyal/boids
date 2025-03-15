@@ -1,24 +1,11 @@
-#include "graphics.hpp"
-#include "boid.hpp"
-#include "constants.hpp"
-#include "structs.hpp"
+#include "../include/graphics.hpp"
+#include "../include/boid.hpp"
+#include "../include/constants.hpp"
+#include "../include/structs.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// CREATE BOIDS as CIRCLES
-
-sf::CircleShape getCircleBoid(const Boid &boid, const sf::Color &color) {
-  sf::CircleShape boidBody{constants::boidSize};
-  boidBody.setOrigin(constants::boidSize, constants::boidSize);
-  sf::Vector2f offSet{constants::marginSize, constants::marginSize};
-
-  boidBody.setPosition(boid.getPosition() + offSet);
-  boidBody.setFillColor(color);
-  return boidBody;
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE BOIDS as TRIANGLES
