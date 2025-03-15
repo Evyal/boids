@@ -4,8 +4,6 @@ A simulation of birds flying in flocks made with C++ using SFML and TGUI for gra
 
 ## Features
 
-## Installation
-
 ### Prerequisites
 
 Ensure you have the following installed:
