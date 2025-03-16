@@ -53,9 +53,9 @@ cmake --build .
 - Adjustable parameters for interactions between boids
 - Interactive controls for adding or removing flocks
 
-![bottoni_evidenziati](images/interfaccia1.jpg)
-![bottoni_evidenziati](images/interfaccia2.jpg)
-![bottoni_evidenziati](images/interfaccia3.jpg)
+![bottoni_evidenziati](images/interfaccia1.png)
+![bottoni_evidenziati](images/interfaccia2.png)
+![bottoni_evidenziati](images/interfaccia3.png)
 
 ## Controls
 
