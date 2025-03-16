@@ -24,7 +24,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-Egui::Egui() : window(sf::VideoMode(1050, 750), "Egui"), gui(window) {}
+Egui::Egui() : window(sf::VideoMode(1050, 750), "Flocks Simulation"), gui(window) {}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -864,7 +864,6 @@ void Egui::deleteFlock(size_t i) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::evolveFlocks() {
-  bodyStack_.resize(flockStack_.size());
   for (size_t i{0}; i < flockStack_.size(); i++) {
     flockStack_[i].updateFlock(repel(flockStack_, i));
   }
@@ -873,6 +872,8 @@ void Egui::evolveFlocks() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Egui::drawFlocks() {
+  bodyStack_.resize(flockStack_.size());
+  
   for (size_t i{0}; i < bodyStack_.size(); i++) {
     bodyStack_[i].clear();
     sf::Color color{flockStack_[i].getFlockColor()};
