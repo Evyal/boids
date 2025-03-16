@@ -7,8 +7,9 @@ A simulation of the behaviour of flocks made with C++ using SFML and TGUI for gr
 Ensure you have the following installed:
 - C++ compiler
 - CMake
-- SFML (2.5)
-- TGUI (1.0)
+- [SFML](https://github.com/SFML/SFML) (2.5): Libreria per la rappresentazione grafica
+- [TGUI](https://github.com/texus/TGUI) (1.0): Libreria per l'interfaccia grafica
+- [doctest](https://github.com/doctest/doctest): Libreria per il testing
 
 ### Clone the Repository
 
