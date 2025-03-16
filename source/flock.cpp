@@ -21,15 +21,21 @@ bool Flock::repulsiveClick_ = false;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
-// COSTRUTTORI
-
-Flock::Flock() : flock_{}, color_{sf::Color::Black} {}
+// CONSTRUCTORS
 
 Flock::Flock(const std::vector<Boid> &flock)
-    : flock_{flock}, color_{sf::Color::Black} {}
+    : flock_{flock}, color_{sf::Color::Black} {
+  if (flock_.size() < 2) {
+    throw std::invalid_argument("Flock must have at least 2 boids.");
+  }
+}
 
 Flock::Flock(const std::vector<Boid> &flock, const sf::Color &color)
-    : flock_{flock}, color_{color} {}
+    : flock_{flock}, color_{color} {
+  if (flock_.size() < 2) {
+    throw std::invalid_argument("Flock must have at least 2 boids.");
+  }
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +97,8 @@ std::vector<float> Flock::getSpeedVector() const {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+// STATIC VARIABLES
 
 FlockPar Flock::getParameters() { return parameters_; }
 bool Flock::getToroidalMode() { return toroidal_; }
@@ -124,7 +132,7 @@ void Flock::setRepulsiveClick(bool p) { repulsiveClick_ = p; }
 std::vector<sf::Vector2f> Flock::separation() const {
   std::vector<sf::Vector2f> separationSpeed{};
   assert((flock_.size() > 1));
-  separationSpeed.clear();
+  separationSpeed.reserve(flock_.size());
 
   for (size_t i{0}; i < flock_.size(); ++i) {
     separationSpeed.emplace_back();
@@ -149,7 +157,7 @@ std::vector<sf::Vector2f> Flock::separation() const {
 std::vector<sf::Vector2f> Flock::alignment() const {
   std::vector<sf::Vector2f> alignSpeed{};
   assert((flock_.size() > 1));
-  alignSpeed.clear();
+  alignSpeed.reserve(flock_.size());
 
   for (size_t i{0}; i < flock_.size(); ++i) {
     alignSpeed.emplace_back();
@@ -180,7 +188,7 @@ std::vector<sf::Vector2f> Flock::alignment() const {
 std::vector<sf::Vector2f> Flock::cohesion() const {
   std::vector<sf::Vector2f> cohesionSpeed{};
   assert((flock_.size() > 1));
-  cohesionSpeed.clear();
+  cohesionSpeed.reserve(flock_.size());
 
   for (size_t i{0}; i < flock_.size(); i++) {
     cohesionSpeed.emplace_back();
@@ -297,7 +305,7 @@ void Flock::repelOnClick(const sf::Vector2f &pos) {
 std::vector<sf::Vector2f> Flock::toroidalCohesion() {
   std::vector<sf::Vector2f> cohesionSpeed{};
   assert((flock_.size() > 1));
-  cohesionSpeed.clear();
+  cohesionSpeed.reserve(flock_.size());
 
   for (size_t i{0}; i < flock_.size(); i++) {
     cohesionSpeed.emplace_back();
@@ -350,7 +358,7 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
 std::vector<sf::Vector2f> repel(const std::vector<Flock> &flockstack,
                                 size_t i) {
   std::vector<sf::Vector2f> repelSpeed;
-  repelSpeed.clear();
+  repelSpeed.reserve(flockstack[i].getSize());
 
   // for all the boids of the selected flock
   for (size_t j{0}; j < flockstack[i].getSize(); j++) {

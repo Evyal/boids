@@ -12,8 +12,8 @@
 
 class Flock {
  private:
-  std::vector<Boid> flock_;
-  sf::Color color_;
+  std::vector<Boid> flock_{};
+  sf::Color color_{sf::Color::Black};
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // STATIC VARIABLES
@@ -24,8 +24,9 @@ class Flock {
 
  public:
   //////////////////////////////////////////////////////////////////////////////////////////
-  // COSTRUTTORI
-  Flock();
+  // CONSTRUCTORS
+
+  Flock() = delete;
   Flock(const std::vector<Boid> &flock);
   Flock(const std::vector<Boid> &flock, const sf::Color &color);
 

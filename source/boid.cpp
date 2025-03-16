@@ -8,9 +8,11 @@
 #include "../include/random.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// COSTRUTTORI
+// CONSTRUCTORS
 
-Boid::Boid() : position_{0., 0.}, velocity_{0., 0.} {}
+Boid::Boid()
+    : position_{constants::defaultBoidPosition},
+      velocity_{constants::defaultBoidVelocity} {}
 Boid::Boid(const sf::Vector2f &position, const sf::Vector2f &velocity)
     : position_{position}, velocity_{velocity} {}
 
@@ -41,27 +43,9 @@ void Boid::setVelocityY(float v_y) { velocity_.y = v_y; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
-// FUNCTIONS
+// FUNCTIONS related to BOIDS
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Distance function between 2D vectors
-
-float distance(const sf::Vector2f &a, const sf::Vector2f &b) {
-  float dx = b.x - a.x;
-  float dy = b.y - a.y;
-  return std::sqrt(dx * dx + dy * dy);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Distance function between 2D boids
-
-float distance(const Boid &boid1, const Boid &boid2) {
-  return sqrtf(powf((boid1.getPosition().x - boid2.getPosition().x), 2) +
-               powf((boid1.getPosition().y - boid2.getPosition().y), 2));
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Distance function between 2D vectors
 
 float distanceX(const Boid &boid1, const Boid &boid2) {
   return boid1.getPosition().x - boid2.getPosition().x;
@@ -74,24 +58,42 @@ float distanceY(const Boid &boid1, const Boid &boid2) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// Distance function between 2D boids
+
+float distance(const Boid &boid1, const Boid &boid2) {
+  float dx = distanceX(boid1, boid2);
+  float dy = distanceY(boid1, boid2);
+  return std::sqrt(dx * dx + dy * dy);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Distance function between 2D vectors
+
+float distance(const sf::Vector2f &a, const sf::Vector2f &b) {
+  float dx = b.x - a.x;
+  float dy = b.y - a.y;
+  return std::sqrt(dx * dx + dy * dy);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 // CHECK SPEED
 
 void checkMinimumSpeed(Boid &boid) {
-  if (0 < boid.getSpeed() && boid.getSpeed() < constants::minBoidSpeed) {
-    boid.setVelocity(
-        {boid.getVelocity().x * constants::minBoidSpeed / boid.getSpeed(),
-         boid.getVelocity().y * constants::minBoidSpeed / boid.getSpeed()});
+  float speed = boid.getSpeed();
+  if (speed > 0 && speed < constants::minBoidSpeed) {
+    boid.setVelocity({boid.getVelocity().x * constants::minBoidSpeed / speed,
+                      boid.getVelocity().y * constants::minBoidSpeed / speed});
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void checkMaximumSpeed(Boid &boid) {
-  if (boid.getSpeed() > constants::maxBoidSpeed) {
-    boid.setVelocity(
-        {boid.getVelocity().x * constants::maxBoidSpeed / boid.getSpeed(),
-         boid.getVelocity().y * constants::maxBoidSpeed / boid.getSpeed()});
+  float speed = boid.getSpeed();
+  if (speed > constants::maxBoidSpeed) {
+    boid.setVelocity({boid.getVelocity().x * constants::maxBoidSpeed / speed,
+                      boid.getVelocity().y * constants::maxBoidSpeed / speed});
   }
 }
 

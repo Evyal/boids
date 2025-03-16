@@ -1,11 +1,15 @@
 #include "../include/random.hpp"
 
 #include <SFML/System/Vector2.hpp>
+#include <cassert>
 #include <chrono>
 #include <cmath>
 #include <random>
 
 #include "../include/constants.hpp"
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// SEED
 
 std::default_random_engine rng(static_cast<size_t>(
     std::chrono::steady_clock::now().time_since_epoch().count()));
@@ -51,6 +55,11 @@ sf::Vector2f randomBoidPosition(sf::Vector2f center) {
       b = false;
     }
   }
+
+  assert(position.x >= 0.f);
+  assert(position.x <= constants::fieldSide);
+  assert(position.y >= 0.f);
+  assert(position.y <= constants::fieldSide);
 
   return position;
 }

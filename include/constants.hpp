@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/System/Vector2.hpp>
 
 #include "structs.hpp"
 
@@ -10,8 +11,8 @@ namespace constants {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Window constanst
-inline constexpr float windowWidth{1050.f};
-inline constexpr float windowHeight{750.f};
+inline constexpr long windowWidth{1050};
+inline constexpr long windowHeight{750};
 inline constexpr int windowFrameRate{60};
 
 // Size of the field where the boids can fly
@@ -26,6 +27,10 @@ inline constexpr int initFlockNumber{1};
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // BOIDS CONSTANTS
+
+// default values
+inline const sf::Vector2f defaultBoidPosition{360, 360};
+inline const sf::Vector2f defaultBoidVelocity{200, 0};
 
 // minimum and maximum speed component of any boid
 inline constexpr float minBoidSpeed{150.f};

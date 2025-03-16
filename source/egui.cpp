@@ -24,7 +24,10 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-Egui::Egui() : window(sf::VideoMode(1050, 750), "Flocks Simulation"), gui(window) {}
+Egui::Egui()
+    : window(sf::VideoMode(constants::windowWidth, constants::windowHeight),
+             "Flocks Simulation"),
+      gui(window) {}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -48,15 +51,15 @@ void Egui::setup() {
 
   // GENERATE FLOCKS at the BEGINNING
 
-  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
            sf::Color{255, 0, 127});  // PINK
-  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
            sf::Color{255, 0, 0});  // RED
-  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
            sf::Color{255, 204, 0});  // YELLOW
-  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
            sf::Color{153, 255, 51});  // GREEN
-  addFlock(randomInt(10, 50), {randomFloat(15, 735), randomFloat(15, 735)},
+  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
            sf::Color{0, 204, 204});  // CYAN
 
   // OPTION 1
@@ -873,7 +876,7 @@ void Egui::evolveFlocks() {
 
 void Egui::drawFlocks() {
   bodyStack_.resize(flockStack_.size());
-  
+
   for (size_t i{0}; i < bodyStack_.size(); i++) {
     bodyStack_[i].clear();
     sf::Color color{flockStack_[i].getFlockColor()};

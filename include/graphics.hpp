@@ -16,7 +16,7 @@ sf::CircleShape getTriangleBoid(const Boid &boid,
 
 // function to create a rectangle from parameters
 
-sf::RectangleShape getRectangle(const RectanglePar &parconst,
+sf::RectangleShape getRectangle(const RectanglePar &par,
                                 const sf::Color &color = sf::Color::Black);
 
 #endif

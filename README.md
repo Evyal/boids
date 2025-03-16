@@ -50,8 +50,9 @@ cmake --build .
 ## Features
 
 - Real-time visualization of flock movement
-- Adjustable parameters for interactions between boids
+- Values of statistics of each flock printed on screed
 - Interactive controls for adding or removing flocks
+- Adjustable parameters for interactions between boids
 
 ![bottoni_evidenziati](images/interface1.png)
 ![bottoni_evidenziati](images/interface2.png)

@@ -11,7 +11,7 @@ class Boid {
 
  public:
   //////////////////////////////////////////////////////////////////////////////////////////
-  // COSTRUTTORI
+  // CONSTRUCTORS
 
   Boid();
   Boid(const sf::Vector2f &position, const sf::Vector2f &velocity);
@@ -42,10 +42,10 @@ class Boid {
 //////////////////////////////////////////////////////////////////////////////////////////
 // FUNCTIONS
 
-float distance(const sf::Vector2f &a, const sf::Vector2f &b);
-float distance(const Boid &boid1, const Boid &boid2);
 float distanceX(const Boid &boid1, const Boid &boid2);
 float distanceY(const Boid &boid1, const Boid &boid2);
+float distance(const Boid &boid1, const Boid &boid2);
+float distance(const sf::Vector2f &a, const sf::Vector2f &b);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // SPEED CONTROL
@@ -62,6 +62,6 @@ void mirrorBorders(Boid &boid);
 //////////////////////////////////////////////////////////////////////////////////////////
 // BUILD
 
-Boid createBoid(sf::Vector2f center, float angle);
+Boid createBoid(sf::Vector2f center = {360, 360}, float angle = 0.f);
 
 #endif

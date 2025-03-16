@@ -3,18 +3,18 @@
 #include <iostream>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
+#include <SFML/Graphics.hpp>
+#include <cmath>
+
 #include "../include/boid.hpp"
 #include "../include/constants.hpp"
 #include "../include/flock.hpp"
 #include "doctest.h"
-#include <SFML/Graphics.hpp>
-#include <cmath>
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING CLASS FLOCK") {
-
   SUBCASE("TESTING CONSTRUCTORS and GETTERS") {
     // sf::Vector2f center{375, 375};
 
@@ -24,10 +24,7 @@ TEST_CASE("TESTING CLASS FLOCK") {
     Boid b4{{10.f, 20.f}, {10.f, 0.f}};
     Boid b5{{20.f, 20.f}, {0.f, 10.f}};
 
-    Flock flock1{};
-
-    CHECK(flock1.getSize() == 0);
-    CHECK(flock1.getFlockColor() == sf::Color::Black);
+    // Flocks must have at least 2 elements
 
     Flock flock2{{b1, b2}};
 
@@ -85,7 +82,6 @@ TEST_CASE("TESTING CLASS FLOCK") {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING RULES") {
-
   Boid b1{{10.f, 50.f}, {20.f, 50.f}};
   Boid b2{{15.f, 45.f}, {10.f, 20.f}};
   Boid b3{{20.f, 40.f}, {40.f, 30.f}};
@@ -99,16 +95,15 @@ TEST_CASE("TESTING RULES") {
   auto alignment = flock.alignment();
   auto cohesion = flock.cohesion();
 
-  const float s = constants::defaultSeparationStrength; // 0.5f
-  const float a = constants::defaultAlignmentStrength;  // 0.03f
-  const float c = constants::defaultCohesionStrength;   // 0.015f
-  const float sr = constants::defaultSeparationRange;   // 15.f
-  const float i = constants::defaultInteractionRange;   // 150.f
+  const float s = constants::defaultSeparationStrength;  // 0.5f
+  const float a = constants::defaultAlignmentStrength;   // 0.03f
+  const float c = constants::defaultCohesionStrength;    // 0.015f
+  const float sr = constants::defaultSeparationRange;    // 15.f
+  const float i = constants::defaultInteractionRange;    // 150.f
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING SEPARATION") {
-
     // Separation Distance Checks
     CHECK(distance(b1, b2) < sr);
     CHECK(distance(b1, b3) < sr);
@@ -188,7 +183,6 @@ TEST_CASE("TESTING RULES") {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     SUBCASE("TESTING ALIGNMENT") {
-
       // Interaction Distance Checks
       CHECK(distance(b1, b2) < i);
       CHECK(distance(b1, b3) < i);
@@ -320,7 +314,6 @@ TEST_CASE("TESTING RULES") {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     SUBCASE("TESTING COHESION") {
-
       {
         // boid 1, compute center of mass for boids 2,3,4,5,6.
         sf::Vector2f center =
@@ -396,7 +389,9 @@ TEST_CASE("TESTING RULES") {
 
 TEST_CASE("TESTING PARAMETERS") {
   SUBCASE("TESTING INTERACTION PARAMETERS") {
-    Flock flock{{}, {}};
+    Boid b1{};
+    Boid b2{};
+    Flock flock{{b1, b2}, {}};
 
     CHECK(Flock::getParameters().separationStrength ==
           constants::defaultSeparationStrength);
@@ -445,7 +440,6 @@ TEST_CASE("TESTING PARAMETERS") {
   }
 
   SUBCASE("TESTING MODES") {
-
     CHECK(Flock::getToroidalMode() == false);
     CHECK(Flock::getRepulsiveClick() == false);
 
@@ -467,7 +461,6 @@ TEST_CASE("TESTING PARAMETERS") {
 ////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING RULES on SPECIAL CASES") {
-
   // REMEMBER TESTS MIGHT NEED TO BE CHANGED IF DEFAULT PARAMETERS OF
   // INTERACTION ARE CHANGED!
 
@@ -488,7 +481,6 @@ TEST_CASE("TESTING RULES on SPECIAL CASES") {
   // CHECKING RULES if some boids are OUT OF THE INTERACTION RANGE
 
   SUBCASE("SEPARATION") {
-
     // std::cout << distance(b1, b2) << '\n';
     // std::cout << distance(b2, b3) << '\n';
     // std::cout << distance(b1, b3) << '\n';
@@ -504,7 +496,6 @@ TEST_CASE("TESTING RULES on SPECIAL CASES") {
   ////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("ALIGNMENT") {
-
     CHECK(alignment[0].x == 0.f);
     CHECK(alignment[0].y == 0.f);
 
@@ -522,7 +513,6 @@ TEST_CASE("TESTING RULES on SPECIAL CASES") {
   ////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("COHESION") {
-
     CHECK(cohesion[0].x == 0.f);
     CHECK(cohesion[0].y == 0.f);
 
@@ -537,14 +527,12 @@ TEST_CASE("TESTING RULES on SPECIAL CASES") {
 ////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING UPDATE FUNCTION") {
-
   Boid b1{{100.f, 500.f}, {200.f, 200.f}};
   Boid b2{{150.f, 300.f}, {210.f, 150.f}};
   Boid b3{{250.f, 300.f}, {190.f, 180.f}};
   Flock flock{{b1, b2, b3}};
 
   SUBCASE("TESTING UPDATE") {
-
     ////////////////////////////////////////////////////////////////////////////////
     // Same flock as before to make it simpler
 
@@ -578,7 +566,6 @@ TEST_CASE("TESTING UPDATE FUNCTION") {
   ////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING REPEL CLICK in ATTRACTIVE MODE") {
-
     Flock::setRepulsiveClick(false);
     flock.repelOnClick({200, 200});
 
@@ -597,7 +584,6 @@ TEST_CASE("TESTING UPDATE FUNCTION") {
   ////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING REPEL CLICK in REPULSIVE MODE") {
-
     Flock::setRepulsiveClick(true);
     flock.repelOnClick({200, 200});
 
@@ -620,7 +606,6 @@ TEST_CASE("TESTING UPDATE FUNCTION") {
 ////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING RULES on TOROIDAL MODE") {
-
   // Create 3 boids: 1 near the right edge, 2 near the left edge, 3 centered
 
   Boid b1{{700.f, 360.f}, {150.f, 0.f}};
@@ -633,7 +618,6 @@ TEST_CASE("TESTING RULES on TOROIDAL MODE") {
   ////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING TOROIDAL COHESION") {
-
     // Calculate toroidal cohesion vectors.
     auto cohesionVecs = flock.toroidalCohesion();
 
@@ -654,7 +638,6 @@ TEST_CASE("TESTING RULES on TOROIDAL MODE") {
   ////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING UPDATE in TOROIDAL MODE") {
-
     flock.updateFlock();
 
     const Boid &boid0 = flock.getBoid(0);
@@ -676,7 +659,7 @@ TEST_CASE("TESTING RULES on TOROIDAL MODE") {
     CHECK(boid1.getPosition().x == doctest::Approx(21.f));
     CHECK(boid1.getPosition().y == doctest::Approx(360.f));
     CHECK(boid1.getVelocity().x ==
-          doctest::Approx(150.f)); // adjusted from 149.4f to 150.f
+          doctest::Approx(150.f));  // adjusted from 149.4f to 150.f
     CHECK(boid1.getVelocity().y == doctest::Approx(0.f));
 
     // boid 3:
@@ -695,7 +678,6 @@ TEST_CASE("TESTING RULES on TOROIDAL MODE") {
 ////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING REPEL") {
-
   // Flock 0: Three boids
   // a1: Positioned near b1, so should be repelled.
   // a2: Positioned near b2, so should be repelled.
@@ -751,7 +733,6 @@ TEST_CASE("TESTING REPEL") {
 ////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING CREATE FLOCK") {
-
   sf::Vector2f center{20, 20};
 
   Flock flock{createFlock(10, center, sf::Color::Green)};
