@@ -1,6 +1,8 @@
 # Boids
 
-A simulation of the behaviour of flocks made with C++ using SFML and TGUI for graphics and UI.
+## Overview
+
+This project simulates the behavior of flocks, such as birds or fish, using a particle-based system. The simulation models individual agents that follow simple rules to create complex, collective behavior.
 
 ### Prerequisites
 
@@ -39,17 +41,19 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 ```
 
-## Running the program
+### Running the program
 
 ```bash
 ./boids
 ```
 
+## Features
+
+- Real-time visualization of flock movement
+- Adjustable parameters for interactions between boids
+- Interactive controls for adding or removing flocks
+
 ## Controls
 
-- 
-- 
-
-
-
-
+- **Left Click**: Interact with boids
+- **Space Bar**: Pause/Resume simulation
