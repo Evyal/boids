@@ -1,4 +1,4 @@
-#include "../include/egui.hpp"
+#include "../include/gui.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
@@ -21,17 +21,16 @@
 #include "../include/structs.hpp"
 #include "../include/switchbutton.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
+namespace ev {
 
-Egui::Egui()
+Gui::Gui()
     : window(sf::VideoMode(constants::windowWidth, constants::windowHeight),
              "Flocks Simulation"),
       gui(window) {}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::setup() {
+void Gui::setup() {
   // THE ORDER in WHICH OPTIONS are SET UP is IMPORTANT!!!
 
   sans.loadFromFile("../assets/OpenSans-Regular.ttf");
@@ -69,7 +68,7 @@ void Egui::setup() {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::run() {
+void Gui::run() {
   window.setPosition({120, 50});
   window.setFramerateLimit(constants::windowFrameRate);
   sf::Event event;
@@ -119,7 +118,7 @@ void Egui::run() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // Draw Interface
 
-void Egui::drawInterface() {
+void Gui::drawInterface() {
   sf::RectangleShape topSettings(getRectangle(constants::topSettingMargin));
   sf::RectangleShape bottomSettings(
       getRectangle(constants::bottomSettingMargin));
@@ -142,7 +141,7 @@ void Egui::drawInterface() {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::drawMargin() {
+void Gui::drawMargin() {
   sf::Color color{constants::fieldColor};
 
   sf::RectangleShape topField(getRectangle(constants::topMargin, color));
@@ -160,7 +159,7 @@ void Egui::drawMargin() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // Sets up the GUI components
 
-void Egui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
+void Gui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
                                 const TguiPar &button3) {
   // Button 1
   sf::Color a = constants::offThreeWayBGColor;
@@ -224,7 +223,7 @@ void Egui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::toggleButtons(tgui::Button::Ptr pressedButton) {
+void Gui::toggleButtons(tgui::Button::Ptr pressedButton) {
   // Set all buttons to "off" (gray background)
   option1->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
   option2->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
@@ -248,7 +247,7 @@ void Egui::toggleButtons(tgui::Button::Ptr pressedButton) {
 //////////////////////////////////////////////////////////////////////////////////////////
 // Updates CONTINUOUSLY to the SELECTED OPTION
 
-void Egui::selectedOption() {
+void Gui::selectedOption() {
   if (activeButton == option1) {
     drawStatistics();
   }
@@ -257,19 +256,19 @@ void Egui::selectedOption() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // CHANGES WHAT DO DISPLAY ON CLICK
 
-void Egui::selectedOption1() {
+void Gui::selectedOption1() {
   setVisibleOpt1(true);
   setVisibleOpt2(false);
   setVisibleOpt3(false);
 }
 
-void Egui::selectedOption2() {
+void Gui::selectedOption2() {
   setVisibleOpt1(false);
   setVisibleOpt2(true);
   setVisibleOpt3(false);
 }
 
-void Egui::selectedOption3() {
+void Gui::selectedOption3() {
   setVisibleOpt1(false);
   setVisibleOpt2(false);
   setVisibleOpt3(true);
@@ -279,7 +278,7 @@ void Egui::selectedOption3() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 1
 
-void Egui::drawStatistics() {
+void Gui::drawStatistics() {
   for (size_t i{0}; i < flockStack_.size(); i++) {
     float posIndex{static_cast<float>(i) * constants::distancePerIndex};
 
@@ -307,7 +306,7 @@ void Egui::drawStatistics() {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createDeleteFlockButton(size_t index) {
+void Gui::createDeleteFlockButton(size_t index) {
   float posX{constants::deleteFlockButton.posX};
   float posY{constants::deleteFlockButton.posY};
   float width{constants::deleteFlockButton.width};
@@ -331,7 +330,7 @@ void Egui::createDeleteFlockButton(size_t index) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createStatisticsLabels(size_t index) {
+void Gui::createStatisticsLabels(size_t index) {
   float posX{constants::statisticsLabel.posX};
   float posY{constants::statisticsLabel.posY};
   unsigned textSize{constants::statisticsLabel.textSize};
@@ -362,7 +361,7 @@ void Egui::createStatisticsLabels(size_t index) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::printValue(const LabelsPar &par, int value, size_t index) {
+void Gui::printValue(const LabelsPar &par, int value, size_t index) {
   sf::Text text;
 
   text.setString(std::to_string(value));
@@ -377,7 +376,7 @@ void Egui::printValue(const LabelsPar &par, int value, size_t index) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::printFlockStats(size_t index) {
+void Gui::printFlockStats(size_t index) {
   int flockSize{static_cast<int>(flockStack_[index].getSize())};
   printValue(constants::flockSizeLabel, flockSize, index);
 
@@ -410,7 +409,7 @@ void Egui::printFlockStats(size_t index) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::deleteDeleteFlockButton(size_t index) {
+void Gui::deleteDeleteFlockButton(size_t index) {
   if (index >= dynamicButtons.size()) {
     std::cout << "Invalid button index: " << index << "\n";
     return;
@@ -433,7 +432,7 @@ void Egui::deleteDeleteFlockButton(size_t index) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::repositionButtons() {
+void Gui::repositionButtons() {
   for (size_t i = 0; i < dynamicButtons.size(); ++i) {
     float posIndex{static_cast<float>(i * constants::distancePerIndex)};
 
@@ -462,7 +461,7 @@ void Egui::repositionButtons() {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::setupOpt1() {
+void Gui::setupOpt1() {
   graphicButton = SwitchButton::create(constants::graphicsButton);
   // COLOR for the BACKGROUND and TEXT of the BUTTON are INVERTED
   const sf::Color &textOff{constants::onGraphicsButtonColor};
@@ -492,7 +491,7 @@ void Egui::setupOpt1() {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::setVisibleOpt1(bool visible) {
+void Gui::setVisibleOpt1(bool visible) {
   graphicButton->setVisible(visible);
 
   for (size_t i = 0; i < dynamicButtons.size(); ++i) {
@@ -510,7 +509,7 @@ void Egui::setVisibleOpt1(bool visible) {
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 2
 
-void Egui::createSliderOpt2(const SlidersPar &sliderPar) {
+void Gui::createSliderOpt2(const SlidersPar &sliderPar) {
   auto slider = tgui::Slider::create(sliderPar.min, sliderPar.max);
   slider->setPosition(sliderPar.posX, sliderPar.posY);
   slider->setSize(sliderPar.width, sliderPar.height);
@@ -522,7 +521,7 @@ void Egui::createSliderOpt2(const SlidersPar &sliderPar) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createLabelOpt2(const LabelsPar &labelsPar) {
+void Gui::createLabelOpt2(const LabelsPar &labelsPar) {
   auto label = tgui::Label::create();
   label->setPosition(labelsPar.posX, labelsPar.posY);
   label->getRenderer()->setTextColor(sf::Color::White);
@@ -535,7 +534,7 @@ void Egui::createLabelOpt2(const LabelsPar &labelsPar) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::setLabelTextOpt2(size_t i, const std::string &text) {
+void Gui::setLabelTextOpt2(size_t i, const std::string &text) {
   option2Labels[i]->setText(
       text + std::to_string(static_cast<int>(option2Sliders[i]->getValue())));
 
@@ -547,7 +546,7 @@ void Egui::setLabelTextOpt2(size_t i, const std::string &text) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::setupOpt2() {
+void Gui::setupOpt2() {
   createSliderOpt2(constants::boidsNumberSlider);
   createSliderOpt2(constants::centerXSlider);
   createSliderOpt2(constants::centerYSlider);
@@ -592,7 +591,7 @@ void Egui::setupOpt2() {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::setVisibleOpt2(bool visible) {
+void Gui::setVisibleOpt2(bool visible) {
   for (auto &i : option2Sliders) {
     i->setVisible(visible);
   }
@@ -604,7 +603,7 @@ void Egui::setVisibleOpt2(bool visible) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::handleColorSliderChange(tgui::Slider::Ptr changedSlider) {
+void Gui::handleColorSliderChange(tgui::Slider::Ptr changedSlider) {
   int newTotal = static_cast<int>(option2Sliders[3]->getValue() +
                                   option2Sliders[4]->getValue() +
                                   option2Sliders[5]->getValue());
@@ -626,7 +625,7 @@ void Egui::handleColorSliderChange(tgui::Slider::Ptr changedSlider) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createAddFlockButton(const TguiPar &par) {
+void Gui::createAddFlockButton(const TguiPar &par) {
   addFlockButton = tgui::Button::create("Create Flock");
   addFlockButton->setPosition(par.posX, par.posY);
   addFlockButton->setSize(par.width, par.height);
@@ -650,7 +649,7 @@ void Egui::createAddFlockButton(const TguiPar &par) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::enableCreateFlockButton() {
+void Gui::enableCreateFlockButton() {
   if (flockStack_.size() == 5 || getActiveBoids() > 245) {
     // index 0 is boids number
     // index 6 is boids max number
@@ -695,7 +694,7 @@ void Egui::enableCreateFlockButton() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // OPTION 3
 
-void Egui::createSliderOpt3(const SlidersPar &params) {
+void Gui::createSliderOpt3(const SlidersPar &params) {
   auto slider = tgui::EditBoxSlider::create();
   slider->setPosition(params.posX, params.posY);
   slider->setSize(params.width, params.height);
@@ -710,7 +709,7 @@ void Egui::createSliderOpt3(const SlidersPar &params) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::createLabelOpt3(const LabelsPar &labelsPar,
+void Gui::createLabelOpt3(const LabelsPar &labelsPar,
                            const std::string &text) {
   auto label = tgui::Label::create();
   label->setPosition(labelsPar.posX, labelsPar.posY);
@@ -725,7 +724,7 @@ void Egui::createLabelOpt3(const LabelsPar &labelsPar,
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::setupOpt3() {
+void Gui::setupOpt3() {
   createSliderOpt3(constants::separationSlider);
   createSliderOpt3(constants::separationRangeSlider);
   createSliderOpt3(constants::alignmentSlider);
@@ -816,7 +815,7 @@ void Egui::setupOpt3() {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::setVisibleOpt3(bool visible) {
+void Gui::setVisibleOpt3(bool visible) {
   for (auto &i : option3Sliders) {
     i->setVisible(visible);
   }
@@ -830,7 +829,7 @@ void Egui::setVisibleOpt3(bool visible) {
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::addFlock(size_t n, sf::Vector2f center, sf::Color color) {
+void Gui::addFlock(size_t n, sf::Vector2f center, sf::Color color) {
   if (flockStack_.size() < constants::maxFlockNumber) {
     flockStack_.emplace_back(createFlock(n, center, color));
     createDeleteFlockButton(flockStack_.size() - 1);
@@ -854,7 +853,7 @@ void Egui::addFlock(size_t n, sf::Vector2f center, sf::Color color) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::deleteFlock(size_t i) {
+void Gui::deleteFlock(size_t i) {
   flockStack_.erase(flockStack_.begin() + static_cast<long>(i));
   addFlockButtonLabel->setText(
       "Number of flocks: " + std::to_string(flockStack_.size()) + "/5");
@@ -862,7 +861,7 @@ void Egui::deleteFlock(size_t i) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::evolveFlocks() {
+void Gui::evolveFlocks() {
   for (size_t i{0}; i < flockStack_.size(); i++) {
     flockStack_[i].updateFlock(repel(flockStack_, i));
   }
@@ -870,7 +869,7 @@ void Egui::evolveFlocks() {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Egui::drawFlocks() {
+void Gui::drawFlocks() {
   bodyStack_.resize(flockStack_.size());
 
   for (size_t i{0}; i < bodyStack_.size(); i++) {
@@ -887,7 +886,7 @@ void Egui::drawFlocks() {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-size_t Egui::getActiveBoids() {
+size_t Gui::getActiveBoids() {
   size_t activeBoids{};
   for (const auto &flock : flockStack_) {
     activeBoids += flock.getSize();
@@ -898,7 +897,7 @@ size_t Egui::getActiveBoids() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // Interact with left click
 
-void Egui::interactWithFlocks() {
+void Gui::interactWithFlocks() {
   int max{static_cast<int>(constants::fieldSide + 2 * constants::marginSize)};
 
   if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -912,6 +911,8 @@ void Egui::interactWithFlocks() {
     }
   }
 }
+
+}  // namespace ev
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////

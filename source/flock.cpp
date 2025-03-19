@@ -13,6 +13,8 @@
 #include "../include/constants.hpp"
 #include "../include/structs.hpp"
 
+namespace ev {
+
 extern std::default_random_engine rng;
 
 FlockPar Flock::parameters_ = constants::defaultFlockParameters;
@@ -400,3 +402,4 @@ Flock createFlock(size_t n, sf::Vector2f center, sf::Color color) {
 
   return {flock, color};
 }
+}  // namespace ev

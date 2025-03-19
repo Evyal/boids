@@ -7,6 +7,8 @@
 
 #include "structs.hpp"
 
+namespace ev {
+
 class SwitchButton : public tgui::Button {
  private:
   ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +34,7 @@ class SwitchButton : public tgui::Button {
  public:
   // DEFAULT CONSTRUCTOR
   SwitchButton(const SwitchButtonPar &par);
-  
+
   // CREATE FUNCTION that returns a SHARED POINTER - Following TGUI conventions.
   static std::shared_ptr<SwitchButton> create(const SwitchButtonPar &par);
 
@@ -46,5 +48,7 @@ class SwitchButton : public tgui::Button {
   void setOnAction(std::function<void()> &&action);
   void setOffAction(std::function<void()> &&action);
 };
+
+}  // namespace ev
 
 #endif

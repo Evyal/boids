@@ -10,6 +10,7 @@
 #include "boid.hpp"
 #include "structs.hpp"
 
+namespace ev {
 class Flock {
  private:
   std::vector<Boid> flock_{};
@@ -94,5 +95,7 @@ std::vector<sf::Vector2f> repel(const std::vector<Flock> &flockstack, size_t i);
 // CREATE FLOCKS
 
 Flock createFlock(size_t n, sf::Vector2f center, sf::Color color);
+
+}  // namespace ev
 
 #endif

@@ -7,6 +7,8 @@
 
 #include "../include/boid.hpp"
 
+namespace ev {
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 std::vector<float> calculateDistances(
@@ -49,3 +51,5 @@ float calculateStandardDeviation(const std::vector<float> &distances,
                    static_cast<float>(distances.size() - 1);
   return std::sqrt(variance);
 }
+
+}  // namespace ev

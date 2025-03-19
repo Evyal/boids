@@ -4,6 +4,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 
+namespace ev {
+
 class Boid {
  private:
   sf::Vector2f position_{};
@@ -64,4 +66,5 @@ void mirrorBorders(Boid &boid);
 
 Boid createBoid(sf::Vector2f center = {360, 360}, float angle = 0.f);
 
+}  // namespace ev
 #endif

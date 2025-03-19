@@ -5,6 +5,8 @@
 #include <cmath>
 #include <random>
 
+namespace ev {
+
 extern std::default_random_engine rng;
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -18,5 +20,7 @@ float randomFloat(float min, float max);
 
 sf::Vector2f randomBoidPosition(sf::Vector2f center);
 sf::Vector2f randomBoidSpeed(float angleCenter);
+
+}  // namespace ev
 
 #endif

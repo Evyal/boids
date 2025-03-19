@@ -4,12 +4,14 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include "../include/statistics.hpp"
-#include "doctest.h"
+#include "../assets/doctest.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
+
+using namespace ev;
 
 TEST_CASE("Test distance calculations with 5 points on a line") {
 

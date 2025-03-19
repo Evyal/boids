@@ -9,6 +9,8 @@
 #include "boid.hpp"
 #include "structs.hpp"
 
+namespace ev {
+
 // DRAW BOID
 
 sf::CircleShape getTriangleBoid(const Boid &boid,
@@ -18,5 +20,7 @@ sf::CircleShape getTriangleBoid(const Boid &boid,
 
 sf::RectangleShape getRectangle(const RectanglePar &par,
                                 const sf::Color &color = sf::Color::Black);
+
+}  // namespace ev
 
 #endif

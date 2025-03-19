@@ -7,12 +7,14 @@
 #include "../include/boid.hpp"
 #include "../include/constants.hpp"
 #include "../include/random.hpp"
-#include "doctest.h"
+#include "../assets/doctest.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
+
+using namespace ev;
 
 TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
   size_t n{1000};

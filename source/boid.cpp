@@ -7,6 +7,8 @@
 #include "../include/constants.hpp"
 #include "../include/random.hpp"
 
+namespace ev {
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // CONSTRUCTORS
 
@@ -147,3 +149,5 @@ void mirrorBorders(Boid &boid) {
 Boid createBoid(sf::Vector2f center, float a) {
   return {{randomBoidPosition(center)}, {randomBoidSpeed(a)}};
 }
+
+}  // namespace ev

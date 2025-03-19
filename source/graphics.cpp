@@ -9,6 +9,8 @@
 #include "../include/constants.hpp"
 #include "../include/structs.hpp"
 
+namespace ev {
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE BOIDS as TRIANGLES
 
@@ -36,3 +38,5 @@ sf::RectangleShape getRectangle(const RectanglePar &par,
   rectangle.setFillColor(color);
   return rectangle;
 }
+
+}  // namespace ev

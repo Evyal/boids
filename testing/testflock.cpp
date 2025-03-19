@@ -9,10 +9,12 @@
 #include "../include/boid.hpp"
 #include "../include/constants.hpp"
 #include "../include/flock.hpp"
-#include "doctest.h"
+#include "../assets/doctest.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
+
+using namespace ev;
 
 TEST_CASE("TESTING CLASS FLOCK") {
   SUBCASE("TESTING CONSTRUCTORS and GETTERS") {

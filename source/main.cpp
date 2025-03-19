@@ -5,12 +5,12 @@
 #include <cmath>
 #include <cstdlib>
 
-#include "../include/egui.hpp"
+#include "../include/gui.hpp"
 
 int main() {
-  Egui egui;
-  egui.setup();
-  egui.run();
+  ev::Gui program;
+  program.setup();
+  program.run();
 
   return 0;
 }

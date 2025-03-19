@@ -2,16 +2,18 @@
 #include <cstddef>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "../include/boid.hpp"
-#include "../include/constants.hpp"
-#include "doctest.h"
 #include <SFML/Graphics.hpp>
 
+#include "../include/boid.hpp"
+#include "../include/constants.hpp"
+#include "../assets/doctest.h"
+
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
+
+using namespace ev;
 
 TEST_CASE("TESTING CLASS BOID") {
-
   SUBCASE("TESTING GETTERS") {
     Boid b1{{0, 0}, {0, 0}};
     Boid b2{{1, 2}, {3, 4}};
@@ -37,7 +39,6 @@ TEST_CASE("TESTING CLASS BOID") {
   //////////////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING SETTERS") {
-
     Boid b1{{0, 0}, {0, 0}};
     Boid b2{{1, 2}, {3, 4}};
 
@@ -78,7 +79,6 @@ TEST_CASE("TESTING CLASS BOID") {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING FUNCTIONS") {
-
   SUBCASE("TESTING DISTANCE BETWEEN SFML 2D VECTORS") {
     sf::Vector2f pos1{0, 0};
     sf::Vector2f pos2{-3, 4};
@@ -94,7 +94,6 @@ TEST_CASE("TESTING FUNCTIONS") {
   //////////////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING DISTANCE BETWEEN BOIDS") {
-
     Boid b1{{0, 0}, {0, 0}};
     Boid b2{{0, 0}, {0, 0}};
 
@@ -109,7 +108,6 @@ TEST_CASE("TESTING FUNCTIONS") {
   //////////////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING SPEED CONTROL") {
-
     Boid b1{{0, 0}, {0, 0}};
     Boid b2{{1, 2}, {3, 4}};
 
@@ -154,7 +152,6 @@ TEST_CASE("TESTING FUNCTIONS") {
   //////////////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING CHECK BORDERS") {
-
     Boid b1{};
     Boid b2{};
     Boid b3{};
@@ -235,7 +232,6 @@ TEST_CASE("TESTING FUNCTIONS") {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING BUILD BOID") {
-
   sf::Vector2f center{400., 200.};
 
   for (size_t i{0}; i < 100; i++) {

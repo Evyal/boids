@@ -6,14 +6,14 @@ This project simulates the behavior of flocks, such as birds or fish, using a pa
 
 ## Prerequisites
 
-Build instructions are for Ubuntu 22.04.
+Build instructions are for **Ubuntu 22.04**.
 
 Ensure you have the following installed:
 
-- [SFML](https://github.com/SFML/SFML) (2.5): Libreria per la rappresentazione grafica
-- [TGUI](https://github.com/texus/TGUI) (1.0): Libreria per l'interfaccia grafica
+- [SFML](https://github.com/SFML/SFML) (2.5): Library for graphic representation.
+- [TGUI](https://github.com/texus/TGUI) (1.0): Library for graphic interface.
 
-### SFML and Tgui Installation
+### SFML and TGUI Installation
 
 ```bash
 sudo apt-get install libsfml-dev
@@ -62,7 +62,7 @@ cmake --build .
 ## Features
 
 - Real-time visualization of flock movement
-- Values of statistics of each flock printed on screed
+- Real-time statistics display for each flock
 - Interactive controls for adding or removing flocks
 - Adjustable parameters for interactions between boids
 
@@ -70,7 +70,25 @@ cmake --build .
 ![Interface2](images/interface2.png)
 ![Interface3](images/interface3.png)
 
-## Controls
+### Option 1: Graphics and statistics
 
-- **Left Click**: Interact with boids
-- **Space Bar**: Pause/Resume simulation
+- **Background color button**: Changes the colour of the backgorund between black and white.
+- **Red numbered buttons**: Delete the corresponding flock.
+
+### Option 2: Create Flocks
+
+- **Number of boids slider**: Selects the number of boids for a new flock.
+- **Center of spawn sliders**: Select the spawn location of a new flock.
+- **RGB sliders**: Select the color of a new flock. (Creating a white or black flock is disallowed because it would be invisible)
+- **Create flock button**: Creates a new flock if there is enough space. (Max 250 boids; Max 5 flocks)
+
+### Option 3: Simulation Parameters
+
+- **Interaction parameters sliders**: Change the values of the parameters of the rules that determine the movement of *boids*.
+- **Border mode button**: Changes the behaviour of *boids* at the borders, mirror and toroidal mode.
+- **Click mode button**: Changes the interaction on click, attractive and repulsive mode.
+
+### Key Controls
+
+- **Left Click**: Interact with boids, attracting or repelling them to cursor.
+- **Space Bar**: Pause/Resume simulation.

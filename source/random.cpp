@@ -8,6 +8,8 @@
 
 #include "../include/constants.hpp"
 
+namespace ev {
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // SEED
 
@@ -78,3 +80,5 @@ sf::Vector2f randomBoidSpeed(float angleCenter) {
   float a{angle(rng)};
   return {cosf(a) * v, sinf(a) * v};
 }
+
+}  // namespace ev

@@ -4,6 +4,8 @@
 #include <SFML/Graphics/Color.hpp>
 #include <string>
 
+namespace ev {
+
 struct TguiPar {
   float posX{};
   float posY{};
@@ -46,5 +48,6 @@ struct FlockPar {
   float repelRange{};
   float clickStrength{};
 };
+}  // namespace ev
 
 #endif

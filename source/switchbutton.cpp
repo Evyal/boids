@@ -2,6 +2,8 @@
 
 #include "../include/structs.hpp"
 
+namespace ev {
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // CONSTRUCTOR
 
@@ -84,3 +86,5 @@ void SwitchButton::setOnAction(std::function<void()> &&action) {
 void SwitchButton::setOffAction(std::function<void()> &&action) {
   offAction_ = action;
 }
+
+}  // namespace ev
