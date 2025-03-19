@@ -6,34 +6,32 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
+#include "../assets/doctest.h"
 #include "../include/boid.hpp"
 #include "../include/constants.hpp"
 #include "../include/flock.hpp"
-#include "../assets/doctest.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
-
-using namespace ev;
 
 TEST_CASE("TESTING CLASS FLOCK") {
   SUBCASE("TESTING CONSTRUCTORS and GETTERS") {
     // sf::Vector2f center{375, 375};
 
-    Boid b1{{0.f, 0.f}, {0.f, 0.f}};
-    Boid b2{{10.f, 10.f}, {0.f, 0.f}};
-    Boid b3{{20.f, 10.f}, {0.f, 15.f}};
-    Boid b4{{10.f, 20.f}, {10.f, 0.f}};
-    Boid b5{{20.f, 20.f}, {0.f, 10.f}};
+    ev::Boid b1{{0.f, 0.f}, {0.f, 0.f}};
+    ev::Boid b2{{10.f, 10.f}, {0.f, 0.f}};
+    ev::Boid b3{{20.f, 10.f}, {0.f, 15.f}};
+    ev::Boid b4{{10.f, 20.f}, {10.f, 0.f}};
+    ev::Boid b5{{20.f, 20.f}, {0.f, 10.f}};
 
     // Flocks must have at least 2 elements
 
-    Flock flock2{{b1, b2}};
+    ev::Flock flock2{{b1, b2}};
 
     CHECK(flock2.getSize() == 2);
     CHECK(flock2.getFlockColor() == sf::Color::Black);
 
-    Flock flock3{{b1, b2, b3, b4, b5}, sf::Color::Red};
+    ev::Flock flock3{{b1, b2, b3, b4, b5}, sf::Color::Red};
 
     CHECK(flock3.getBoid(0).getPosition().x == 0.f);
     CHECK(flock3.getBoid(0).getPosition().y == 0.f);
@@ -55,11 +53,11 @@ TEST_CASE("TESTING CLASS FLOCK") {
     // CHECK(flock3.getMeanVelocity().y == 5.f);
     CHECK(flock3.getMeanSpeed() == 7.f);
 
-    Boid b6{{10.f, 50.f}, {200.f, 150.f}};
-    Boid b7{{20.f, 40.f}, {100.f, 250.f}};
-    Boid b8{{30.f, 60.f}, {50.f, 120.f}};
+    ev::Boid b6{{10.f, 50.f}, {200.f, 150.f}};
+    ev::Boid b7{{20.f, 40.f}, {100.f, 250.f}};
+    ev::Boid b8{{30.f, 60.f}, {50.f, 120.f}};
 
-    Flock flock4{{b6, b7, b8}};
+    ev::Flock flock4{{b6, b7, b8}};
 
     CHECK(flock4.getFlockPositions().at(0).x == 10.f);
     CHECK(flock4.getFlockPositions().at(0).y == 50.f);
@@ -84,24 +82,24 @@ TEST_CASE("TESTING CLASS FLOCK") {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING RULES") {
-  Boid b1{{10.f, 50.f}, {20.f, 50.f}};
-  Boid b2{{15.f, 45.f}, {10.f, 20.f}};
-  Boid b3{{20.f, 40.f}, {40.f, 30.f}};
-  Boid b4{{25.f, 30.f}, {70.f, 10.f}};
-  Boid b5{{30.f, 20.f}, {60.f, 40.f}};
-  Boid b6{{100.f, 100.f}, {0.f, 0.f}};
+  ev::Boid b1{{10.f, 50.f}, {20.f, 50.f}};
+  ev::Boid b2{{15.f, 45.f}, {10.f, 20.f}};
+  ev::Boid b3{{20.f, 40.f}, {40.f, 30.f}};
+  ev::Boid b4{{25.f, 30.f}, {70.f, 10.f}};
+  ev::Boid b5{{30.f, 20.f}, {60.f, 40.f}};
+  ev::Boid b6{{100.f, 100.f}, {0.f, 0.f}};
 
-  Flock flock{{b1, b2, b3, b4, b5, b6}};
+  ev::Flock flock{{b1, b2, b3, b4, b5, b6}};
 
   auto separation = flock.separation();
   auto alignment = flock.alignment();
   auto cohesion = flock.cohesion();
 
-  const float s = constants::defaultSeparationStrength;  // 0.5f
-  const float a = constants::defaultAlignmentStrength;   // 0.03f
-  const float c = constants::defaultCohesionStrength;    // 0.015f
-  const float sr = constants::defaultSeparationRange;    // 15.f
-  const float i = constants::defaultInteractionRange;    // 150.f
+  const float s = ev::constants::defaultSeparationStrength;  // 0.5f
+  const float a = ev::constants::defaultAlignmentStrength;   // 0.03f
+  const float c = ev::constants::defaultCohesionStrength;    // 0.015f
+  const float sr = ev::constants::defaultSeparationRange;    // 15.f
+  const float i = ev::constants::defaultInteractionRange;    // 150.f
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -391,72 +389,73 @@ TEST_CASE("TESTING RULES") {
 
 TEST_CASE("TESTING PARAMETERS") {
   SUBCASE("TESTING INTERACTION PARAMETERS") {
-    Boid b1{};
-    Boid b2{};
-    Flock flock{{b1, b2}, {}};
+    ev::Boid b1{};
+    ev::Boid b2{};
+    ev::Flock flock{{b1, b2}, {}};
 
-    CHECK(Flock::getParameters().separationStrength ==
-          constants::defaultSeparationStrength);
-    CHECK(Flock::getParameters().separationRange ==
-          constants::defaultSeparationRange);
-    CHECK(Flock::getParameters().alignmentStrength ==
-          constants::defaultAlignmentStrength);
-    CHECK(Flock::getParameters().cohesionStrength ==
-          constants::defaultCohesionStrength);
-    CHECK(Flock::getParameters().interactionRange ==
-          constants::defaultInteractionRange);
-    CHECK(Flock::getParameters().repelStrength ==
-          constants::defaultRepelStrength);
-    CHECK(Flock::getParameters().repelRange == constants::defaultRepelRange);
-    CHECK(Flock::getParameters().clickStrength ==
-          constants::defaultClickStrenght);
+    CHECK(ev::Flock::getParameters().separationStrength ==
+          ev::constants::defaultSeparationStrength);
+    CHECK(ev::Flock::getParameters().separationRange ==
+          ev::constants::defaultSeparationRange);
+    CHECK(ev::Flock::getParameters().alignmentStrength ==
+          ev::constants::defaultAlignmentStrength);
+    CHECK(ev::Flock::getParameters().cohesionStrength ==
+          ev::constants::defaultCohesionStrength);
+    CHECK(ev::Flock::getParameters().interactionRange ==
+          ev::constants::defaultInteractionRange);
+    CHECK(ev::Flock::getParameters().repelStrength ==
+          ev::constants::defaultRepelStrength);
+    CHECK(ev::Flock::getParameters().repelRange ==
+          ev::constants::defaultRepelRange);
+    CHECK(ev::Flock::getParameters().clickStrength ==
+          ev::constants::defaultClickStrenght);
 
-    Flock::setParameters({1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f});
+          ev::Flock::setParameters({1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f});
 
-    CHECK(Flock::getParameters().separationStrength == 1.f);
-    CHECK(Flock::getParameters().separationRange == 2.f);
-    CHECK(Flock::getParameters().alignmentStrength == 3.f);
-    CHECK(Flock::getParameters().cohesionStrength == 4.f);
-    CHECK(Flock::getParameters().interactionRange == 5.f);
-    CHECK(Flock::getParameters().repelStrength == 6.f);
-    CHECK(Flock::getParameters().repelRange == 7.f);
-    CHECK(Flock::getParameters().clickStrength == 8.f);
+    CHECK(ev::Flock::getParameters().separationStrength == 1.f);
+    CHECK(ev::Flock::getParameters().separationRange == 2.f);
+    CHECK(ev::Flock::getParameters().alignmentStrength == 3.f);
+    CHECK(ev::Flock::getParameters().cohesionStrength == 4.f);
+    CHECK(ev::Flock::getParameters().interactionRange == 5.f);
+    CHECK(ev::Flock::getParameters().repelStrength == 6.f);
+    CHECK(ev::Flock::getParameters().repelRange == 7.f);
+    CHECK(ev::Flock::getParameters().clickStrength == 8.f);
 
-    Flock::setSeparationStrength(15.f);
-    Flock::setSeparationRange(15.f);
-    Flock::setAlignmentStrength(15.f);
-    Flock::setCohesionStrength(15.f);
-    Flock::setInteractionRange(15.f);
-    Flock::setRepelStrength(15.f);
-    Flock::setRepelRange(15.f);
-    Flock::setClickStrength(15.f);
+    ev::Flock::setSeparationStrength(15.f);
+    ev::Flock::setSeparationRange(15.f);
+    ev::Flock::setAlignmentStrength(15.f);
+    ev::Flock::setCohesionStrength(15.f);
+    ev::Flock::setInteractionRange(15.f);
+    ev::Flock::setRepelStrength(15.f);
+    ev::Flock::setRepelRange(15.f);
+    ev::Flock::setClickStrength(15.f);
 
-    CHECK(Flock::getParameters().separationStrength == 15.f);
-    CHECK(Flock::getParameters().separationRange == 15.f);
-    CHECK(Flock::getParameters().alignmentStrength == 15.f);
-    CHECK(Flock::getParameters().cohesionStrength == 15.f);
-    CHECK(Flock::getParameters().interactionRange == 15.f);
-    CHECK(Flock::getParameters().repelStrength == 15.f);
-    CHECK(Flock::getParameters().repelRange == 15.f);
-    CHECK(Flock::getParameters().clickStrength == 15.f);
+    CHECK(ev::Flock::getParameters().separationStrength == 15.f);
+    CHECK(ev::Flock::getParameters().separationRange == 15.f);
+    CHECK(ev::Flock::getParameters().alignmentStrength == 15.f);
+    CHECK(ev::Flock::getParameters().cohesionStrength == 15.f);
+    CHECK(ev::Flock::getParameters().interactionRange == 15.f);
+    CHECK(ev::Flock::getParameters().repelStrength == 15.f);
+    CHECK(ev::Flock::getParameters().repelRange == 15.f);
+    CHECK(ev::Flock::getParameters().clickStrength == 15.f);
   }
 
   SUBCASE("TESTING MODES") {
-    CHECK(Flock::getToroidalMode() == false);
-    CHECK(Flock::getRepulsiveClick() == false);
+    CHECK(ev::Flock::getToroidalMode() == false);
+    CHECK(ev::Flock::getRepulsiveClick() == false);
 
-    Flock::setToroidalMode(true);
-    Flock::setRepulsiveClick(true);
+    ev::Flock::setToroidalMode(true);
+    ev::Flock::setRepulsiveClick(true);
 
-    CHECK(Flock::getToroidalMode() == true);
-    CHECK(Flock::getRepulsiveClick() == true);
+    CHECK(ev::Flock::getToroidalMode() == true);
+    CHECK(ev::Flock::getRepulsiveClick() == true);
   }
 
   // RESETTING FLOCK PARAMETERS TO DEFAULT VALUES since they are static.
 
-  Flock::setParameters(constants::defaultFlockParameters);
-  Flock::setToroidalMode(false);
-  Flock::setRepulsiveClick(false);
+  ev::Flock::setParameters(ev::constants::defaultFlockParameters);
+  ev::Flock::setToroidalMode(false);
+  ev::Flock::setRepulsiveClick(false);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -466,18 +465,18 @@ TEST_CASE("TESTING RULES on SPECIAL CASES") {
   // REMEMBER TESTS MIGHT NEED TO BE CHANGED IF DEFAULT PARAMETERS OF
   // INTERACTION ARE CHANGED!
 
-  Boid b1{{100.f, 500.f}, {200.f, 200.f}};
-  Boid b2{{150.f, 300.f}, {210.f, 150.f}};
-  Boid b3{{250.f, 300.f}, {190.f, 180.f}};
-  Flock flock{{b1, b2, b3}};
+  ev::Boid b1{{100.f, 500.f}, {200.f, 200.f}};
+  ev::Boid b2{{150.f, 300.f}, {210.f, 150.f}};
+  ev::Boid b3{{250.f, 300.f}, {190.f, 180.f}};
+  ev::Flock flock{{b1, b2, b3}};
 
   std::vector<sf::Vector2f> separation{flock.separation()};
   std::vector<sf::Vector2f> alignment{flock.alignment()};
   std::vector<sf::Vector2f> cohesion{flock.cohesion()};
 
-  // const float &s{constants::defaultSeparationStrength};
-  const float &a{constants::defaultAlignmentStrength};
-  // const float &c{constants::defaultCohesionStrength};
+  // const float &s{ev::constants::defaultSeparationStrength};
+  const float &a{ev::constants::defaultAlignmentStrength};
+  // const float &c{ev::constants::defaultCohesionStrength};
 
   ////////////////////////////////////////////////////////////////////////////////
   // CHECKING RULES if some boids are OUT OF THE INTERACTION RANGE
@@ -529,10 +528,10 @@ TEST_CASE("TESTING RULES on SPECIAL CASES") {
 ////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("TESTING UPDATE FUNCTION") {
-  Boid b1{{100.f, 500.f}, {200.f, 200.f}};
-  Boid b2{{150.f, 300.f}, {210.f, 150.f}};
-  Boid b3{{250.f, 300.f}, {190.f, 180.f}};
-  Flock flock{{b1, b2, b3}};
+  ev::Boid b1{{100.f, 500.f}, {200.f, 200.f}};
+  ev::Boid b2{{150.f, 300.f}, {210.f, 150.f}};
+  ev::Boid b3{{250.f, 300.f}, {190.f, 180.f}};
+  ev::Flock flock{{b1, b2, b3}};
 
   SUBCASE("TESTING UPDATE") {
     ////////////////////////////////////////////////////////////////////////////////
@@ -541,66 +540,66 @@ TEST_CASE("TESTING UPDATE FUNCTION") {
     flock.updateFlock();
 
     CHECK(flock.getBoid(0).getPosition().x ==
-          doctest::Approx(100.f + b1.getVelocity().x / constants::speedScale));
+          doctest::Approx(100.f + b1.getVelocity().x / ev::constants::speedScale));
     CHECK(flock.getBoid(0).getPosition().y ==
-          doctest::Approx(500.f + b1.getVelocity().y / constants::speedScale));
+          doctest::Approx(500.f + b1.getVelocity().y / ev::constants::speedScale));
     CHECK(flock.getBoid(0).getVelocity().x == doctest::Approx(200.f));
     CHECK(flock.getBoid(0).getVelocity().y == doctest::Approx(200.f));
 
     CHECK(flock.getBoid(1).getPosition().x ==
-          doctest::Approx(150.f + b2.getVelocity().x / constants::speedScale));
+          doctest::Approx(150.f + b2.getVelocity().x / ev::constants::speedScale));
     CHECK(flock.getBoid(1).getPosition().y ==
-          doctest::Approx(300.f + b2.getVelocity().y / constants::speedScale));
+          doctest::Approx(300.f + b2.getVelocity().y / ev::constants::speedScale));
     CHECK(flock.getBoid(1).getVelocity().x == doctest::Approx(210.9f));
     CHECK(flock.getBoid(1).getVelocity().y == doctest::Approx(150.9f));
 
     CHECK(flock.getBoid(2).getPosition().x ==
-          doctest::Approx(250.f + b3.getVelocity().x / constants::speedScale));
+          doctest::Approx(250.f + b3.getVelocity().x / ev::constants::speedScale));
     CHECK(flock.getBoid(2).getPosition().y ==
-          doctest::Approx(300.f + b3.getVelocity().y / constants::speedScale));
+          doctest::Approx(300.f + b3.getVelocity().y / ev::constants::speedScale));
     CHECK(flock.getBoid(2).getVelocity().x == doctest::Approx(189.1f));
     CHECK(flock.getBoid(2).getVelocity().y == doctest::Approx(179.1f));
 
-    std::cout << distance({200, 200}, {150, 300}) << " "
-              << distance({200, 200}, {250, 300}) << '\n';
+    std::cout << ev::distance({200, 200}, {150, 300}) << " "
+              << ev::distance({200, 200}, {250, 300}) << '\n';
   }
 
   ////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING REPEL CLICK in ATTRACTIVE MODE") {
-    Flock::setRepulsiveClick(false);
+    ev::Flock::setRepulsiveClick(false);
     flock.repelOnClick({200, 200});
 
     CHECK(flock.getBoid(0).getVelocity().x == doctest::Approx(200.f));
     CHECK(flock.getBoid(0).getVelocity().y == doctest::Approx(200.f));
     CHECK(flock.getBoid(1).getVelocity().x ==
-          doctest::Approx(210.f + 50 * constants::defaultClickStrenght));
+          doctest::Approx(210.f + 50 * ev::constants::defaultClickStrenght));
     CHECK(flock.getBoid(1).getVelocity().y ==
-          doctest::Approx(150.f + (-100) * constants::defaultClickStrenght));
+          doctest::Approx(150.f + (-100) * ev::constants::defaultClickStrenght));
     CHECK(flock.getBoid(2).getVelocity().x ==
-          doctest::Approx(190.f + (-50) * constants::defaultClickStrenght));
+          doctest::Approx(190.f + (-50) * ev::constants::defaultClickStrenght));
     CHECK(flock.getBoid(2).getVelocity().y ==
-          doctest::Approx(180.f + (-100) * constants::defaultClickStrenght));
+          doctest::Approx(180.f + (-100) * ev::constants::defaultClickStrenght));
   }
 
   ////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING REPEL CLICK in REPULSIVE MODE") {
-    Flock::setRepulsiveClick(true);
+    ev::Flock::setRepulsiveClick(true);
     flock.repelOnClick({200, 200});
 
     CHECK(flock.getBoid(0).getVelocity().x == doctest::Approx(200.f));
     CHECK(flock.getBoid(0).getVelocity().y == doctest::Approx(200.f));
     CHECK(flock.getBoid(1).getVelocity().x ==
-          doctest::Approx(210.f + (-50) * constants::defaultClickStrenght));
+          doctest::Approx(210.f + (-50) * ev::constants::defaultClickStrenght));
     CHECK(flock.getBoid(1).getVelocity().y ==
-          doctest::Approx(150.f + (100) * constants::defaultClickStrenght));
+          doctest::Approx(150.f + (100) * ev::constants::defaultClickStrenght));
     CHECK(flock.getBoid(2).getVelocity().x ==
-          doctest::Approx(190.f + (50) * constants::defaultClickStrenght));
+          doctest::Approx(190.f + (50) * ev::constants::defaultClickStrenght));
     CHECK(flock.getBoid(2).getVelocity().y ==
-          doctest::Approx(180.f + (100) * constants::defaultClickStrenght));
+          doctest::Approx(180.f + (100) * ev::constants::defaultClickStrenght));
 
-    Flock::setRepulsiveClick(false);
+          ev::Flock::setRepulsiveClick(false);
   }
 }
 
@@ -610,12 +609,12 @@ TEST_CASE("TESTING UPDATE FUNCTION") {
 TEST_CASE("TESTING RULES on TOROIDAL MODE") {
   // Create 3 boids: 1 near the right edge, 2 near the left edge, 3 centered
 
-  Boid b1{{700.f, 360.f}, {150.f, 0.f}};
-  Boid b2{{20.f, 360.f}, {150.f, 0.f}};
-  Boid b3{{360.f, 360.f}, {150.f, 0.f}};
-  Flock flock{{b1, b2, b3}};
+  ev::Boid b1{{700.f, 360.f}, {150.f, 0.f}};
+  ev::Boid b2{{20.f, 360.f}, {150.f, 0.f}};
+  ev::Boid b3{{360.f, 360.f}, {150.f, 0.f}};
+  ev::Flock flock{{b1, b2, b3}};
 
-  Flock::setToroidalMode(true);
+  ev::Flock::setToroidalMode(true);
 
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -642,9 +641,9 @@ TEST_CASE("TESTING RULES on TOROIDAL MODE") {
   SUBCASE("TESTING UPDATE in TOROIDAL MODE") {
     flock.updateFlock();
 
-    const Boid &boid0 = flock.getBoid(0);
-    const Boid &boid1 = flock.getBoid(1);
-    const Boid &boid2 = flock.getBoid(2);
+    const ev::Boid &boid0 = flock.getBoid(0);
+    const ev::Boid &boid1 = flock.getBoid(1);
+    const ev::Boid &boid2 = flock.getBoid(2);
 
     // boid 1:
     //   Position: (700,360) + (150/150, 0) = (701,360)
@@ -673,7 +672,7 @@ TEST_CASE("TESTING RULES on TOROIDAL MODE") {
     CHECK(boid2.getVelocity().y == doctest::Approx(0.f));
   }
 
-  Flock::setToroidalMode(false);
+  ev::Flock::setToroidalMode(false);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -684,18 +683,18 @@ TEST_CASE("TESTING REPEL") {
   // a1: Positioned near b1, so should be repelled.
   // a2: Positioned near b2, so should be repelled.
   // a3: Placed far from any boid in Flock 1, so no repel force.
-  Boid a1{{100.f, 100.f}, {0.f, 0.f}};
-  Boid a2{{150.f, 150.f}, {0.f, 0.f}};
-  Boid a3{{300.f, 300.f}, {0.f, 0.f}};
-  Flock flock0{{a1, a2, a3}};
+  ev::Boid a1{{100.f, 100.f}, {0.f, 0.f}};
+  ev::Boid a2{{150.f, 150.f}, {0.f, 0.f}};
+  ev::Boid a3{{300.f, 300.f}, {0.f, 0.f}};
+  ev::Flock flock0{{a1, a2, a3}};
 
   // Flock 1: Three boids
   // b1 is close to a1, b2 is close to a2, b3 is far away.
-  Boid b1{{105.f, 105.f}, {0.f, 0.f}};
-  Boid b2{{140.f, 140.f}, {0.f, 0.f}};
-  Boid b3{{400.f, 400.f}, {0.f, 0.f}};
-  Flock flock1{{b1, b2, b3}};
-  std::vector<Flock> flockstack{flock0, flock1};
+  ev::Boid b1{{105.f, 105.f}, {0.f, 0.f}};
+  ev::Boid b2{{140.f, 140.f}, {0.f, 0.f}};
+  ev::Boid b3{{400.f, 400.f}, {0.f, 0.f}};
+  ev::Flock flock1{{b1, b2, b3}};
+  std::vector<ev::Flock> flockstack{flock0, flock1};
 
   auto repelSpeeds = repel(flockstack, 0);
 
@@ -711,7 +710,7 @@ TEST_CASE("TESTING REPEL") {
   // For a3: No boid in flock1 is close (distance > 20), so repel force is
   // (0, 0).
 
-  const float repelStrength{Flock::getParameters().repelStrength};
+  const float repelStrength{ev::Flock::getParameters().repelStrength};
   sf::Vector2f a1expected =
       ((sf::Vector2f{105.f, 105.f} - sf::Vector2f{100.f, 100.f})) *
       (-repelStrength);
@@ -737,18 +736,18 @@ TEST_CASE("TESTING REPEL") {
 TEST_CASE("TESTING CREATE FLOCK") {
   sf::Vector2f center{20, 20};
 
-  Flock flock{createFlock(10, center, sf::Color::Green)};
+  ev::Flock flock{ev::createFlock(10, center, sf::Color::Green)};
 
   CHECK(flock.getFlockColor() == sf::Color::Green);
   CHECK(flock.getSize() == 10);
 
   for (size_t i{0}; i < flock.getSize(); i++) {
-    CHECK(distance(flock.getFlockPositions()[i], center) <
-          constants::randomPositionRange);
+    CHECK(ev::distance(flock.getFlockPositions()[i], center) <
+          ev::constants::randomPositionRange);
 
     CHECK(flock.getFlockPositions()[i].x >= 0.f);
-    CHECK(flock.getFlockPositions()[i].x <= constants::fieldSide);
+    CHECK(flock.getFlockPositions()[i].x <= ev::constants::fieldSide);
     CHECK(flock.getFlockPositions()[i].y >= 0.f);
-    CHECK(flock.getFlockPositions()[i].y <= constants::fieldSide);
+    CHECK(flock.getFlockPositions()[i].y <= ev::constants::fieldSide);
   }
 }

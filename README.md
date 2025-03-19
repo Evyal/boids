@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project simulates the behavior of flocks, such as birds or fish, using a particle-based system. The simulation models individual agents that follow simple rules to create complex, collective behavior.
+This project simulates the behavior of flocks in a bidimentional space. The simulation models individual agents, called *boids*, that follow rules to create complex, collective behavior.
 
 ## Prerequisites
 

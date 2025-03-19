@@ -11,14 +11,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-using namespace ev;
-
 TEST_CASE("Test distance calculations with 5 points on a line") {
 
   std::vector<sf::Vector2f> points = {
       {0.f, 0.f}, {1.f, 0.f}, {2.f, 0.f}, {3.f, 0.f}, {4.f, 0.f}};
 
-  std::vector<float> distances = calculateDistances(points);
+  std::vector<float> distances = ev::calculateDistances(points);
 
   // function calculateDistances calculates like this:
   // [0] -> others,
@@ -45,7 +43,7 @@ TEST_CASE("Test distance calculations with 5 points on a line") {
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // Test calculateMean.
-  float mean = calculateMean(distances);
+  float mean = ev::calculateMean(distances);
 
   // Sum of expected distances is 20; mean should be 20/10 = 2.
   CHECK(mean == doctest::Approx(2.f));
@@ -54,7 +52,7 @@ TEST_CASE("Test distance calculations with 5 points on a line") {
   // Test calculateStandardDeviation.
   // Variance is calculated with N - 1 = 9
   // deviation is sqrt(10/9) = 1.05409 (approx)
-  float stddev = calculateStandardDeviation(distances, mean);
+  float stddev = ev::calculateStandardDeviation(distances, mean);
   CHECK(stddev == doctest::Approx(sqrtf(10.f / 9.f)));
 }
 
@@ -62,7 +60,7 @@ TEST_CASE("Test distance calculations with 5 points on a line") {
 
 TEST_CASE("Test calculateMean with empty vector") {
   std::vector<float> distances;
-  CHECK(calculateMean(distances) == 0.f);
+  CHECK(ev::calculateMean(distances) == 0.f);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -70,8 +68,8 @@ TEST_CASE("Test calculateMean with empty vector") {
 TEST_CASE("Test calculateStandardDeviation with one element") {
   std::vector<float> distances = {1.f};
 
-  CHECK(calculateMean(distances) == doctest::Approx(1.f));
+  CHECK(ev::calculateMean(distances) == doctest::Approx(1.f));
 
   // With only one distance, standard deviation should be 0.
-  CHECK(calculateStandardDeviation(distances, 1.f) == 0.f);
+  CHECK(ev::calculateStandardDeviation(distances, 1.f) == 0.f);
 }

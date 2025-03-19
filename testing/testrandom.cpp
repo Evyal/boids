@@ -14,8 +14,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-using namespace ev;
-
 TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
   size_t n{1000};
 
@@ -25,7 +23,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
 
     size_t sumInt{};
     for (size_t i{0}; i < n; i++) {
-      size_t a{randomInt(0, 100)};
+      size_t a{ev::randomInt(0, 100)};
       CHECK(a >= 0);
       CHECK(a <= 100);
       sumInt += a;
@@ -35,7 +33,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
 
     float sumFloat{};
     for (size_t i{0}; i < n; i++) {
-      float a{randomFloat(0, 100)};
+      float a{ev::randomFloat(0, 100)};
       CHECK(a >= 0.f);
       CHECK(a <= 100.f);
       sumFloat += a;
@@ -50,8 +48,8 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
 
     sf::Vector2f center{100, 100};
     for (size_t i{0}; i < n; i++) {
-      sf::Vector2f pos{randomBoidPosition(center)};
-      CHECK(distance(center, pos) <= 50.f);
+      sf::Vector2f pos{ev::randomBoidPosition(center)};
+      CHECK(ev::distance(center, pos) <= 50.f);
       CHECK(pos.x >= 0.f);
       CHECK(pos.x <= 720.f);
       CHECK(pos.y >= 0.f);
@@ -60,12 +58,12 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
 
     float angle{0.5f};
     for (size_t i{0}; i < n; i++) {
-      sf::Vector2f vel{randomBoidSpeed(angle)};
-      CHECK(distance(vel, {0, 0}) >= constants::minBoidSpeed);
-      CHECK(distance(vel, {0, 0}) <= constants::maxBoidSpeed);
+      sf::Vector2f vel{ev::randomBoidSpeed(angle)};
+      CHECK(ev::distance(vel, {0, 0}) >= ev::constants::minBoidSpeed);
+      CHECK(ev::distance(vel, {0, 0}) <= ev::constants::maxBoidSpeed);
 
-      CHECK(atan2(vel.y, vel.x) <= angle + constants::randomAngleRange);
-      CHECK(atan2(vel.y, vel.x) >= angle - constants::randomAngleRange);
+      CHECK(atan2(vel.y, vel.x) <= angle + ev::constants::randomAngleRange);
+      CHECK(atan2(vel.y, vel.x) >= angle - ev::constants::randomAngleRange);
     }
   }
 }
