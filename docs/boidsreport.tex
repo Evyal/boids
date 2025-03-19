@@ -1,0 +1,149 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\usepackage[margin=25mm]{geometry}
+\parskip 4.2pt  % Sets spacing between paragraphs.
+% \renewcommand{\baselinestretch}{1.5}  % Uncomment for 1.5 spacing between lines.
+\parindent 8.4pt  % Sets leading space for paragraphs.
+\usepackage[font=sf]{caption} % Changes font of captions.
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{esint}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{multicol}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{url}
+
+\usepackage{subfiles}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle, language= C++}
+
+\title{Relazione Progetto Boids}
+\author{Francesco Bartoli}
+\date{}
+
+\begin{document}
+
+\setlength{\parindent}{0pt}
+
+\maketitle
+
+\section{Introduzione}
+\subsection{Scopo}
+Il programma ha come obiettivo quello di simulare in uno spazio bidimensionale il comportamento di stormi di uccelli in volo, che verranno indicati con il nome di \textit{boids}. 
+
+\subsection{Installazione}
+
+Le istruzioni su come compilare, testare, eseguire sono anche presenti nel README del progetto, che riporto qui sotto:
+
+Build instructions are for **Ubuntu 22.04**.
+
+Ensure you have the following installed:
+
+- [SFML](https://github.com/SFML/SFML) (2.5): Library for graphic representation.
+- [TGUI](https://github.com/texus/TGUI) (1.0): Library for graphic interface.
+
+\subsection{SFML and TGUI Installation}
+
+Install SFML:x
+
+\begin{lstlisting}
+sudo apt-get install libsfml-dev
+\end{lstlisting}
+
+Install TGUI:
+
+\begin{lstlisting}
+sudo add-apt-repository ppa:texus/tgui
+sudo apt update
+sudo apt install libtgui-1.0-dev
+\end{lstlisting}
+
+\subsection{Clone the Repository}
+
+\begin{lstlisting}
+git clone https://github.com/Evyal/boids.git
+\end{lstlisting}
+
+\subsection{Build the Project}
+
+    
+\subsubsection{Create a build directory:}
+
+\begin{lstlisting}
+mkdir build
+cd build
+\end{lstlisting}
+
+\subsubsection{Configure CMake in Release mode}
+
+\begin{lstlisting}
+cmake .. -DCMAKE_BUILD_TYPE=Release
+\end{lstlisting}
+
+\subsubsection{Build the project} 
+
+\begin{lstlisting}
+cmake --build .
+\end{lstlisting}
+
+\subsection{Running the program} 
+
+\begin{lstlisting}
+./boids
+\end{lstlisting}
+
+\section{Struttura del programma}
+descrizione sintetica delle principali scelte progettuali e implementative
+
+\subsection{Regole di volo}
+\subsection{File di implementazione}
+
+
+
+\section{Interfaccia della simulazione}
+descrizione del formato di input e di output, possibilmente con degli esempi
+
+\section{Testing}
+strategia di test per verificare che quanto ottenuto sia ragionevolmente esente da errori
+
+\section{Conlcusioni}
+interpretazione dei risultati ottenuti
+
+
+
+
+
+\end{document}
