@@ -4,14 +4,26 @@
 
 This project simulates the behavior of flocks, such as birds or fish, using a particle-based system. The simulation models individual agents that follow simple rules to create complex, collective behavior.
 
-### Prerequisites
+## Prerequisites
+
+Build instructions are for Ubuntu 22.04.
 
 Ensure you have the following installed:
-- C++ compiler
-- CMake
+
 - [SFML](https://github.com/SFML/SFML) (2.5): Libreria per la rappresentazione grafica
 - [TGUI](https://github.com/texus/TGUI) (1.0): Libreria per l'interfaccia grafica
-- [doctest](https://github.com/doctest/doctest): Libreria per il testing
+
+### SFML and Tgui Installation
+
+```bash
+sudo apt-get install libsfml-dev
+```
+
+```bash
+sudo add-apt-repository ppa:texus/tgui
+sudo apt update
+sudo apt install libtgui-1.0-dev
+```
 
 ### Clone the Repository
 
@@ -54,9 +66,9 @@ cmake --build .
 - Interactive controls for adding or removing flocks
 - Adjustable parameters for interactions between boids
 
-![bottoni_evidenziati](images/interface1.png)
-![bottoni_evidenziati](images/interface2.png)
-![bottoni_evidenziati](images/interface3.png)
+![Interface1](images/interface1.png)
+![Interface2](images/interface2.png)
+![Interface3](images/interface3.png)
 
 ## Controls
 

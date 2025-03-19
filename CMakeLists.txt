@@ -38,7 +38,7 @@ add_executable(boids ${SOURCES})
 target_link_libraries(boids sfml-graphics sfml-window sfml-system TGUI::TGUI)
 
 # Optionally enable tests
-option(BUILD_TESTS "Build the tests executable" ON)
+option(BUILD_TESTS "Build the tests executable" OFF)
 if(BUILD_TESTS)
     add_subdirectory(testing)
 endif()
