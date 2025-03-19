@@ -35,7 +35,7 @@ add_executable(boids ${SOURCES})
 # add_executable(boids egui.cpp switchbutton.cpp statistics.cpp graphics.cpp random.cpp boid.cpp flock.cpp main.cpp)
 
 # Link SFML and TGUI
-target_link_libraries(boids sfml-graphics sfml-window sfml-system TGUI::TGUI)
+target_link_libraries(boids sfml-graphics sfml-window sfml-system sfml-audio TGUI::TGUI)
 
 # Optionally enable tests
 option(BUILD_TESTS "Build the tests executable" ON)

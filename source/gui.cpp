@@ -1,5 +1,7 @@
 #include "../include/gui.hpp"
 
+#include <SFML/Audio.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -34,6 +36,8 @@ void Gui::setup() {
   // THE ORDER in WHICH OPTIONS are SET UP is IMPORTANT!!!
 
   sans.loadFromFile("../assets/OpenSans-Regular.ttf");
+  buffer.loadFromFile("../assets/birdschirping.wav");
+  texture.loadFromFile("../assets/skybackground.png");
 
   // CREATE OPTIONS
 
@@ -73,11 +77,28 @@ void Gui::run() {
   window.setFramerateLimit(constants::windowFrameRate);
   sf::Event event;
 
+  sf::Sound sound;
+  sound.setBuffer(buffer);
+  sound.play();
+
+  sf::Sprite sprite;
+  sprite.setTexture(texture);
+  sprite.setPosition(constants::marginSize, constants::marginSize);
+  sprite.setScale(
+      constants::fieldSide / static_cast<float>(texture.getSize().x),
+      constants::fieldSide / static_cast<float>(texture.getSize().y));
+
   while (window.isOpen()) {
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::KeyPressed &&
           event.key.code == sf::Keyboard::Space) {
         pause = !pause;
+        if (pause) {
+          sound.stop();
+        } else {
+          sound.play();
+        }
+
         continue;
       }
 
@@ -104,6 +125,7 @@ void Gui::run() {
     enableCreateFlockButton();
 
     drawInterface();
+    window.draw(sprite);
     drawFlocks();
     drawMargin();
 
@@ -160,7 +182,7 @@ void Gui::drawMargin() {
 // Sets up the GUI components
 
 void Gui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
-                                const TguiPar &button3) {
+                               const TguiPar &button3) {
   // Button 1
   sf::Color a = constants::offThreeWayBGColor;
   sf::Color b = constants::offThreeWayBGColorHover;
@@ -709,8 +731,7 @@ void Gui::createSliderOpt3(const SlidersPar &params) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Gui::createLabelOpt3(const LabelsPar &labelsPar,
-                           const std::string &text) {
+void Gui::createLabelOpt3(const LabelsPar &labelsPar, const std::string &text) {
   auto label = tgui::Label::create();
   label->setPosition(labelsPar.posX, labelsPar.posY);
   label->setTextSize(labelsPar.textSize);

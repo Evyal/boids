@@ -1,12 +1,12 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[10pt,a4paper]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 
-\usepackage[margin=25mm]{geometry}
-\parskip 4.2pt  % Sets spacing between paragraphs.
+\usepackage[margin=19mm]{geometry}
+\parskip 4.0pt  % Sets spacing between paragraphs.
 % \renewcommand{\baselinestretch}{1.5}  % Uncomment for 1.5 spacing between lines.
-\parindent 8.4pt  % Sets leading space for paragraphs.
+\parindent 8.0pt  % Sets leading space for paragraphs.
 \usepackage[font=sf]{caption} % Changes font of captions.
 
 \usepackage{amsmath}
@@ -17,12 +17,15 @@
 \usepackage{multicol}
 \usepackage{tabularx}
 \usepackage{booktabs}
-\usepackage{url}
+\usepackage{url} % Links
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=black, citecolor=green]{hyperref} % Links in words
 
 \usepackage{subfiles}
 
 \usepackage{listings}
 \usepackage{xcolor}
+
+
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -66,82 +69,211 @@ Il programma ha come obiettivo quello di simulare in uno spazio bidimensionale i
 
 \subsection{Installazione}
 
-Le istruzioni su come compilare, testare, eseguire sono anche presenti nel README del progetto, che riporto qui sotto:
+Le istruzioni su come compilare, testare, eseguire sono presentate nel README del progetto, che riporto qui sotto:
 
-Build instructions are for **Ubuntu 22.04**.
+\par\noindent\rule{\textwidth}{0.4pt}
 
-Ensure you have the following installed:
+Build instructions are for \textbf{Ubuntu 22.04}.
 
-- [SFML](https://github.com/SFML/SFML) (2.5): Library for graphic representation.
-- [TGUI](https://github.com/texus/TGUI) (1.0): Library for graphic interface.
+\subsubsection{Prerequisites}
 
-\subsection{SFML and TGUI Installation}
+\href{https://github.com/SFML/SFML}{SFML} (2.5): Library for graphic representation. \\
+\href{https://github.com/texus/TGUI}{TGUI} (1.0): Library for graphic interface.
 
-Install SFML:x
+% \subsubsection{SFML and TGUI Installation}
 
-\begin{lstlisting}
-sudo apt-get install libsfml-dev
-\end{lstlisting}
+% Install SFML:
 
-Install TGUI:
+% \begin{lstlisting}
+% sudo apt-get install libsfml-dev
+% \end{lstlisting}
 
-\begin{lstlisting}
-sudo add-apt-repository ppa:texus/tgui
-sudo apt update
-sudo apt install libtgui-1.0-dev
-\end{lstlisting}
+% \vspace{5pt}
+% \hrule
+% \vspace{5pt}
 
-\subsection{Clone the Repository}
+% Install TGUI:
+
+% \begin{lstlisting}
+% sudo add-apt-repository ppa:texus/tgui
+% sudo apt update
+% sudo apt install libtgui-1.0-dev
+% \end{lstlisting}
+
+\subsubsection{Clone the Repository}
 
 \begin{lstlisting}
 git clone https://github.com/Evyal/boids.git
 \end{lstlisting}
 
-\subsection{Build the Project}
+\subsubsection{Build the Project}
 
     
-\subsubsection{Create a build directory:}
+\title{\textbf{Create a build directory}}
 
 \begin{lstlisting}
 mkdir build
 cd build
 \end{lstlisting}
 
-\subsubsection{Configure CMake in Release mode}
+\title{\textbf{Configure CMake in Release mode}}
 
 \begin{lstlisting}
 cmake .. -DCMAKE_BUILD_TYPE=Release
 \end{lstlisting}
 
-\subsubsection{Build the project} 
+\title{\textbf{Build the project}} 
 
 \begin{lstlisting}
 cmake --build .
 \end{lstlisting}
 
-\subsection{Running the program} 
+\subsubsection{Running the program} 
 
 \begin{lstlisting}
 ./boids
 \end{lstlisting}
 
+\newpage
+
 \section{Struttura del programma}
-descrizione sintetica delle principali scelte progettuali e implementative
+Segue una breve descrizione sintetica delle principali scelte progettuali e implementative del programma.
 
 \subsection{Regole di volo}
+
+I \textit{boids} si seguono delle regole di volo, che ne determinano il comportamento. Ad ogni istante, il programma modifica le velocità e le posizioni dei \textit{boids} attraverso le seguenti formule:
+
+\begin{equation*}
+    \vec{v}_{bi} = \vec{v}_{bi} + \vec{v}_S + \vec{v}_A + \vec{v}_C + \vec{v}_R
+\end{equation*}
+
+\begin{equation*}
+    \vec{x}_{bi} = \vec{x}_{bi} + \vec{v}_{bi} \Delta t
+\end{equation*}
+
+Dove $\vec{v}_S$, $\vec{v}_A$, $\vec{v}_C$, e $\vec{v}_R$ sono rispettivamente:
+
+\subsubsection{Separazione}
+
+\begin{equation*}
+    \vec{v}_1 = -s \sum_{j \neq i} (\vec{x}_{b_j} - \vec{x}_{b_i}) \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < d_s
+\end{equation*}
+
+\subsubsection{Allineamento}
+
+\begin{equation*}
+    \vec{v}_2 = a \left( \frac{1}{n-1} \sum_{j \neq i} \vec{v}_{b_j} - \vec{v}_{b_i} \right) \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < i
+\end{equation*}
+
+\subsubsection{Coesione}
+
+\begin{equation*}
+    \vec{x}_c = \frac{1}{n-1} \sum_{j \neq i} \vec{x}_{b_j} \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < i
+\end{equation*}
+
+\begin{equation*}
+    \vec{v}_3 = c (\vec{x}_{c} - \vec{x}_{b_j})
+\end{equation*}
+
+Dove $n-1$ assume valori dipendenti dal numero di boid nel range di interazione, e non è un valore fisso dipendente dal numero di boids nello stormo.
+
+E $s, ds, a, c, i$ sono parametri della simulazione.
+
+\subsubsection{Repulsione}
+
+\begin{equation*}
+    \vec{x}_c = \frac{1}{n-1} \sum_{j \neq i} \vec{x}_{b_j} \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < dr
+\end{equation*}
+
+Questa regola determina l'allontanamento tra \textit{boids} di stormi differenti e introduce due nuovi parametri $r, dr$.
+
+\subsubsection{Interazione \textit{On Click}}
+
+\begin{equation*}
+    \vec{v}_1 = \pm p \sum_{j} (\vec{x}_{b_j} - \vec{x}) \quad \text{se} \quad \left| \vec{x}_{b_j} - \vec{x} \right| < i
+\end{equation*}
+
+Questa regola permette all'utente di interagire con i boids, e introduce l'ultimo parametro che determina il comportamento dei boids. Il $\pm$ è dovuto al fatto che questa interazione può essere sia attrattiva che repulsiva mentre $\vec{x}$ è il punto in cui l'utente ha cliccato.
+
+\newpage
+
 \subsection{File di implementazione}
 
+Tutti i file menzionati come .cpp hanno un corrispettivo header.
 
+\subsubsection{constants.hpp}
+
+Namespace che contiene valori come limiti di velocità o posizione per i \textit{boids}, parametri di interazione di default, o ulteriori valori per l'inizializzazione degli elementi dell'interfaccia grafica.
+
+\subsubsection{structs.hpp}
+
+Struct per impacchettare dei valori usati per inizializzare bottoni o altri elementi di interfaccia grafica
+
+\subsubsection{boid.cpp}
+
+File di implementazione della classe Boid e funzioni ausiliare per gestirne il comportamento
+
+\subsubsection{flock.cpp}
+
+File di implementazione della classe Flock che determina la struttura collettiva dei \textit{boids} all'interno di uno stormo.
+
+\subsubsection{random.cpp}
+
+File che si occupa della generazione di numeri casuali
+
+\subsubsection{statistics.cpp}
+
+File che si occupa del calcolo delle statistiche restituite a schermo, riguardanti valori medi e deviazioni standard delle posizioni e velocità dei \textit{boids}.
+
+\subsubsection{graphics.cpp}
+
+Breve file che contiene una funzione per la corretta rappresentazione grafica dei \textit{boids}, ed un'altra che costruisce un rettangolo (sf::Rectangle) prendendo come parametro una delle struct definita nel file sopracitato.
+
+\subsubsection{switchbutton.cpp}
+
+La classe Switchbutton introduce la funzionalità di un bottone che può trovarsi in due stati, non fornita da TGUI.
+
+\subsubsection{gui.cpp}
+
+Classe che introduce gli elementi necessari a costruire l'interfaccia grafica del programma, e si occupa di coordinare tutti i file che implementano la logica all'interno di essa. 
+
+\newpage
 
 \section{Interfaccia della simulazione}
-descrizione del formato di input e di output, possibilmente con degli esempi
+%descrizione del formato di input e di output, possibilmente con degli esempi
+\newpage
 
 \section{Testing}
-strategia di test per verificare che quanto ottenuto sia ragionevolmente esente da errori
+%strategia di test per verificare che quanto ottenuto sia ragionevolmente esente da errori
 
-\section{Conlcusioni}
-interpretazione dei risultati ottenuti
+Tutti i file incaricati dell'implementazione di parte della logica del programma hanno un corrispettivo file di testing. Più precisamente, sono presenti i seguenti: testboid.cpp, testflock.cpp, testrandom.cpp e teststatistics.cpp. 
 
+Attraverso i test si è cercato di controllare che le classi, i metodi delle classi e le funzioni introdotte fossero esenti da errori e mostrassero il comportamento atteso. Sono stati eseguiti test in casi semplici per poter stabilire il funzionamento corretto del codice, e anche in alcuni casi particolari quando ritenuto necessario.
+
+Il framework che si è utilizzato per creare le testing unit è doctest.h, il cui file è incluso nella cartella nel progetto (/assets/doctest.h). Questa libreria è in grado di generare autonomamente un main e permette l'esecuzione dei test semplicemente includendo il file sopracitato.
+
+Per potere eseguire i test è necessario trovarsi nella cartella dove vengono prodotti gli eseguibili dei file precedentemente menzionati, seguendo i passaggi elencati sotto. Immaginando di trovarsi nella cartella principale dov'é contenuto il progetto:
+
+\begin{lstlisting}
+    cd build
+    cd testing
+\end{lstlisting}
+
+E digitare il comando corrispondente al test che si vuole eseguire: 
+
+\begin{lstlisting}
+    ./testboid
+    ./testflock
+    ./testrandom
+    ./teststatistics
+\end{lstlisting}
+
+\newpage
+
+\section{Conclusioni}
+%interpretazione dei risultati ottenuti
+
+\subsection{Descrizione dei risultati}
 
 
 

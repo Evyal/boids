@@ -124,8 +124,10 @@ inline const sf::Color threeWayBGColorDown{sf::Color(224, 224, 224)};
 // OPTION 1
 
 // BUTTON to change the COLOUR of the BACKGROUND
-inline const std::string onGraphicsButtonText{"White Mode"};
-inline const std::string offGraphicsButtonText{"Black Mode"};
+
+// inline const std::string onGraphicsButtonText{"White Mode"};
+inline const std::string onGraphicsButtonText{"Sky Background"};
+inline const std::string offGraphicsButtonText{"Black Background"};
 inline const sf::Color onGraphicsButtonColor{sf::Color(224, 224, 224)};
 inline const sf::Color offGraphicsButtonColor{sf::Color(32, 32, 32)};
 inline const SwitchButtonPar graphicsButton{{770, 80, 260, 50},
