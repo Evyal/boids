@@ -87,6 +87,7 @@ std::vector<sf::Vector2f> Flock::getFlockVelocities() const {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// Returns a vector with a speed for every boid of the flock
 
 std::vector<float> Flock::getSpeedVector() const {
   std::vector<float> speeds;

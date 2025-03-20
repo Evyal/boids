@@ -1,12 +1,13 @@
 #include <SFML/System/Vector2.hpp>
+#include <cmath>
 #include <cstddef>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <SFML/Graphics.hpp>
 
+#include "../assets/doctest.h"
 #include "../include/boid.hpp"
 #include "../include/constants.hpp"
-#include "../assets/doctest.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -101,6 +102,26 @@ TEST_CASE("TESTING FUNCTIONS") {
     b2.setPosition({3, 4});
 
     CHECK(distance(b1, b2) == 5.f);
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+
+  SUBCASE("TESTING TOROIDAL DISTANCE BETWEEN BOIDS") {
+    ev::Boid b1{{360, 100}};
+    ev::Boid b2{{360, 700}};
+
+    CHECK(ev::toroidalDistance(b1.getPosition(), b2.getPosition()) ==
+          doctest::Approx(120.f));
+
+    ev::Boid b3{{20, 20}};
+    ev::Boid b4{{-20, -10}};
+    ev::Boid b5{{0, 0}};
+    CHECK(ev::toroidalDistance(b3.getPosition(), b4.getPosition()) ==
+          doctest::Approx(50.f));
+    CHECK(ev::toroidalDistance(b3.getPosition(), b5.getPosition()) ==
+          doctest::Approx(sqrtf(800.f)));
+    CHECK(ev::toroidalDistance(b4.getPosition(), b5.getPosition()) ==
+          doctest::Approx(sqrtf(500.f)));
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////

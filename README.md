@@ -59,6 +59,27 @@ cmake --build .
 ./boids
 ```
 
+### Running the tests
+
+Supposing you find yourself in the build directory of the program.
+
+```bash
+cd testing
+```
+
+```bash
+./testboid
+./testflock
+./testrandom
+./teststatistics
+```
+
+Or eventually it is possible to run all of them at once
+
+```bash
+ctest
+```
+
 ## Features
 
 - Real-time visualization of flock movement

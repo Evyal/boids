@@ -3,16 +3,16 @@
 #include <vector>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "../include/statistics.hpp"
-#include "../assets/doctest.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
+
+#include "../assets/doctest.h"
+#include "../include/statistics.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("Test distance calculations with 5 points on a line") {
-
   std::vector<sf::Vector2f> points = {
       {0.f, 0.f}, {1.f, 0.f}, {2.f, 0.f}, {3.f, 0.f}, {4.f, 0.f}};
 
@@ -72,4 +72,18 @@ TEST_CASE("Test calculateStandardDeviation with one element") {
 
   // With only one distance, standard deviation should be 0.
   CHECK(ev::calculateStandardDeviation(distances, 1.f) == 0.f);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("Test toroidal distances") {
+  std::vector<sf::Vector2f> positions{{360, 100}, {360, 700}};
+  CHECK(ev::calculateToroidalDistances(positions)[0] == doctest::Approx(120.f));
+
+  std::vector<sf::Vector2f> positions2{{20, 20}, {-20, -10}, {0, 0}};
+  CHECK(ev::calculateToroidalDistances(positions2)[0] == doctest::Approx(50.f));
+  CHECK(ev::calculateToroidalDistances(positions2)[1] ==
+        doctest::Approx(sqrtf(800.f)));
+  CHECK(ev::calculateToroidalDistances(positions2)[2] ==
+        doctest::Approx(sqrtf(500)));
 }

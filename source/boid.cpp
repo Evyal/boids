@@ -12,9 +12,6 @@ namespace ev {
 //////////////////////////////////////////////////////////////////////////////////////////
 // CONSTRUCTORS
 
-Boid::Boid()
-    : position_{constants::defaultBoidPosition},
-      velocity_{constants::defaultBoidVelocity} {}
 Boid::Boid(const sf::Vector2f &position, const sf::Vector2f &velocity)
     : position_{position}, velocity_{velocity} {}
 
@@ -74,6 +71,22 @@ float distance(const Boid &boid1, const Boid &boid2) {
 float distance(const sf::Vector2f &a, const sf::Vector2f &b) {
   float dx = b.x - a.x;
   float dy = b.y - a.y;
+  return std::sqrt(dx * dx + dy * dy);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Distance function between 2D vectors
+
+float toroidalDistance(const sf::Vector2f &a, const sf::Vector2f &b) {
+  float dx = std::abs(a.x - b.x);
+  float dy = std::abs(a.y - b.y);
+  float t = constants::fieldSide / 2.f;
+  if (dx > t) {
+    dx = constants::fieldSide - dx;
+  }
+  if (dy > t) {
+    dy = constants::fieldSide - dy;
+  }
   return std::sqrt(dx * dx + dy * dy);
 }
 

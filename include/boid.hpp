@@ -4,6 +4,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 
+#include "constants.hpp"
+
 namespace ev {
 
 class Boid {
@@ -15,8 +17,8 @@ class Boid {
   //////////////////////////////////////////////////////////////////////////////////////////
   // CONSTRUCTORS
 
-  Boid();
-  Boid(const sf::Vector2f &position, const sf::Vector2f &velocity);
+  Boid(const sf::Vector2f &position = constants::defaultBoidPosition,
+       const sf::Vector2f &velocity = constants::defaultBoidVelocity);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // GETTERS
@@ -48,6 +50,7 @@ float distanceX(const Boid &boid1, const Boid &boid2);
 float distanceY(const Boid &boid1, const Boid &boid2);
 float distance(const Boid &boid1, const Boid &boid2);
 float distance(const sf::Vector2f &a, const sf::Vector2f &b);
+float toroidalDistance(const sf::Vector2f &a, const sf::Vector2f &b);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // SPEED CONTROL

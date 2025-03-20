@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <TGUI/Color.hpp>
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Widgets/EditBoxSlider.hpp>
@@ -12,6 +13,7 @@
 #include <cstdint>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "../include/constants.hpp"
 #include "../include/flock.hpp"
@@ -160,7 +162,7 @@ void Gui::drawMargin() {
 // Sets up the GUI components
 
 void Gui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
-                                const TguiPar &button3) {
+                               const TguiPar &button3) {
   // Button 1
   sf::Color a = constants::offThreeWayBGColor;
   sf::Color b = constants::offThreeWayBGColorHover;
@@ -250,6 +252,11 @@ void Gui::toggleButtons(tgui::Button::Ptr pressedButton) {
 void Gui::selectedOption() {
   if (activeButton == option1) {
     drawStatistics();
+    if (Flock::getToroidalMode()) {
+      printToroidalFlockStats();
+    } else {
+      printFlockStats();
+    }
   }
 }
 
@@ -299,8 +306,6 @@ void Gui::drawStatistics() {
     window.draw(rectangle1);
     window.draw(rectangle2);
     window.draw(rectangle3);
-
-    printFlockStats(i);
   }
 }
 
@@ -376,35 +381,76 @@ void Gui::printValue(const LabelsPar &par, int value, size_t index) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Gui::printFlockStats(size_t index) {
-  int flockSize{static_cast<int>(flockStack_[index].getSize())};
-  printValue(constants::flockSizeLabel, flockSize, index);
+void Gui::printFlockStats() {
+  for (size_t index{0}; index < flockStack_.size(); index++) {
+    int flockSize{static_cast<int>(flockStack_[index].getSize())};
+    printValue(constants::flockSizeLabel, flockSize, index);
 
-  LabelsPar par{constants::statisticsValueLabel};
+    LabelsPar par{constants::statisticsValueLabel};
 
-  float meanDistanceValue{calculateMean(
-      calculateDistances(flockStack_[index].getFlockPositions()))};
-  int meanDistance{static_cast<int>(meanDistanceValue)};
-  printValue(par, meanDistance, index);
+    std::vector<float> distances{
+        calculateDistances(flockStack_[index].getFlockPositions())};
 
-  par.posY += constants::labelsDistance;
+    float meanDistanceValue{calculateMean(distances)};
+    printValue(par, static_cast<int>(meanDistanceValue), index);
 
-  int standardDeviation{static_cast<int>(calculateStandardDeviation(
-      calculateDistances(flockStack_[index].getFlockPositions()),
-      meanDistanceValue))};
-  printValue(par, standardDeviation, index);
+    par.posY += constants::labelsDistance;
 
-  par.posY += constants::labelsDistance;
+    printValue(par,
+               static_cast<int>(
+                   calculateStandardDeviation(distances, meanDistanceValue)),
+               index);
 
-  float meanSpeedValue{flockStack_[index].getMeanSpeed()};
-  int meanSpeed{static_cast<int>(meanSpeedValue)};
-  printValue(par, meanSpeed, index);
+    par.posY += constants::labelsDistance;
 
-  par.posY += constants::labelsDistance;
+    float meanSpeedValue{flockStack_[index].getMeanSpeed()};
 
-  int SpeedStandardDeviation{static_cast<int>(calculateStandardDeviation(
-      flockStack_[index].getSpeedVector(), meanSpeedValue))};
-  printValue(par, SpeedStandardDeviation, index);
+    printValue(par, static_cast<int>(meanSpeedValue), index);
+
+    par.posY += constants::labelsDistance;
+
+    printValue(par,
+               static_cast<int>(calculateStandardDeviation(
+                   flockStack_[index].getSpeedVector(), meanSpeedValue)),
+               index);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Gui::printToroidalFlockStats() {
+  for (size_t index{0}; index < flockStack_.size(); index++) {
+    int flockSize{static_cast<int>(flockStack_[index].getSize())};
+    printValue(constants::flockSizeLabel, flockSize, index);
+
+    LabelsPar par{constants::statisticsValueLabel};
+
+    std::vector<float> distances{
+        calculateToroidalDistances(flockStack_[index].getFlockPositions())};
+    float meanDistanceValue{calculateMean(distances)};
+
+    printValue(par, static_cast<int>(meanDistanceValue), index);
+
+    par.posY += constants::labelsDistance;
+
+    printValue(par,
+               static_cast<int>(
+                   calculateStandardDeviation(distances, meanDistanceValue)),
+               index);
+
+    par.posY += constants::labelsDistance;
+
+    float meanSpeedValue{flockStack_[index].getMeanSpeed()};
+
+    printValue(par, static_cast<int>(meanSpeedValue), index);
+
+    par.posY += constants::labelsDistance;
+
+    printValue(par,
+               static_cast<int>(calculateStandardDeviation(
+                   flockStack_[index].getSpeedVector(), meanSpeedValue)),
+               index);
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -709,8 +755,7 @@ void Gui::createSliderOpt3(const SlidersPar &params) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Gui::createLabelOpt3(const LabelsPar &labelsPar,
-                           const std::string &text) {
+void Gui::createLabelOpt3(const LabelsPar &labelsPar, const std::string &text) {
   auto label = tgui::Label::create();
   label->setPosition(labelsPar.posX, labelsPar.posY);
   label->setTextSize(labelsPar.textSize);

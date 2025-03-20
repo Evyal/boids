@@ -26,6 +26,21 @@ std::vector<float> calculateDistances(
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
+std::vector<float> calculateToroidalDistances(
+    const std::vector<sf::Vector2f> &positions) {
+  std::vector<float> distances;
+
+  // iterate over all the possible pairs
+  for (size_t i{0}; i < positions.size(); ++i) {
+    for (size_t j{i + 1}; j < positions.size(); ++j) {
+      distances.push_back(toroidalDistance(positions[i], positions[j]));
+    }
+  }
+  return distances;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
 float calculateMean(const std::vector<float> &distances) {
   if (distances.empty()) {
     return 0.0;

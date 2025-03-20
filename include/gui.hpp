@@ -20,7 +20,7 @@ class Gui {
  public:
   ////////////////////////////////////////////////////////////////////////////////
 
-  Gui();        // Constructor
+  Gui();         // Constructor
   void setup();  // Sets up the application
   void run();    // Runs the application
 
@@ -89,10 +89,11 @@ class Gui {
 
   ////////////////////////////////////////////////////////////////////////////////
 
-  void printValue(const LabelsPar &par, int value, size_t index);
-  void printFlockStats(size_t index);
-
   void drawStatistics();
+
+  void printValue(const LabelsPar &par, int value, size_t index);
+  void printFlockStats();
+  void printToroidalFlockStats();
 
   ////////////////////////////////////////////////////////////////////////////////
 
