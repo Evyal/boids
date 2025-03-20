@@ -87,13 +87,13 @@ ctest
 - Adjustable parameters for interactions between boids
 
 <p align="center">
-![Interface](images/interface.png)
+<img src="images/interface.png" alt="Interface">
 </p>
 
 <p align="center">
-![Option1](images/option1.png)
-![Option2](images/option2.png)
-![Option3](images/option3.png)
+<img src="images/option1.png" alt="Option1">
+<img src="images/option2.png" alt="Option2">
+<img src="images/option3.png" alt="Option3">
 </p>
 
 ### Option 1: Graphics and statistics
