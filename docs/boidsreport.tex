@@ -201,43 +201,43 @@ Anche questa regola ha una formula analoga a quella della separazione e permette
 
 \subsection{Files}
 
-Tutti i file del progetto sono stati inseriti nel namespace \texttt{ev}. Tutti i file menzionati di seguito come \texttt{.cpp} hanno un corrispettivo header.
+Tutti i file del progetto sono stati inseriti nel namespace \texttt{ev}.
 
-\subsubsection{constants.hpp}
+\subsubsection{\texttt{constants.hpp}}
 
-Namespace che contiene valori come limiti di velocità o posizione per i \textit{boids}, parametri di interazione di default, o ulteriori valori per l'inizializzazione degli elementi dell'interfaccia grafica.
+Un unico header file con un namespace contenente valori delle costanti usate nel progetto. Alcuni esempi sono limiti di velocità o posizione per i \textit{boids}, parametri di interazione di default, o ulteriori valori per l'inizializzazione degli elementi dell'interfaccia grafica. Uno dei principali vantaggi di questo approccio è la possibilità di modificare valori riutilizzati da diverse unità del programma tutti da un unico punto.
 
-\subsubsection{structs.hpp}
+\subsubsection{\texttt{structs.hpp}}
 
-Struct per impacchettare dei valori usati per inizializzare bottoni o altri elementi di interfaccia grafica
+Struct per impacchettare dei valori usati per inizializzare bottoni o altri elementi di interfaccia grafica. Trovano particolare utilità come parametri delle funzioni che inizializzano tali elementi, aiutando a mantenere il codice più pulito.
 
-\subsubsection{boid.cpp}
+\subsubsection{\texttt{boid.hpp/cpp}}
 
-File di implementazione della classe Boid e funzioni ausiliare per gestirne il comportamento
+File di implementazione della classe \texttt{Boid} e funzioni ausiliari per gestirne il comportamento. La classe  contiene due variabili private (\texttt{sf::Vector2f}), che contengono i valori vettoriali di posizione e velocità in uno spazio bidimensionale. Sono presenti funzioni membro come \textit{getters} e \textit{setters} per accedere alle variabili private, e funzioni esterne alla classe che prendono elementi della classe \texttt{Boid} come parametri. Per esempio \texttt{distance} che calcola la distanza fra \textit{boids} o \texttt{checkMinimumSpeed} che ha il compito di assicurarsi che il boid in questione abbia una velocità compresa all'interno dei limiti prestabiliti, ed eventualmente modificarla. È importante notare che la velocità limite non è stato inteso all'interno del progetto come un'invariante di classe, ma semplicemente un limite imposto durante la simulazione per assicurarsi un comportamento ordinato.
 
-\subsubsection{flock.cpp}
+\subsubsection{\texttt{flock.hpp/cpp}}
 
-File di implementazione della classe Flock che determina la struttura collettiva dei \textit{boids} all'interno di uno stormo.
+File di implementazione della classe \texttt{Flock} che determina la struttura collettiva dei \textit{boids} all'interno di uno stormo. La classe presenta due variabili membro private, la prima un vettore di boids, in cui sono contenuti i boid che compongono lo stormo, e l'altra che ne determina il colore. Il vettore di boids deve contenere almeno due elementi, e se si cerca di inizializzare un'istanza appartenente alla classe \texttt{Flock} con meno di due elementi, questo risulterà in un errore a \textit{compile-time}. All'interno della classe sono contenute delle variabili statiche, condivise da tutti gli stormi, che rappresentano i valori dei parametri di interazione. La parte restante della classe è designata all'implementazione delle regole che determinano il comportamento degli stormi, e della funzione \texttt{update()} che si occupa di aggiornare lo stormo. Quest'ultima funzione ne ha una \texttt{overloaded}, in grado di prendere come argomento le velocità da sommare dovute alla repulsione con altri stormi.
 
-\subsubsection{random.cpp}
+\subsubsection{\texttt{random.hpp/cpp}}
 
-File che si occupa della generazione di numeri casuali
+File che si occupa della generazione di numeri casuali. Sono presenti una funzioni base per generare numeri interi casuali di tipo \texttt{int} o \texttt{float}, e funzioni per generare posizioni e velocità dei \textit{boids} in range prestabiliti.
 
-\subsubsection{statistics.cpp}
+\subsubsection{\texttt{statistics.hpp/cpp}}
 
 File che si occupa del calcolo delle statistiche restituite a schermo, riguardanti valori medi e deviazioni standard delle posizioni e velocità dei \textit{boids}.
 
-\subsubsection{graphics.cpp}
+\subsubsection{\texttt{graphics.hpp/cpp}}
 
-Breve file che contiene una funzione per la corretta rappresentazione grafica dei \textit{boids}, ed un'altra che costruisce un rettangolo (\texttt{sf::Rectangle}) prendendo come parametro una delle struct definita nel file sopracitato.
+Breve file che contiene una funzione per la corretta rappresentazione grafica dei \textit{boids}, ed un'altra che costruisce un rettangolo (\texttt{sf::Rectangle}) prendendo come parametro una delle struct definite nel file sopracitato, con lo scopo di migliorare la leggibilità del codice nella creazione dell'interfaccia.
 
-\subsubsection{switchbutton.cpp}
+\subsubsection{\texttt{switchbutton.hpp/cpp}}
 
-La classe Switchbutton introduce la funzionalità di un bottone che può trovarsi in due stati, non fornita da TGUI.
+La classe Switchbutton introduce la funzionalità di un bottone che può trovarsi in due stati, non fornita da TGUI, e si è cercato di seguire le convenzioni di TGUI nella creazione delle funzioni membro. 
 
-\subsubsection{gui.cpp}
+\subsubsection{\texttt{gui.hpp/cpp}}
 
-Classe che introduce gli elementi necessari a costruire l'interfaccia grafica del programma, e si occupa di coordinare tutti i file che implementano la logica all'interno di essa. 
+Classe che contiene gli elementi necessari a costruire l'interfaccia grafica del programma, e si occupa di coordinare i file di implementazione logica all'interno di essa. In ultima analisi la classe \texttt{Gui} è responsabile del funzionamento del programma. Nel main è sufficiente costruire un elemento della classe, utilizzare il metodo \texttt{setup()} che lo configura correttamente e infine seguire con il metodo \texttt{run()} che inizia l'esecuzione.
 
 \newpage
 
@@ -246,13 +246,29 @@ Classe che introduce gli elementi necessari a costruire l'interfaccia grafica de
 
 Anche questa parte deriva in parte dal README del progetto.
 
+% \begin{center}
+%     \includegraphics[width=1.0\textwidth]{images/interface.png}
+% \end{center}
+
+% \maketitle{\textbf{Features}}
+
+% - Different modes for behaviour at borders \\
+% - Statistics display for each active flock \\
+% - Interactive controls for adding or removing flocks \\
+% - Adjustable parameters for interactions between \textit{boids} \\
+
+% \begin{center}
+%     \includegraphics[width=0.32\textwidth]{images/option1.png}
+%     \includegraphics[width=0.32\textwidth]{images/option2.png}
+%     \includegraphics[width=0.32\textwidth]{images/option3.png}
+% \end{center}
+
 \begin{center}
     \includegraphics[width=1.0\textwidth]{../images/interface.png}
 \end{center}
 
 \maketitle{\textbf{Features}}
 
-- Real-time visualization of flock movement \\
 - Real-time statistics display for each flock \\
 - Interactive controls for adding or removing flocks \\
 - Adjustable parameters for interactions between boids \\
@@ -262,7 +278,6 @@ Anche questa parte deriva in parte dal README del progetto.
     \includegraphics[width=0.32\textwidth]{../images/option2.png}
     \includegraphics[width=0.32\textwidth]{../images/option3.png}
 \end{center}
-
 
 \subsection{Option 1: Graphics and statistics} 
 
@@ -326,11 +341,16 @@ O eventualmente eseguendoli tutti in una volta utilizzando il seguente comando
 \section{Descrizione dei risultati}
 %interpretazione dei risultati ottenuti
 
+ Nel caso della modalità toroidale ai bordi, i \textit{boids} si raggruppano nei rispettivi stormi e tendono ad assumere valori di distanza media proporzionali al numero di elementi che lo compongono, e lo stesso vale per la deviazione standard delle distanze. Anche per quanto riguarda le velocità, esse raggiungono valori stabili indipendentemente dalle dimensioni dello stormo.
+
+Diversamente accade nel caso della modalità a specchio (\textit{mirror mode}). Infatti, i \textit{boids} una volta ai bordi sono soggetti a un boost conferito dopo il rimbalzo, che provoca una temporanea variabilità sia delle posizioni che delle velocità e delle relative deviazioni standard.
+
+La modificazione dei parametri di volo permette all'utente anche di creare ulteriori comportamenti collettivi più o meno caotici che tuttavia non rispecchiano il movimento desiderato nella simulazione.
 
 \section{Links}
 
 \setlength{\parindent}{20pt}
-Link alla repository di github utilizzata durante la realizzazione del progetto.
+Link alla repository di GitHub utilizzata durante la realizzazione del progetto.
 
 \url{https://github.com/Evyal/boids}
 

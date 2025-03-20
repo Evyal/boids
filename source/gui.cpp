@@ -26,9 +26,9 @@
 namespace ev {
 
 Gui::Gui()
-    : window(sf::VideoMode(constants::windowWidth, constants::windowHeight),
-             "Flocks Simulation"),
-      gui(window) {}
+    : window_(sf::VideoMode(constants::windowWidth, constants::windowHeight),
+              "Flocks Simulation"),
+      gui_(window_) {}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -71,23 +71,23 @@ void Gui::setup() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::run() {
-  window.setPosition({120, 50});
-  window.setFramerateLimit(constants::windowFrameRate);
+  window_.setPosition({120, 50});
+  window_.setFramerateLimit(constants::windowFrameRate);
   sf::Event event;
 
-  while (window.isOpen()) {
-    while (window.pollEvent(event)) {
+  while (window_.isOpen()) {
+    while (window_.pollEvent(event)) {
       if (event.type == sf::Event::KeyPressed &&
           event.key.code == sf::Keyboard::Space) {
-        pause = !pause;
+        pause_ = !pause_;
         continue;
       }
 
-      gui.handleEvent(event);
+      gui_.handleEvent(event);
 
       switch (event.type) {
         case sf::Event::Closed: {
-          window.close();
+          window_.close();
           break;
         }
 
@@ -96,12 +96,12 @@ void Gui::run() {
       }
     }
 
-    if (!pause) {
+    if (!pause_) {
       interactWithFlocks();
       evolveFlocks();
     }
 
-    window.clear(sf::Color::White);
+    window_.clear(sf::Color::White);
 
     enableCreateFlockButton();
 
@@ -111,8 +111,8 @@ void Gui::run() {
 
     selectedOption();
 
-    gui.draw();
-    window.display();
+    gui_.draw();
+    window_.display();
   }
 }
 
@@ -127,10 +127,10 @@ void Gui::drawInterface() {
   sf::RectangleShape leftSettings(getRectangle(constants::leftSettingMargin));
   sf::RectangleShape rightSettings(getRectangle(constants::rightSettingMargin));
 
-  window.draw(topSettings);
-  window.draw(bottomSettings);
-  window.draw(leftSettings);
-  window.draw(rightSettings);
+  window_.draw(topSettings);
+  window_.draw(bottomSettings);
+  window_.draw(leftSettings);
+  window_.draw(rightSettings);
 
   // BLACK BACKGROUND
 
@@ -138,7 +138,7 @@ void Gui::drawInterface() {
   rectangle.setPosition(constants::marginSize, constants::marginSize);
   rectangle.setFillColor(backgroundColour_);
 
-  window.draw(rectangle);
+  window_.draw(rectangle);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -151,10 +151,10 @@ void Gui::drawMargin() {
   sf::RectangleShape leftField(getRectangle(constants::leftMargin, color));
   sf::RectangleShape rightField(getRectangle(constants::rightMargin, color));
 
-  window.draw(topField);
-  window.draw(bottomField);
-  window.draw(leftField);
-  window.draw(rightField);
+  window_.draw(topField);
+  window_.draw(bottomField);
+  window_.draw(leftField);
+  window_.draw(rightField);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +184,7 @@ void Gui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
     selectedOption1();
   });
 
-  gui.add(option1);
+  gui_.add(option1);
 
   // Button 2
   option2 = tgui::Button::create(
@@ -201,7 +201,7 @@ void Gui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
     selectedOption2();
   });
 
-  gui.add(option2);
+  gui_.add(option2);
 
   // Button 3
   option3 = tgui::Button::create(
@@ -218,7 +218,7 @@ void Gui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
     selectedOption3();
   });
 
-  gui.add(option3);
+  gui_.add(option3);
 
   activeButton = option1;
 }
@@ -303,9 +303,9 @@ void Gui::drawStatistics() {
     sf::RectangleShape rectangle3(
         getRectangle(rectangle3par, flockStack_[i].getFlockColor()));
 
-    window.draw(rectangle1);
-    window.draw(rectangle2);
-    window.draw(rectangle3);
+    window_.draw(rectangle1);
+    window_.draw(rectangle2);
+    window_.draw(rectangle3);
   }
 }
 
@@ -327,15 +327,15 @@ void Gui::createDeleteFlockButton(size_t index) {
     deleteDeleteFlockButton(index);
   });
 
-  gui.add(button);
+  gui_.add(button);
   dynamicButtons.push_back(button);
 
-  createStatisticsLabels(index);
+  createStatisticsLabel(index);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Gui::createStatisticsLabels(size_t index) {
+void Gui::createStatisticsLabel(size_t index) {
   float posX{constants::statisticsLabel.posX};
   float posY{constants::statisticsLabel.posY};
   unsigned textSize{constants::statisticsLabel.textSize};
@@ -344,22 +344,22 @@ void Gui::createStatisticsLabels(size_t index) {
   auto label0 = tgui::Label::create("Mean Distance: ");
   label0->setTextSize(textSize);
   label0->setPosition({posX, posY + posIndex});
-  gui.add(label0);
+  gui_.add(label0);
 
   auto label1 = tgui::Label::create("Distance std dev: ");
   label1->setTextSize(textSize);
   label1->setPosition({posX, posY + constants::labelsDistance + posIndex});
-  gui.add(label1);
+  gui_.add(label1);
 
   auto label2 = tgui::Label::create("Mean Speed: ");
   label2->setTextSize(textSize);
   label2->setPosition({posX, posY + 2 * constants::labelsDistance + posIndex});
-  gui.add(label2);
+  gui_.add(label2);
 
   auto label3 = tgui::Label::create("Speed std dev: ");
   label3->setTextSize(textSize);
   label3->setPosition({posX, posY + 3 * constants::labelsDistance + posIndex});
-  gui.add(label3);
+  gui_.add(label3);
 
   dynamicLabels.push_back({label0, label1, label2, label3});
 }
@@ -376,7 +376,7 @@ void Gui::printValue(const LabelsPar &par, int value, size_t index) {
   text.setPosition(par.posX, par.posY + static_cast<float>(index) *
                                             constants::distancePerIndex);
 
-  window.draw(text);
+  window_.draw(text);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -462,11 +462,11 @@ void Gui::deleteDeleteFlockButton(size_t index) {
   }
 
   // Remove the button from GUI and erase it from the vector
-  gui.remove(dynamicButtons[index]);
+  gui_.remove(dynamicButtons[index]);
   dynamicButtons.erase(dynamicButtons.begin() + static_cast<long>(index));
 
   for (size_t i{0}; i < 4; i++) {
-    gui.remove(dynamicLabels[index][i]);
+    gui_.remove(dynamicLabels[index][i]);
   }
   dynamicLabels.erase(dynamicLabels.begin() + static_cast<long>(index));
 
@@ -530,7 +530,7 @@ void Gui::setupOpt1() {
     graphicButton->getRenderer()->setTextColorDown(textOn);
   });
 
-  gui.add(graphicButton);
+  gui_.add(graphicButton);
 
   setVisibleOpt1(true);
 }
@@ -560,7 +560,7 @@ void Gui::createSliderOpt2(const SlidersPar &sliderPar) {
   slider->setPosition(sliderPar.posX, sliderPar.posY);
   slider->setSize(sliderPar.width, sliderPar.height);
   slider->setValue(sliderPar.initialValue);
-  gui.add(slider);
+  gui_.add(slider);
 
   option2Sliders.emplace_back(slider);
 }
@@ -573,20 +573,21 @@ void Gui::createLabelOpt2(const LabelsPar &labelsPar) {
   label->getRenderer()->setTextColor(sf::Color::White);
   label->setTextSize(labelsPar.textSize);
   label->getRenderer()->setTextColor(sf::Color::Black);
-  gui.add(label);
+  gui_.add(label);
 
   option2Labels.emplace_back(label);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void Gui::setLabelTextOpt2(size_t i, const std::string &text) {
-  option2Labels[i]->setText(
-      text + std::to_string(static_cast<int>(option2Sliders[i]->getValue())));
+void Gui::setLabelTextOpt2(size_t index, const std::string &text) {
+  option2Labels[index]->setText(text + std::to_string(static_cast<int>(
+                                           option2Sliders[index]->getValue())));
 
-  option2Sliders[i]->onValueChange([this, i, text]() {
-    option2Labels[i]->setText(
-        text + std::to_string(static_cast<int>(option2Sliders[i]->getValue())));
+  option2Sliders[index]->onValueChange([this, index, text]() {
+    option2Labels[index]->setText(
+        text +
+        std::to_string(static_cast<int>(option2Sliders[index]->getValue())));
   });
 }
 
@@ -690,7 +691,7 @@ void Gui::createAddFlockButton(const TguiPar &par) {
                        static_cast<uint8_t>(option2Sliders[5]->getValue())));
   });
 
-  gui.add(addFlockButton);
+  gui_.add(addFlockButton);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -748,7 +749,7 @@ void Gui::createSliderOpt3(const SlidersPar &params) {
   slider->setMaximum(params.max);
   slider->setValue(params.initialValue);
 
-  gui.add(slider);
+  gui_.add(slider);
 
   option3Sliders.emplace_back(slider);
 }
@@ -761,7 +762,7 @@ void Gui::createLabelOpt3(const LabelsPar &labelsPar, const std::string &text) {
   label->setTextSize(labelsPar.textSize);
   label->getRenderer()->setTextColor(sf::Color::Black);
   label->setText(text);
-  gui.add(label);
+  gui_.add(label);
 
   option3Labels.emplace_back(label);
 }
@@ -837,7 +838,7 @@ void Gui::setupOpt3() {
   });
 
   frameRateLimitSlider->onValueChange([this]() {
-    window.setFramerateLimit(
+    window_.setFramerateLimit(
         static_cast<unsigned>(frameRateLimitSlider->getValue()));
   });
 
@@ -852,8 +853,8 @@ void Gui::setupOpt3() {
   repulsiveClickButton->setOnAction(
       []() -> void { Flock::setRepulsiveClick(true); });
 
-  gui.add(toroidalButton);
-  gui.add(repulsiveClickButton);
+  gui_.add(toroidalButton);
+  gui_.add(repulsiveClickButton);
 
   setVisibleOpt3(false);
 }
@@ -924,7 +925,7 @@ void Gui::drawFlocks() {
     for (size_t j{0}; j < flockStack_[i].getSize(); j++) {
       bodyStack_[i].emplace_back(
           getTriangleBoid(flockStack_[i].getBoid(j), color));
-      window.draw(bodyStack_[i][j]);
+      window_.draw(bodyStack_[i][j]);
     }
   }
 }
@@ -946,7 +947,7 @@ void Gui::interactWithFlocks() {
   int max{static_cast<int>(constants::fieldSide + 2 * constants::marginSize)};
 
   if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window_);
     for (auto &i : flockStack_) {
       if ((mousePos.x > 0) && (mousePos.x < max) && (mousePos.y > 0) &&
           (mousePos.y < max))

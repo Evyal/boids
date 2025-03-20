@@ -82,16 +82,19 @@ ctest
 
 ## Features
 
-- Real-time visualization of flock movement
 - Real-time statistics display for each flock
 - Interactive controls for adding or removing flocks
 - Adjustable parameters for interactions between boids
 
+<p align="center">
 ![Interface](images/interface.png)
+</p>
 
+<p align="center">
 ![Option1](images/option1.png)
 ![Option2](images/option2.png)
 ![Option3](images/option3.png)
+</p>
 
 ### Option 1: Graphics and statistics
 

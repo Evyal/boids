@@ -28,17 +28,19 @@ class Gui {
   ////////////////////////////////////////////////////////////////////////////////
   // WINDOW
 
-  sf::RenderWindow window;
-  tgui::Gui gui;
+  sf::RenderWindow window_;
+  tgui::Gui gui_;
 
   ////////////////////////////////////////////////////////////////////////////////
   // keep track of FLOCKS and their GRAPHICS
 
   std::vector<Flock> flockStack_;
   std::vector<std::vector<sf::CircleShape>> bodyStack_;
+  sf::Font sans;
 
   ////////////////////////////////////////////////////////////////////////////////
-  bool pause{false};
+
+  bool pause_{false};
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -82,8 +84,7 @@ class Gui {
   std::vector<std::array<tgui::Label::Ptr, 4>> dynamicLabels;
 
   void createDeleteFlockButton(size_t index);
-  void createStatisticsLabels(size_t index);
-
+  void createStatisticsLabel(size_t index);
   void deleteDeleteFlockButton(size_t index);
   void repositionButtons();
 
@@ -110,7 +111,7 @@ class Gui {
   // CREATE and STORE
   void createSliderOpt2(const SlidersPar &sliderPar);
   void createLabelOpt2(const LabelsPar &labelsPar);
-  void setLabelTextOpt2(size_t i, const std::string &text);
+  void setLabelTextOpt2(size_t index, const std::string &text);
 
   void handleColorSliderChange(tgui::Slider::Ptr changedSlider);
 
@@ -133,26 +134,15 @@ class Gui {
   std::vector<tgui::EditBoxSlider::Ptr> option3Sliders;
   std::vector<tgui::Label::Ptr> option3Labels;
 
-  // 0 separationSlider
-  // 1 separationRangeSlider
-  // 2 alignmentSlider
-  // 3 cohesionSlider
-  // 4 interactionSlider
-  // 5 repelSlider
-  // 6 repelRangeSlider
-
-  tgui::EditBoxSlider::Ptr separationSlider;
-  tgui::EditBoxSlider::Ptr separationRangeSlider;
-  tgui::EditBoxSlider::Ptr alignmentSlider;
-  tgui::EditBoxSlider::Ptr cohesionSlider;
-  tgui::EditBoxSlider::Ptr interactionSlider;
-  tgui::EditBoxSlider::Ptr repelSlider;
-  tgui::EditBoxSlider::Ptr repelRangeSlider;
-  tgui::EditBoxSlider::Ptr clickStrengthSlider;
-
-  tgui::EditBoxSlider::Ptr frameRateLimitSlider;
-
-  void createParametersSliders();
+  tgui::EditBoxSlider::Ptr separationSlider;       // 0
+  tgui::EditBoxSlider::Ptr separationRangeSlider;  // 1
+  tgui::EditBoxSlider::Ptr alignmentSlider;        // 2
+  tgui::EditBoxSlider::Ptr cohesionSlider;         // 3
+  tgui::EditBoxSlider::Ptr interactionSlider;      // 4
+  tgui::EditBoxSlider::Ptr repelSlider;            // 5
+  tgui::EditBoxSlider::Ptr repelRangeSlider;       // 6
+  tgui::EditBoxSlider::Ptr clickStrengthSlider;    // 7
+  tgui::EditBoxSlider::Ptr frameRateLimitSlider;   // 8
 
   void createSliderOpt3(const SlidersPar &sliderPar);
   void createLabelOpt3(const LabelsPar &labelsPar, const std::string &text);
@@ -172,8 +162,6 @@ class Gui {
   ////////////////////////////////////////////////////////////////////////////////
   // FLOCKS and DRAWING
 
-  sf::Font sans;
-
   void addFlock(size_t n = 20, sf::Vector2f center = {360, 360},
                 sf::Color color = sf::Color::Black);
   void deleteFlock(size_t i);
@@ -181,10 +169,10 @@ class Gui {
   void drawFlocks();
 
   ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  // OTHER RANDOM FUNCS
 
   size_t getActiveBoids();
-
-  //////////////////////////////////////////////////////////////////////////////////////////
 
   void interactWithFlocks();
 
