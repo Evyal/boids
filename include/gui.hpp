@@ -1,5 +1,5 @@
-#ifndef EGUI_HPP
-#define EGUI_HPP
+#ifndef GUI_HPP
+#define GUI_HPP
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
@@ -20,9 +20,9 @@ class Gui {
  public:
   ////////////////////////////////////////////////////////////////////////////////
 
-  Gui();         // Constructor
-  void setup();  // Sets up the application
-  void run();    // Runs the application
+  Gui();
+  void setup();
+  void run();
 
  private:
   ////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ class Gui {
   tgui::Button::Ptr option1;
   tgui::Button::Ptr option2;
   tgui::Button::Ptr option3;
-  tgui::Button::Ptr activeButton = nullptr;  // Track the active button
+  tgui::Button::Ptr activeButton = nullptr;
 
   void createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
                             const TguiPar &button3);

@@ -42,16 +42,16 @@ TEST_CASE("Test distance calculations with 5 points on a line") {
   CHECK(distances[9] == 1.f);
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // Test calculateMean.
+  // Test calculateMean
+
   float mean = ev::calculateMean(distances);
 
-  // Sum of expected distances is 20; mean should be 20/10 = 2.
   CHECK(mean == doctest::Approx(2.f));
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // Test calculateStandardDeviation.
   // Variance is calculated with N - 1 = 9
-  // deviation is sqrt(10/9) = 1.05409 (approx)
+  // deviation is sqrt(10/9) = 1.05409...
   float stddev = ev::calculateStandardDeviation(distances, mean);
   CHECK(stddev == doctest::Approx(sqrtf(10.f / 9.f)));
 }

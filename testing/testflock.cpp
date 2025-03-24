@@ -451,7 +451,7 @@ TEST_CASE("TESTING PARAMETERS") {
     CHECK(ev::Flock::getRepulsiveClick() == true);
   }
 
-  // RESETTING FLOCK PARAMETERS TO DEFAULT VALUES since they are static.
+  // resetting flock parameters to default values since they are static.
 
   ev::Flock::setParameters(ev::constants::defaultFlockParameters);
   ev::Flock::setToroidalMode(false);
@@ -479,7 +479,7 @@ TEST_CASE("TESTING RULES on SPECIAL CASES") {
   // const float &c{ev::constants::defaultCohesionStrength};
 
   ////////////////////////////////////////////////////////////////////////////////
-  // CHECKING RULES if some boids are OUT OF THE INTERACTION RANGE
+  // Checking rules if some boids are out of the interaction range
 
   SUBCASE("SEPARATION") {
     // std::cout << distance(b1, b2) << '\n';
