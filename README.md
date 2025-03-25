@@ -81,9 +81,11 @@ ctest
 
 ## Features
 
-- Real-time statistics display for each flock
+- Random generation of flocks at the beginning of the simulation 
+- Different modes for behaviour at borders
+- Statistics display for each active flock
 - Interactive controls for adding or removing flocks
-- Adjustable parameters for interactions between boids
+- Adjustable parameters for interactions between \textit{boids}
 
 <p align="center">
 <img src="images/interface.png" alt="Interface">
