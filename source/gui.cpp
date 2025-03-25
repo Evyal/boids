@@ -35,7 +35,7 @@ Gui::Gui()
 void Gui::setup() {
   // THE ORDER in WHICH OPTIONS are SET UP is IMPORTANT!!!
 
-  sans.loadFromFile("../assets/OpenSans-Regular.ttf");
+  sans_.loadFromFile("../assets/OpenSans-Regular.ttf");
 
   // CREATE OPTIONS
 
@@ -168,74 +168,74 @@ void Gui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
   sf::Color b = constants::offThreeWayBGColorHover;
   sf::Color c = constants::threeWayBGColorDown;
 
-  option1 = tgui::Button::create(
+  option1_ = tgui::Button::create(
       "Graphics &\n"
       "statistics");
-  option1->setPosition(button1.posX, button1.posY);
-  option1->setSize(button1.width, button1.height);
-  option1->getRenderer()->setBackgroundColor(
+  option1_->setPosition(button1.posX, button1.posY);
+  option1_->setSize(button1.width, button1.height);
+  option1_->getRenderer()->setBackgroundColor(
       constants::onThreeWayBGColor);  // Default "on"
-  option1->getRenderer()->setBackgroundColorHover(
+  option1_->getRenderer()->setBackgroundColorHover(
       constants::onThreeWayBGColorHover);
-  option1->getRenderer()->setBackgroundColorDown(c);
+  option1_->getRenderer()->setBackgroundColorDown(c);
 
-  option1->onPress([this]() {
-    toggleButtons(option1);
+  option1_->onPress([this]() {
+    toggleButtons(option1_);
     selectedOption1();
   });
 
-  gui_.add(option1);
+  gui_.add(option1_);
 
   // Button 2
-  option2 = tgui::Button::create(
+  option2_ = tgui::Button::create(
       "Create\n"
       "flocks");
-  option2->setPosition(button2.posX, button2.posY);
-  option2->setSize(button2.width, button2.height);
-  option2->getRenderer()->setBackgroundColor(a);  // Default "off"
-  option2->getRenderer()->setBackgroundColorHover(b);
-  option2->getRenderer()->setBackgroundColorDown(c);
+  option2_->setPosition(button2.posX, button2.posY);
+  option2_->setSize(button2.width, button2.height);
+  option2_->getRenderer()->setBackgroundColor(a);  // Default "off"
+  option2_->getRenderer()->setBackgroundColorHover(b);
+  option2_->getRenderer()->setBackgroundColorDown(c);
 
-  option2->onPress([this]() {
-    toggleButtons(option2);
+  option2_->onPress([this]() {
+    toggleButtons(option2_);
     selectedOption2();
   });
 
-  gui_.add(option2);
+  gui_.add(option2_);
 
   // Button 3
-  option3 = tgui::Button::create(
+  option3_ = tgui::Button::create(
       "Simulation\n"
       "parameters");
-  option3->setPosition(button3.posX, button3.posY);
-  option3->setSize(button3.width, button3.height);
-  option3->getRenderer()->setBackgroundColor(a);  // Default "off"
-  option3->getRenderer()->setBackgroundColorHover(b);
-  option3->getRenderer()->setBackgroundColorDown(c);
+  option3_->setPosition(button3.posX, button3.posY);
+  option3_->setSize(button3.width, button3.height);
+  option3_->getRenderer()->setBackgroundColor(a);  // Default "off"
+  option3_->getRenderer()->setBackgroundColorHover(b);
+  option3_->getRenderer()->setBackgroundColorDown(c);
 
-  option3->onPress([this]() {
-    toggleButtons(option3);
+  option3_->onPress([this]() {
+    toggleButtons(option3_);
     selectedOption3();
   });
 
-  gui_.add(option3);
+  gui_.add(option3_);
 
-  activeButton = option1;
+  activeButton_ = option1_;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::toggleButtons(tgui::Button::Ptr pressedButton) {
   // Set all buttons to "off" (gray background)
-  option1->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
-  option2->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
-  option3->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
+  option1_->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
+  option2_->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
+  option3_->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
 
-  option1->getRenderer()->setBackgroundColorHover(
+  option1_->getRenderer()->setBackgroundColorHover(
       constants::offThreeWayBGColorHover);
-  option2->getRenderer()->setBackgroundColorHover(
+  option2_->getRenderer()->setBackgroundColorHover(
       constants::offThreeWayBGColorHover);
-  option3->getRenderer()->setBackgroundColorHover(
+  option3_->getRenderer()->setBackgroundColorHover(
       constants::offThreeWayBGColorHover);
 
   pressedButton->getRenderer()->setBackgroundColor(
@@ -243,14 +243,14 @@ void Gui::toggleButtons(tgui::Button::Ptr pressedButton) {
   pressedButton->getRenderer()->setBackgroundColorHover(
       constants::onThreeWayBGColorHover);
 
-  activeButton = pressedButton;
+  activeButton_ = pressedButton;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Updates CONTINUOUSLY to the SELECTED OPTION
 
 void Gui::selectedOption() {
-  if (activeButton == option1) {
+  if (activeButton_ == option1_) {
     drawStatistics();
     if (Flock::getToroidalMode()) {
       printToroidalFlockStats();
@@ -322,13 +322,13 @@ void Gui::createDeleteFlockButton(size_t index) {
       posX, posY + static_cast<float>(index * constants::distancePerIndex));
   button->setSize(width, height);
   button->getRenderer()->setBackgroundColor(sf::Color::Red);
-  button->onPress([this, index = dynamicButtons.size()]() {
+  button->onPress([this, index = dynamicButtons_.size()]() {
     deleteFlock(index);
     deleteDeleteFlockButton(index);
   });
 
   gui_.add(button);
-  dynamicButtons.push_back(button);
+  dynamicButtons_.push_back(button);
 
   createStatisticsLabel(index);
 }
@@ -361,7 +361,7 @@ void Gui::createStatisticsLabel(size_t index) {
   label3->setPosition({posX, posY + 3 * constants::labelsDistance + posIndex});
   gui_.add(label3);
 
-  dynamicLabels.push_back({label0, label1, label2, label3});
+  dynamicLabels_.push_back({label0, label1, label2, label3});
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -370,7 +370,7 @@ void Gui::printValue(const LabelsPar &par, int value, size_t index) {
   sf::Text text;
 
   text.setString(std::to_string(value));
-  text.setFont(sans);
+  text.setFont(sans_);
   text.setCharacterSize(par.textSize);
   text.setFillColor(sf::Color::Black);
   text.setPosition(par.posX, par.posY + static_cast<float>(index) *
@@ -456,22 +456,22 @@ void Gui::printToroidalFlockStats() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::deleteDeleteFlockButton(size_t index) {
-  if (index >= dynamicButtons.size()) {
+  if (index >= dynamicButtons_.size()) {
     std::cout << "Invalid button index: " << index << "\n";
     return;
   }
 
   // Remove the button from GUI and erase it from the vector
-  gui_.remove(dynamicButtons[index]);
-  dynamicButtons.erase(dynamicButtons.begin() + static_cast<long>(index));
+  gui_.remove(dynamicButtons_[index]);
+  dynamicButtons_.erase(dynamicButtons_.begin() + static_cast<long>(index));
 
   for (size_t i{0}; i < 4; i++) {
-    gui_.remove(dynamicLabels[index][i]);
+    gui_.remove(dynamicLabels_[index][i]);
   }
-  dynamicLabels.erase(dynamicLabels.begin() + static_cast<long>(index));
+  dynamicLabels_.erase(dynamicLabels_.begin() + static_cast<long>(index));
 
   // Reposition the remaining buttons
-  if (dynamicButtons.size() > 0) {
+  if (dynamicButtons_.size() > 0) {
     repositionButtons();
   }
 }
@@ -479,15 +479,15 @@ void Gui::deleteDeleteFlockButton(size_t index) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::repositionButtons() {
-  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
+  for (size_t i = 0; i < dynamicButtons_.size(); ++i) {
     float posIndex{static_cast<float>(i * constants::distancePerIndex)};
 
-    dynamicButtons[i]->setText(std::to_string(i + 1));
-    dynamicButtons[i]->setPosition(
+    dynamicButtons_[i]->setText(std::to_string(i + 1));
+    dynamicButtons_[i]->setPosition(
         constants::deleteFlockButton.posX,
         constants::deleteFlockButton.posY + posIndex);
-    dynamicButtons[i]->onPress.disconnectAll();
-    dynamicButtons[i]->onPress([this, i]() {
+    dynamicButtons_[i]->onPress.disconnectAll();
+    dynamicButtons_[i]->onPress([this, i]() {
       deleteFlock(i);
       deleteDeleteFlockButton(i);
     });
@@ -495,12 +495,12 @@ void Gui::repositionButtons() {
     float posX{constants::statisticsLabel.posX};
     float posY{constants::statisticsLabel.posY};
 
-    dynamicLabels[i][0]->setPosition({posX, posY + posIndex});
-    dynamicLabels[i][1]->setPosition(
+    dynamicLabels_[i][0]->setPosition({posX, posY + posIndex});
+    dynamicLabels_[i][1]->setPosition(
         {posX, posY + constants::labelsDistance + posIndex});
-    dynamicLabels[i][2]->setPosition(
+    dynamicLabels_[i][2]->setPosition(
         {posX, posY + constants::labelsDistance * 2 + posIndex});
-    dynamicLabels[i][3]->setPosition(
+    dynamicLabels_[i][3]->setPosition(
         {posX, posY + constants::labelsDistance * 3 + posIndex});
   }
 }
@@ -508,29 +508,30 @@ void Gui::repositionButtons() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::setupOpt1() {
-  graphicButton = SwitchButton::create(constants::graphicsButton);
-  // COLOR for the BACKGROUND and TEXT of the BUTTON are INVERTED
+  
+  graphicsButton_ = SwitchButton::create(constants::graphicsButton);
+  // COLOR for the BACKGROUND and TEXT of the BUTTON are INVERTED for visibility
   const sf::Color &textOff{constants::onGraphicsButtonColor};
   const sf::Color &textOn{constants::offGraphicsButtonColor};
 
-  graphicButton->getRenderer()->setTextColor(textOff);
-  graphicButton->getRenderer()->setTextColorHover(textOff);
-  graphicButton->getRenderer()->setTextColorDown(textOff);
+  graphicsButton_->getRenderer()->setTextColor(textOff);
+  graphicsButton_->getRenderer()->setTextColorHover(textOff);
+  graphicsButton_->getRenderer()->setTextColorDown(textOff);
 
-  graphicButton->setOffAction([this]() -> void {
+  graphicsButton_->setOffAction([this]() -> void {
     backgroundColour_ = sf::Color::Black;
-    graphicButton->getRenderer()->setTextColor(textOff);
-    graphicButton->getRenderer()->setTextColorHover(textOff);
-    graphicButton->getRenderer()->setTextColorDown(textOff);
+    graphicsButton_->getRenderer()->setTextColor(textOff);
+    graphicsButton_->getRenderer()->setTextColorHover(textOff);
+    graphicsButton_->getRenderer()->setTextColorDown(textOff);
   });
-  graphicButton->setOnAction([this]() -> void {
+  graphicsButton_->setOnAction([this]() -> void {
     backgroundColour_ = sf::Color::White;
-    graphicButton->getRenderer()->setTextColor(textOn);
-    graphicButton->getRenderer()->setTextColorHover(textOn);
-    graphicButton->getRenderer()->setTextColorDown(textOn);
+    graphicsButton_->getRenderer()->setTextColor(textOn);
+    graphicsButton_->getRenderer()->setTextColorHover(textOn);
+    graphicsButton_->getRenderer()->setTextColorDown(textOn);
   });
 
-  gui_.add(graphicButton);
+  gui_.add(graphicsButton_);
 
   setVisibleOpt1(true);
 }
@@ -538,13 +539,13 @@ void Gui::setupOpt1() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::setVisibleOpt1(bool visible) {
-  graphicButton->setVisible(visible);
+  graphicsButton_->setVisible(visible);
 
-  for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-    dynamicButtons[i]->setVisible(visible);
+  for (size_t i = 0; i < dynamicButtons_.size(); ++i) {
+    dynamicButtons_[i]->setVisible(visible);
   }
 
-  for (auto &labels : dynamicLabels) {
+  for (auto &labels : dynamicLabels_) {
     for (size_t i{0}; i < 4; i++) {
       labels[i]->setVisible(visible);
     }
@@ -562,7 +563,7 @@ void Gui::createSliderOpt2(const SlidersPar &sliderPar) {
   slider->setValue(sliderPar.initialValue);
   gui_.add(slider);
 
-  option2Sliders.emplace_back(slider);
+  option2Sliders_.emplace_back(slider);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -575,19 +576,19 @@ void Gui::createLabelOpt2(const LabelsPar &labelsPar) {
   label->getRenderer()->setTextColor(sf::Color::Black);
   gui_.add(label);
 
-  option2Labels.emplace_back(label);
+  option2Labels_.emplace_back(label);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::setLabelTextOpt2(size_t index, const std::string &text) {
-  option2Labels[index]->setText(text + std::to_string(static_cast<int>(
-                                           option2Sliders[index]->getValue())));
+  option2Labels_[index]->setText(text + std::to_string(static_cast<int>(
+                                           option2Sliders_[index]->getValue())));
 
-  option2Sliders[index]->onValueChange([this, index, text]() {
-    option2Labels[index]->setText(
+  option2Sliders_[index]->onValueChange([this, index, text]() {
+    option2Labels_[index]->setText(
         text +
-        std::to_string(static_cast<int>(option2Sliders[index]->getValue())));
+        std::to_string(static_cast<int>(option2Sliders_[index]->getValue())));
   });
 }
 
@@ -601,16 +602,16 @@ void Gui::setupOpt2() {
   createSliderOpt2(constants::greenSlider);
   createSliderOpt2(constants::blueSlider);
 
-  createLabelOpt2(constants::boidsNumberSliderLabel);
-  createLabelOpt2(constants::centerXSliderLabel);
-  createLabelOpt2(constants::centerYSliderLabel);
-  createLabelOpt2(constants::redSliderLabel);
-  createLabelOpt2(constants::greenSliderLabel);
-  createLabelOpt2(constants::blueSliderLabel);
-  createLabelOpt2(constants::maxBoidsNumberLabel);  // INDEX 6
+  createLabelOpt2(constants::boidsNumberSliderLabel);  // index 0
+  createLabelOpt2(constants::centerXSliderLabel);      // index 1
+  createLabelOpt2(constants::centerYSliderLabel);      // index 2
+  createLabelOpt2(constants::redSliderLabel);          // index 3
+  createLabelOpt2(constants::greenSliderLabel);        // index 4
+  createLabelOpt2(constants::blueSliderLabel);         // index 5
+  createLabelOpt2(constants::maxBoidsNumberLabel);     // index 6
 
-  // VALUE SHOULD CHANGE when FLOCK are created or destructed
-  option2Labels[6]->setText("Number of boids: " + std::to_string(10) + "/250");
+  // Value changes when flocks are created or destructed
+  option2Labels_[6]->setText("Number of boids: " + std::to_string(10) + "/250");
 
   setLabelTextOpt2(0, "Create N boids: ");
   setLabelTextOpt2(1, "Center of Spawn X: ");
@@ -620,17 +621,17 @@ void Gui::setupOpt2() {
   setLabelTextOpt2(5, "Blue: ");
 
   // HANDLE MAXIMUM VALUE of COLOUR SLIDERS
-  option2Sliders[3]->onValueChange(
-      [&]() { handleColorSliderChange(option2Sliders[3]); });
-  option2Sliders[4]->onValueChange(
-      [&]() { handleColorSliderChange(option2Sliders[4]); });
-  option2Sliders[5]->onValueChange(
-      [&]() { handleColorSliderChange(option2Sliders[5]); });
+  option2Sliders_[3]->onValueChange(
+      [&]() { handleColorSliderChange(option2Sliders_[3]); });
+  option2Sliders_[4]->onValueChange(
+      [&]() { handleColorSliderChange(option2Sliders_[4]); });
+  option2Sliders_[5]->onValueChange(
+      [&]() { handleColorSliderChange(option2Sliders_[5]); });
 
   createAddFlockButton(constants::addFlockButton);
-  createLabelOpt2(constants::addFlockButtonLabel);  // LABEL with INDEX 7
-  addFlockButtonLabel = option2Labels[7];
-  addFlockButtonLabel->setText(
+  createLabelOpt2(constants::addFlockButtonLabel);  // index 7
+  addFlockButtonLabel_ = option2Labels_[7];
+  addFlockButtonLabel_->setText(
       "Number of flocks: " + std::to_string(flockStack_.size()) + "/5");
 
   setVisibleOpt2(false);
@@ -639,31 +640,31 @@ void Gui::setupOpt2() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::setVisibleOpt2(bool visible) {
-  for (auto &i : option2Sliders) {
+  for (auto &i : option2Sliders_) {
     i->setVisible(visible);
   }
-  for (auto &i : option2Labels) {
+  for (auto &i : option2Labels_) {
     i->setVisible(visible);
   }
-  addFlockButton->setVisible(visible);
+  addFlockButton_->setVisible(visible);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::handleColorSliderChange(tgui::Slider::Ptr changedSlider) {
-  int newTotal = static_cast<int>(option2Sliders[3]->getValue() +
-                                  option2Sliders[4]->getValue() +
-                                  option2Sliders[5]->getValue());
+  int newTotal = static_cast<int>(option2Sliders_[3]->getValue() +
+                                  option2Sliders_[4]->getValue() +
+                                  option2Sliders_[5]->getValue());
 
   // 3 is RED, 4 is GREEN, 5 is BLUE
 
   if (newTotal > constants::colorSliderTotalMax) {
-    // If the sum exceeds 765, lower the current slider to keep it in range
+    // If sum exceeds 765, lower current slider value to keep it within bounds
     changedSlider->setValue(
         changedSlider->getValue() -
         static_cast<float>(newTotal - constants::colorSliderTotalMax));
   } else if (newTotal < constants::colorSliderTotalMin) {
-    // If the sum is below 255, increase the slider to stay within bounds
+    // If sum is below 255, increase current slider value to keep it in bounds
     changedSlider->setValue(
         changedSlider->getValue() +
         static_cast<float>(constants::colorSliderTotalMin - newTotal));
@@ -673,25 +674,25 @@ void Gui::handleColorSliderChange(tgui::Slider::Ptr changedSlider) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::createAddFlockButton(const TguiPar &par) {
-  addFlockButton = tgui::Button::create("Create Flock");
-  addFlockButton->setPosition(par.posX, par.posY);
-  addFlockButton->setSize(par.width, par.height);
-  addFlockButton->getRenderer()->setBackgroundColor(
+  addFlockButton_ = tgui::Button::create("Create Flock");
+  addFlockButton_->setPosition(par.posX, par.posY);
+  addFlockButton_->setSize(par.width, par.height);
+  addFlockButton_->getRenderer()->setBackgroundColor(
       sf::Color(128, 128, 128));  // Default "off"
-  addFlockButton->getRenderer()->setBackgroundColorHover(
-      sf::Color(128, 128, 128));  // Prevent white hover
-  addFlockButton->getRenderer()->setBackgroundColorDown(
+  addFlockButton_->getRenderer()->setBackgroundColorHover(
+      sf::Color(128, 128, 128));
+  addFlockButton_->getRenderer()->setBackgroundColorDown(
       sf::Color(255, 255, 204));
 
-  addFlockButton->onPress([this]() {
-    addFlock(static_cast<size_t>(option2Sliders[0]->getValue()),
-             {option2Sliders[1]->getValue(), option2Sliders[2]->getValue()},
-             sf::Color(static_cast<uint8_t>(option2Sliders[3]->getValue()),
-                       static_cast<uint8_t>(option2Sliders[4]->getValue()),
-                       static_cast<uint8_t>(option2Sliders[5]->getValue())));
+  addFlockButton_->onPress([this]() {
+    addFlock(static_cast<size_t>(option2Sliders_[0]->getValue()),
+             {option2Sliders_[1]->getValue(), option2Sliders_[2]->getValue()},
+             sf::Color(static_cast<uint8_t>(option2Sliders_[3]->getValue()),
+                       static_cast<uint8_t>(option2Sliders_[4]->getValue()),
+                       static_cast<uint8_t>(option2Sliders_[5]->getValue())));
   });
 
-  gui_.add(addFlockButton);
+  gui_.add(addFlockButton_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -701,40 +702,50 @@ void Gui::enableCreateFlockButton() {
     // index 0 is boids number
     // index 6 is boids max number
 
-    option2Sliders[0]->setEnabled(false);
+    option2Sliders_[0]->setEnabled(false);
 
-    option2Labels[0]->setText("Create N boids: Disabled");
-    option2Labels[6]->setText(
+    option2Labels_[0]->setText("Create N boids: Disabled");
+    option2Labels_[6]->setText(
         "Number of boids: " + std::to_string(getActiveBoids()) + "/250");
 
-    addFlockButton->setEnabled(false);
+    addFlockButton_->setEnabled(false);
 
   } else if (getActiveBoids() > 150) {
-    option2Sliders[0]->setMaximum(250 - static_cast<float>(getActiveBoids()));
-    option2Sliders[0]->setEnabled(true);
-    option2Labels[0]->setText(
+    option2Sliders_[0]->setMaximum(250 - static_cast<float>(getActiveBoids()));
+    option2Sliders_[0]->setEnabled(true);
+    option2Labels_[0]->setText(
         "Create N boids: " +
-        std::to_string(static_cast<int>(option2Sliders[0]->getValue())));
-    option2Labels[6]->setText(
+        std::to_string(static_cast<int>(option2Sliders_[0]->getValue())));
+    option2Labels_[6]->setText(
         "Number of boids: " + std::to_string(getActiveBoids()) + "/250");
 
-    addFlockButton->setEnabled(true);
+    addFlockButton_->setEnabled(true);
 
   } else {
-    option2Sliders[0]->setMaximum(100);
-    option2Sliders[0]->setEnabled(true);
+    option2Sliders_[0]->setMaximum(100);
+    option2Sliders_[0]->setEnabled(true);
 
-    option2Labels[0]->setText(
+    option2Labels_[0]->setText(
         "Create N boids: " +
-        std::to_string(static_cast<int>(option2Sliders[0]->getValue())));
-    option2Labels[6]->setText(
+        std::to_string(static_cast<int>(option2Sliders_[0]->getValue())));
+    option2Labels_[6]->setText(
         "Number of boids: " + std::to_string(getActiveBoids()) + "/250");
 
-    addFlockButton->setEnabled(true);
+    addFlockButton_->setEnabled(true);
   }
 
   assert(flockStack_.size() < 6);
   assert(getActiveBoids() <= 250);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+size_t Gui::getActiveBoids() {
+  size_t activeBoids{};
+  for (const auto &flock : flockStack_) {
+    activeBoids += flock.getSize();
+  }
+  return activeBoids;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -751,7 +762,7 @@ void Gui::createSliderOpt3(const SlidersPar &params) {
 
   gui_.add(slider);
 
-  option3Sliders.emplace_back(slider);
+  option3Sliders_.emplace_back(slider);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -764,7 +775,7 @@ void Gui::createLabelOpt3(const LabelsPar &labelsPar, const std::string &text) {
   label->setText(text);
   gui_.add(label);
 
-  option3Labels.emplace_back(label);
+  option3Labels_.emplace_back(label);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -793,68 +804,70 @@ void Gui::setupOpt3() {
   createLabelOpt3(constants::parametersLabel, "INTERACTION PARAMETERS");
   createLabelOpt3(constants::extraLabel, "ADDITIONAL OPTIONS");
 
-  separationSlider = option3Sliders[0];
-  separationRangeSlider = option3Sliders[1];
-  alignmentSlider = option3Sliders[2];
-  cohesionSlider = option3Sliders[3];
-  interactionSlider = option3Sliders[4];
-  repelSlider = option3Sliders[5];
-  repelRangeSlider = option3Sliders[6];
-  clickStrengthSlider = option3Sliders[7];
-  frameRateLimitSlider = option3Sliders[8];
+  separationSlider_ = option3Sliders_[0];
+  separationRangeSlider_ = option3Sliders_[1];
+  alignmentSlider_ = option3Sliders_[2];
+  cohesionSlider_ = option3Sliders_[3];
+  interactionSlider_ = option3Sliders_[4];
+  repelSlider_ = option3Sliders_[5];
+  repelRangeSlider_ = option3Sliders_[6];
+  clickStrengthSlider_ = option3Sliders_[7];
+  frameRateLimitSlider_ = option3Sliders_[8];
 
-  separationSlider->onValueChange([this]() {
-    Flock::setSeparationStrength(separationSlider->getValue() /
+  // Set up action on click
+  separationSlider_->onValueChange([this]() {
+    Flock::setSeparationStrength(separationSlider_->getValue() /
                                  constants::scalingFactor);
   });
 
-  separationRangeSlider->onValueChange([this]() {
-    Flock::setSeparationRange(separationRangeSlider->getValue());
+  separationRangeSlider_->onValueChange([this]() {
+    Flock::setSeparationRange(separationRangeSlider_->getValue());
   });
 
-  alignmentSlider->onValueChange([this]() {
-    Flock::setAlignmentStrength(alignmentSlider->getValue() /
+  alignmentSlider_->onValueChange([this]() {
+    Flock::setAlignmentStrength(alignmentSlider_->getValue() /
                                 constants::scalingFactor);
   });
 
-  cohesionSlider->onValueChange([this]() {
-    Flock::setCohesionStrength(cohesionSlider->getValue() /
+  cohesionSlider_->onValueChange([this]() {
+    Flock::setCohesionStrength(cohesionSlider_->getValue() /
                                constants::scalingFactor);
   });
 
-  interactionSlider->onValueChange(
-      [this]() { Flock::setInteractionRange(interactionSlider->getValue()); });
+  interactionSlider_->onValueChange(
+      [this]() { Flock::setInteractionRange(interactionSlider_->getValue()); });
 
-  repelSlider->onValueChange([this]() {
-    Flock::setRepelStrength(repelSlider->getValue() / constants::scalingFactor);
+  repelSlider_->onValueChange([this]() {
+    Flock::setRepelStrength(repelSlider_->getValue() / constants::scalingFactor);
   });
 
-  repelRangeSlider->onValueChange(
-      [this]() { Flock::setRepelRange(repelRangeSlider->getValue()); });
+  repelRangeSlider_->onValueChange(
+      [this]() { Flock::setRepelRange(repelRangeSlider_->getValue()); });
 
-  clickStrengthSlider->onValueChange([this]() {
-    Flock::setClickStrength(clickStrengthSlider->getValue() /
+  clickStrengthSlider_->onValueChange([this]() {
+    Flock::setClickStrength(clickStrengthSlider_->getValue() /
                             constants::scalingFactor);
   });
 
-  frameRateLimitSlider->onValueChange([this]() {
+  frameRateLimitSlider_->onValueChange([this]() {
     window_.setFramerateLimit(
-        static_cast<unsigned>(frameRateLimitSlider->getValue()));
+        static_cast<unsigned>(frameRateLimitSlider_->getValue()));
   });
 
-  toroidalButton = SwitchButton::create(constants::toroidalButton);
-  toroidalButton->setOffAction([]() -> void { Flock::setToroidalMode(false); });
-  toroidalButton->setOnAction([]() -> void { Flock::setToroidalMode(true); });
+  // Create switchbuttons and assign actions
+  toroidalButton_ = SwitchButton::create(constants::toroidalButton);
+  toroidalButton_->setOffAction([]() -> void { Flock::setToroidalMode(false); });
+  toroidalButton_->setOnAction([]() -> void { Flock::setToroidalMode(true); });
 
-  repulsiveClickButton =
+  repulsiveClickButton_ =
       SwitchButton::create(constants::clickInteractionButton);
-  repulsiveClickButton->setOffAction(
+  repulsiveClickButton_->setOffAction(
       []() -> void { Flock::setRepulsiveClick(false); });
-  repulsiveClickButton->setOnAction(
+  repulsiveClickButton_->setOnAction(
       []() -> void { Flock::setRepulsiveClick(true); });
 
-  gui_.add(toroidalButton);
-  gui_.add(repulsiveClickButton);
+  gui_.add(toroidalButton_);
+  gui_.add(repulsiveClickButton_);
 
   setVisibleOpt3(false);
 }
@@ -862,14 +875,14 @@ void Gui::setupOpt3() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::setVisibleOpt3(bool visible) {
-  for (auto &i : option3Sliders) {
+  for (auto &i : option3Sliders_) {
     i->setVisible(visible);
   }
-  for (auto &i : option3Labels) {
+  for (auto &i : option3Labels_) {
     i->setVisible(visible);
   }
-  toroidalButton->setVisible(visible);
-  repulsiveClickButton->setVisible(visible);
+  toroidalButton_->setVisible(visible);
+  repulsiveClickButton_->setVisible(visible);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -879,17 +892,17 @@ void Gui::addFlock(size_t n, sf::Vector2f center, sf::Color color) {
   if (flockStack_.size() < constants::maxFlockNumber) {
     flockStack_.emplace_back(createFlock(n, center, color));
     createDeleteFlockButton(flockStack_.size() - 1);
-    addFlockButtonLabel->setText(
+    addFlockButtonLabel_->setText(
         "Number of flocks: " + std::to_string(flockStack_.size()) + "/5");
 
-    for (auto &labels : dynamicLabels) {
+    for (auto &labels : dynamicLabels_) {
       for (size_t i{0}; i < 4; i++) {
         labels[i]->setVisible(false);
       }
     }
 
-    for (size_t i = 0; i < dynamicButtons.size(); ++i) {
-      dynamicButtons[i]->setVisible(false);
+    for (size_t i = 0; i < dynamicButtons_.size(); ++i) {
+      dynamicButtons_[i]->setVisible(false);
     }
 
   } else {
@@ -901,7 +914,7 @@ void Gui::addFlock(size_t n, sf::Vector2f center, sf::Color color) {
 
 void Gui::deleteFlock(size_t i) {
   flockStack_.erase(flockStack_.begin() + static_cast<long>(i));
-  addFlockButtonLabel->setText(
+  addFlockButtonLabel_->setText(
       "Number of flocks: " + std::to_string(flockStack_.size()) + "/5");
 }
 
@@ -911,33 +924,6 @@ void Gui::evolveFlocks() {
   for (size_t i{0}; i < flockStack_.size(); i++) {
     flockStack_[i].updateFlock(repel(flockStack_, i));
   }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Gui::drawFlocks() {
-  bodyStack_.resize(flockStack_.size());
-
-  for (size_t i{0}; i < bodyStack_.size(); i++) {
-    bodyStack_[i].clear();
-    sf::Color color{flockStack_[i].getFlockColor()};
-
-    for (size_t j{0}; j < flockStack_[i].getSize(); j++) {
-      bodyStack_[i].emplace_back(
-          getTriangleBoid(flockStack_[i].getBoid(j), color));
-      window_.draw(bodyStack_[i][j]);
-    }
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-size_t Gui::getActiveBoids() {
-  size_t activeBoids{};
-  for (const auto &flock : flockStack_) {
-    activeBoids += flock.getSize();
-  }
-  return activeBoids;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -954,6 +940,23 @@ void Gui::interactWithFlocks() {
         i.repelOnClick(
             {static_cast<float>(mousePos.x) - constants::marginSize,
              static_cast<float>(mousePos.y) - constants::marginSize});
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+void Gui::drawFlocks() {
+  bodyStack_.resize(flockStack_.size());
+
+  for (size_t i{0}; i < bodyStack_.size(); i++) {
+    bodyStack_[i].clear();
+    sf::Color color{flockStack_[i].getFlockColor()};
+
+    for (size_t j{0}; j < flockStack_[i].getSize(); j++) {
+      bodyStack_[i].emplace_back(
+          getTriangleBoid(flockStack_[i].getBoid(j), color));
+      window_.draw(bodyStack_[i][j]);
     }
   }
 }

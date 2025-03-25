@@ -36,7 +36,7 @@ class Gui {
 
   std::vector<Flock> flockStack_;
   std::vector<std::vector<sf::CircleShape>> bodyStack_;
-  sf::Font sans;
+  sf::Font sans_;
 
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -54,10 +54,10 @@ class Gui {
   ////////////////////////////////////////////////////////////////////////////////
   // THREE WAY SWITCH, SELECT OPTION
 
-  tgui::Button::Ptr option1;
-  tgui::Button::Ptr option2;
-  tgui::Button::Ptr option3;
-  tgui::Button::Ptr activeButton = nullptr;
+  tgui::Button::Ptr option1_;
+  tgui::Button::Ptr option2_;
+  tgui::Button::Ptr option3_;
+  tgui::Button::Ptr activeButton_ = nullptr;
 
   void createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
                             const TguiPar &button3);
@@ -76,12 +76,12 @@ class Gui {
   // OPTION 1
 
   // ON OFF BUTTON, for MIRROR or TOROIDAL MODE
-  std::shared_ptr<SwitchButton> graphicButton;
+  std::shared_ptr<SwitchButton> graphicsButton_;
 
   ////////////////////////////////////////////////////////////////////////////////
 
-  std::vector<tgui::Button::Ptr> dynamicButtons;
-  std::vector<std::array<tgui::Label::Ptr, 4>> dynamicLabels;
+  std::vector<tgui::Button::Ptr> dynamicButtons_;
+  std::vector<std::array<tgui::Label::Ptr, 4>> dynamicLabels_;
 
   void createDeleteFlockButton(size_t index);
   void createStatisticsLabel(size_t index);
@@ -105,8 +105,8 @@ class Gui {
   ////////////////////////////////////////////////////////////////////////////////
   // OPTION 2
 
-  std::vector<tgui::Slider::Ptr> option2Sliders;
-  std::vector<tgui::Label::Ptr> option2Labels;
+  std::vector<tgui::Slider::Ptr> option2Sliders_;
+  std::vector<tgui::Label::Ptr> option2Labels_;
 
   // CREATE and STORE
   void createSliderOpt2(const SlidersPar &sliderPar);
@@ -116,11 +116,12 @@ class Gui {
   void handleColorSliderChange(tgui::Slider::Ptr changedSlider);
 
   // OPTION TO CREATE NEW FLOCKS
-  tgui::Button::Ptr addFlockButton;
-  tgui::Label::Ptr addFlockButtonLabel;
+  tgui::Button::Ptr addFlockButton_;
+  tgui::Label::Ptr addFlockButtonLabel_;
 
   void createAddFlockButton(const TguiPar &par);
   void enableCreateFlockButton();
+  size_t getActiveBoids();
 
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -131,18 +132,18 @@ class Gui {
   ////////////////////////////////////////////////////////////////////////////////
   // OPTION 3
 
-  std::vector<tgui::EditBoxSlider::Ptr> option3Sliders;
-  std::vector<tgui::Label::Ptr> option3Labels;
+  std::vector<tgui::EditBoxSlider::Ptr> option3Sliders_;
+  std::vector<tgui::Label::Ptr> option3Labels_;
 
-  tgui::EditBoxSlider::Ptr separationSlider;       // 0
-  tgui::EditBoxSlider::Ptr separationRangeSlider;  // 1
-  tgui::EditBoxSlider::Ptr alignmentSlider;        // 2
-  tgui::EditBoxSlider::Ptr cohesionSlider;         // 3
-  tgui::EditBoxSlider::Ptr interactionSlider;      // 4
-  tgui::EditBoxSlider::Ptr repelSlider;            // 5
-  tgui::EditBoxSlider::Ptr repelRangeSlider;       // 6
-  tgui::EditBoxSlider::Ptr clickStrengthSlider;    // 7
-  tgui::EditBoxSlider::Ptr frameRateLimitSlider;   // 8
+  tgui::EditBoxSlider::Ptr separationSlider_;       // 0
+  tgui::EditBoxSlider::Ptr separationRangeSlider_;  // 1
+  tgui::EditBoxSlider::Ptr alignmentSlider_;        // 2
+  tgui::EditBoxSlider::Ptr cohesionSlider_;         // 3
+  tgui::EditBoxSlider::Ptr interactionSlider_;      // 4
+  tgui::EditBoxSlider::Ptr repelSlider_;            // 5
+  tgui::EditBoxSlider::Ptr repelRangeSlider_;       // 6
+  tgui::EditBoxSlider::Ptr clickStrengthSlider_;    // 7
+  tgui::EditBoxSlider::Ptr frameRateLimitSlider_;   // 8
 
   void createSliderOpt3(const SlidersPar &sliderPar);
   void createLabelOpt3(const LabelsPar &labelsPar, const std::string &text);
@@ -150,8 +151,8 @@ class Gui {
   ////////////////////////////////////////////////////////////////////////////////
 
   // ON OFF BUTTON, for MIRROR or TOROIDAL MODE
-  std::shared_ptr<SwitchButton> toroidalButton;
-  std::shared_ptr<SwitchButton> repulsiveClickButton;
+  std::shared_ptr<SwitchButton> toroidalButton_;
+  std::shared_ptr<SwitchButton> repulsiveClickButton_;
 
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -166,15 +167,8 @@ class Gui {
                 sf::Color color = sf::Color::Black);
   void deleteFlock(size_t i);
   void evolveFlocks();
-  void drawFlocks();
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  // OTHER RANDOM FUNCS
-
-  size_t getActiveBoids();
-
   void interactWithFlocks();
+  void drawFlocks();
 
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////

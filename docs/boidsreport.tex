@@ -43,7 +43,6 @@
     breaklines=true,                 
     captionpos=b,                    
     keepspaces=true,                 
-    numbers=left,                    
     numbersep=5pt,                  
     showspaces=false,                
     showstringspaces=false,
@@ -61,6 +60,7 @@
 
 \maketitle
 
+\hypertarget{toc}{}
 \tableofcontents
 
 \setlength{\parindent}{0pt}
@@ -87,13 +87,13 @@ Build instructions are for \textbf{Ubuntu 22.04}.
 
 Install SFML:
 
-\begin{lstlisting}
-sudo apt-get install libsfml-dev
+\begin{lstlisting}[style=codecolour, language=bash]
+sudo apt install libsfml-dev
 \end{lstlisting}
 
 Install TGUI:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=codecolour, language=bash]
 sudo add-apt-repository ppa:texus/tgui
 sudo apt update
 sudo apt install libtgui-1.0-dev
@@ -101,7 +101,7 @@ sudo apt install libtgui-1.0-dev
 
 \subsubsection{Clone the Repository}
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=codecolour, language=bash]
 git clone https://github.com/Evyal/boids.git
 \end{lstlisting}
 
@@ -110,28 +110,27 @@ git clone https://github.com/Evyal/boids.git
 \begin{itemize}
     \item \title{\textbf{Create the build directory}}
 
-\begin{lstlisting}[language=bash]
-mkdir build
-cd build
+\begin{lstlisting}[style=codecolour, language=bash]
+mkdir build && cd build
 \end{lstlisting}
 
 \item \title{\textbf{Configure CMake in Release mode}}
 
-\begin{lstlisting}[language=bash]
-cmake .. -DCMAKE_BUILD_TYPE=Release
+\begin{lstlisting}[style=codecolour, language=bash]
+cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release
 \end{lstlisting}
 
 \item \title{\textbf{Build the project}} 
 
-\begin{lstlisting}[language=bash]
-cmake --build .
+\begin{lstlisting}[style=codecolour, language=bash]
+cmake --build . -j$(nproc)
 \end{lstlisting}
 \end{itemize}
 
 
 \subsubsection{Running the program} 
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=codecolour, language=bash]
 ./boids
 \end{lstlisting}
 
@@ -140,8 +139,6 @@ cmake --build .
 \newpage
 
 \section{Struttura del programma}
-Segue una breve descrizione delle principali scelte progettuali e implementative del programma.
-
 
 I file del progetto sono organizzati in sottocartelle, nello specifico i \texttt{.cpp} si trovano nella \texttt{/source}, mentre i rispettivi header sono situati nella \texttt{/include}. La directory \texttt{/testing} contiene i file di testing, e infine in \texttt{/assets} sono presenti alcuni file necessari per il corretto funzionamento del programma. 
 
@@ -154,10 +151,10 @@ I \textit{boids} si seguono delle regole di volo, che ne determinano il comporta
 \end{equation*}
 
 \begin{equation*}
-    \vec{x}_{bi} = \vec{x}_{bi} + \vec{v}_{bi} \Delta t
+    \vec{x}_{bi} = \vec{x}_{bi} + \vec{v}_{bi} \cdot k
 \end{equation*}
 
-Dove $\vec{v}_S$, $\vec{v}_A$, $\vec{v}_C$, e $\vec{v}_R$ sono rispettivamente:
+Dove $k$ è un fattore di scala, mentre $\vec{v}_S$, $\vec{v}_A$, $\vec{v}_C$, e $\vec{v}_R$ sono rispettivamente:
 
 \subsubsection{Separazione}
 
@@ -201,50 +198,52 @@ Anche questa regola ha una formula analoga a quella della separazione e permette
 
 \subsection{Files}
 
-Tutti i file del progetto sono stati inseriti nel namespace \texttt{ev}.
+Tutti i file del progetto sono stati inseriti nel namespace \texttt{ev::}.
 
 \subsubsection{\texttt{constants.hpp}}
 
-Un unico header file con un namespace contenente valori delle costanti usate nel progetto. Alcuni esempi sono limiti di velocità o posizione per i \textit{boids}, parametri di interazione di default, o ulteriori valori per l'inizializzazione degli elementi dell'interfaccia grafica. Uno dei principali vantaggi di questo approccio è la possibilità di modificare valori riutilizzati da diverse unità del programma tutti da un unico punto.
+Header file che definisce i valori delle costanti usate nel progetto raggruppandole nel namespace \texttt{constants}. Alcuni esempi sono limiti di posizione o velocità per i \textit{boids}, parametri di interazione di default, o ulteriori valori fissi per l'inizializzazione degli elementi dell'interfaccia grafica. Uno dei principali vantaggi di questo approccio è la possibilità di cambiare valori riutilizzati in diverse unità del programma, tutti da un unico punto, conferendo una maggiore facilità della loro modifica.
 
 \subsubsection{\texttt{structs.hpp}}
 
-Struct per impacchettare dei valori usati per inizializzare bottoni o altri elementi di interfaccia grafica. Trovano particolare utilità come parametri delle funzioni che inizializzano tali elementi, aiutando a mantenere il codice più pulito.
+Header contenente la definizione di alcune \texttt{struct} designate prevalentemente ad impacchettare dei valori usati per inizializzare bottoni o altri elementi di interfaccia grafica. Trovano particolare utilità come parametri delle funzioni che inizializzano tali elementi, aiutando a mantenere il codice più pulito. Un esempio è la \textit{struct} \texttt{TguiPar} che contiene i parametri per inizializzare un generico elemento di interfaccia grafica, da cui seguono alcune struct derivate, come \texttt{SlidersPar}. È presente un'unica struct che non ha a che fare con la parte grafica, e contiene le variabili che parametrizzano l'interazione dei \textit{boids} negli stormi.
 
 \subsubsection{\texttt{boid.hpp/cpp}}
 
-File di implementazione della classe \texttt{Boid} e funzioni ausiliari per gestirne il comportamento. La classe  contiene due variabili private (\texttt{sf::Vector2f}), che contengono i valori vettoriali di posizione e velocità in uno spazio bidimensionale. Sono presenti funzioni membro come \textit{getters} e \textit{setters} per accedere alle variabili private, e funzioni esterne alla classe che prendono elementi della classe \texttt{Boid} come parametri. Per esempio \texttt{distance} che calcola la distanza fra \textit{boids} o \texttt{checkMinimumSpeed} che ha il compito di assicurarsi che il boid in questione abbia una velocità compresa all'interno dei limiti prestabiliti, ed eventualmente modificarla. È importante notare che la velocità limite non è stato inteso all'interno del progetto come un'invariante di classe, ma semplicemente un limite imposto durante la simulazione per assicurarsi un comportamento ordinato.
+File che si occupa dell'implementazione della classe \texttt{Boid} e di tutte le funzioni ausiliari necessarie per gestirne il comportamento. Oltre alle variabili private che contengono posizione e velocita dei \textit{boids}, sotto forma di \texttt{sf::Vector2f}, sono presenti funzioni membro come \textit{getters} e \textit{setters} per accedere a quest'ultime. Vi sono anche funzioni esterne alla classe, che lavorano su elementi della classe, come per esempio \texttt{distance} che calcola la distanza fra \textit{boids} o \texttt{checkMinimumSpeed} che ha il compito di assicurarsi che il boid in questione abbia una velocità compresa all'interno dei limiti prestabiliti, ed eventualmente modificarla. È importante sottolineare che la velocità limite non è stata intesa all'interno del progetto come un'invariante di classe, ma semplicemente un limite imposto durante la simulazione per assicurarsi un comportamento ordinato, infatti non è vietato che un \textit{boid} possieda una velocità superiore al limite prestabilito, in quanto questo non invalida nessuna delle funzioni che lo utilizzano.
 
 \subsubsection{\texttt{flock.hpp/cpp}}
 
-File di implementazione della classe \texttt{Flock} che determina la struttura collettiva dei \textit{boids} all'interno di uno stormo. La classe presenta due variabili membro private, la prima un vettore di boids, in cui sono contenuti i boid che compongono lo stormo, e l'altra che ne determina il colore. Il vettore di boids deve contenere almeno due elementi, e se si cerca di inizializzare un'istanza appartenente alla classe \texttt{Flock} con meno di due elementi, questo risulterà in un errore a \textit{compile-time}. All'interno della classe sono contenute delle variabili statiche, condivise da tutti gli stormi, che rappresentano i valori dei parametri di interazione. La parte restante della classe è designata all'implementazione delle regole che determinano il comportamento degli stormi, e della funzione \texttt{update()} che si occupa di aggiornare lo stormo. Quest'ultima funzione ne ha una \texttt{overloaded}, in grado di prendere come argomento le velocità da sommare dovute alla repulsione con altri stormi.
+File di implementazione della classe \texttt{Flock} che determina la struttura collettiva dei \textit{boids} all'interno di uno stormo. La classe presenta numerose variabili statiche, condivise da tutti gli stormi, che costituiscono i parametri dell'interazione tra \textit{boids}, e due variabili membro private, la prima un vettore di boids, in cui sono contenuti i boid che compongono lo stormo, e l'altra che determina il colore dello stormo. Il vettore di boids deve contenere almeno due elementi, e se si cerca di inizializzare un'istanza appartenente alla classe \texttt{Flock} con meno di due elementi, questo risulterà in un errore a \textit{compile-time}. Per assicurarsi che la classe non permetta l'utilizzo dei suoi metodi su stormi con meno di due \textit{boids}, sono stati inseriti multipli \texttt{assert()} all'interno del corpo di quest'ultimi in modo da evitare che si verifichino comportamenti indesiderati. La parte restante della classe è designata all'implementazione delle regole che determinano il comportamento degli stormi, e della funzione \texttt{updateFlock()} che si occupa di aggiornare lo stato dello stormo. Quest'ultima funzione ne ha una \texttt{overloaded}, in grado di prendere come argomento le velocità da sommare dovute alla repulsione con altri stormi.
 
 \subsubsection{\texttt{random.hpp/cpp}}
 
-File che si occupa della generazione di numeri casuali. Sono presenti una funzioni base per generare numeri interi casuali di tipo \texttt{int} o \texttt{float}, e funzioni per generare posizioni e velocità dei \textit{boids} in range prestabiliti.
+File che si occupa della generazione di numeri casuali. Sono presenti una funzioni base per generare numeri interi casuali di tipo \texttt{int} o \texttt{float}, e funzioni più complesse per generare posizioni e velocità dei \textit{boids} in range prestabiliti.
 
 \subsubsection{\texttt{statistics.hpp/cpp}}
 
-File che si occupa del calcolo delle statistiche restituite a schermo, riguardanti valori medi e deviazioni standard delle posizioni e velocità dei \textit{boids}.
+File che si occupa del calcolo delle statistiche restituite a schermo, riguardanti valori medi e deviazioni standard delle posizioni e velocità dei \textit{boids}. Ad esempio, la funzione \texttt{calculateDistances()} calcola le distanze tra tutte le coppie degli elementi di un vettore, mentre \texttt{calculateToroidalDistances()} fa lo stesso ma in geometria toroidale. Infine è presente una funzione per il calcolo della media e una per il calcolo delle deviazioni standard. 
 
 \subsubsection{\texttt{graphics.hpp/cpp}}
 
-Breve file che contiene una funzione per la corretta rappresentazione grafica dei \textit{boids}, ed un'altra che costruisce un rettangolo (\texttt{sf::Rectangle}) prendendo come parametro una delle struct definite nel file sopracitato, con lo scopo di migliorare la leggibilità del codice nella creazione dell'interfaccia.
+Breve file che contiene due funzioni. La prima si occupa di rappresentare graficamente i \textit{boids}, posizionandoli ed orientandoli correttamente. La seconda costruisce un rettangolo (\texttt{sf::Rectangle}) prendendo come parametro una delle struct definite nel file sopracitato, con lo scopo di migliorare la leggibilità del codice nella creazione dell'interfaccia.
 
 \subsubsection{\texttt{switchbutton.hpp/cpp}}
 
-La classe Switchbutton introduce la funzionalità di un bottone che può trovarsi in due stati, non fornita da TGUI, e si è cercato di seguire le convenzioni di TGUI nella creazione delle funzioni membro. 
+La classe \texttt{SwitchButton} introduce la funzionalità di un bottone che può trovarsi in due stati, non fornita da TGUI, e si è cercato di seguire le convenzioni di TGUI nella creazione delle funzioni membro. In particolare è presente un costruttore, che crea un oggetto della classe, ed una funzione \texttt{create()} che restituisce uno \texttt{std::shared\_ptr} che punta all'oggetto.
 
 \subsubsection{\texttt{gui.hpp/cpp}}
 
-Classe che contiene gli elementi necessari a costruire l'interfaccia grafica del programma, e si occupa di coordinare i file di implementazione logica all'interno di essa. In ultima analisi la classe \texttt{Gui} è responsabile del funzionamento del programma. Nel main è sufficiente costruire un elemento della classe, utilizzare il metodo \texttt{setup()} che lo configura correttamente e infine seguire con il metodo \texttt{run()} che inizia l'esecuzione.
+In quest'ultimo file è definita la classe che contiene gli elementi necessari a realizzare l'interfaccia grafica del programma, e si occupa di coordinare gli altri file all'interno di essa. La classe contiene diversi membri privati, come ad esempio la \texttt{sf::RenderWindow}, per la raffigurazione grafica, l'elemento \texttt{tgui::Gui} per il funzionamento dei pulsanti, un vettore che contiene gli stormi attivi, e così via. Le funzioni al suo interno sono prevalentemente di \textit{setup}, e sono organizzate in tre macro-aree, ciascuna con lo scopo di configurare la propria opzione di menù. Infine sono presenti ulteriori funzioni, come quella di creazione del menù (\texttt{createThreeWaySwitch()}), e quelle di gestione, creazione e distruzione degli stormi.
+
+In ultima analisi, la classe \texttt{Gui} è responsabile del generale funzionamento del programma. Nel main è sufficiente costruire un elemento della classe, utilizzare il metodo \texttt{setup()} che lo configura correttamente e infine chiamare il metodo \texttt{run()} che contiene le istruzioni da seguire durante l'esecuzione.
 
 \newpage
 
 \section{Interfaccia della simulazione}
 %descrizione del formato di input e di output, possibilmente con degli esempi
 
-Anche questa parte deriva in parte dal README del progetto.
+Anche questa parte derivante in parte dal README del progetto.
 
 % \begin{center}
 %     \includegraphics[width=1.0\textwidth]{images/interface.png}
@@ -252,6 +251,7 @@ Anche questa parte deriva in parte dal README del progetto.
 
 % \maketitle{\textbf{Features}}
 
+% - Random generation of flocks at the beginning of the simulation \\
 % - Different modes for behaviour at borders \\
 % - Statistics display for each active flock \\
 % - Interactive controls for adding or removing flocks \\
@@ -313,27 +313,28 @@ Attraverso i test si è cercato di controllare che le classi, i metodi delle cla
 
 Il framework che si è utilizzato per creare le testing unit è doctest.h, il cui file è incluso nella cartella nel progetto (\texttt{/assets/doctest.h}). Questa libreria è in grado di generare autonomamente un main e permette l'esecuzione dei test semplicemente includendo il file sopracitato.
 
+Un altro strumento utilizzato per controllare lo svolgimento corretto del programma sono degli \texttt{assert()}, prontamente inseriti all'interno di alcune funzioni per assicurarsi che determinate condizioni fossero verificate.
+
 \subsection{Eseguire i test}
 
-Per potere eseguire i test è necessario trovarsi nella cartella dove vengono prodotti gli eseguibili dei file precedentemente menzionati, seguendo i passaggi elencati sotto. Immaginando di trovarsi nella cartella principale dov'è contenuto il progetto:
+Per potere eseguire i test è necessario trovarsi nella cartella dove vengono prodotti gli eseguibili dei file precedentemente menzionati. Immaginando di trovarsi nella cartella principale dov'è contenuto il progetto, sarà sufficiente eseguire i seguenti comandi da terminale:
 
-\begin{lstlisting}[language=bash]
-    cd build
-    cd testing
+\begin{lstlisting}
+    cd build/testing
 \end{lstlisting}
 
 E digitare il comando corrispondente al test che si vuole eseguire: 
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=codecolour, language=bash]
     ./testboid
     ./testflock
     ./testrandom
     ./teststatistics
 \end{lstlisting}
 
-O eventualmente eseguendoli tutti in una volta utilizzando il seguente comando
+O eventualmente è possibile eseguirli tutti in una volta utilizzando il seguente comando
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=codecolour, language=bash]
     ctest
 \end{lstlisting}
 
@@ -345,7 +346,7 @@ O eventualmente eseguendoli tutti in una volta utilizzando il seguente comando
 
 Diversamente accade nel caso della modalità a specchio (\textit{mirror mode}). Infatti, i \textit{boids} una volta ai bordi sono soggetti a un boost conferito dopo il rimbalzo, che provoca una temporanea variabilità sia delle posizioni che delle velocità e delle relative deviazioni standard.
 
-La modificazione dei parametri di volo permette all'utente anche di creare ulteriori comportamenti collettivi più o meno caotici che tuttavia non rispecchiano il movimento desiderato nella simulazione.
+La modificazione dei parametri di volo permette all'utente anche di creare ulteriori comportamenti collettivi più o meno caotici che tuttavia non rispecchiano il movimento desiderato nella simulazione. Nonostante con i valori impostati di default si sia cercato di parametrizzare delle interazioni che danno luogo a comportamenti emergenti analoghi allo spostamento di uno stormo, questo non è riuscito alla perfezione, e probabilmente vi sono combinazioni di valori che realizzano un effetto migliore. 
 
 \section{Links}
 

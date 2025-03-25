@@ -16,7 +16,7 @@ Ensure you have the following installed:
 ### SFML and TGUI Installation
 
 ```bash
-sudo apt-get install libsfml-dev
+sudo apt install libsfml-dev
 ```
 
 ```bash
@@ -37,20 +37,19 @@ cd boids
 1. Create a build directory:
 
 ```bash
-mkdir build
-cd build
+mkdir build && cd build
 ```
 
 2. Configure CMake in Release mode:
 
 ```bash
-cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake -S .. -B . - DCMAKE_BUILD_TYPE = Release
 ```
 
 3. Build the project:
 
 ```bash
-cmake --build .
+cmake -- build . - j$ ( nproc )
 ```
 
 ### Running the program
@@ -64,7 +63,7 @@ cmake --build .
 Supposing you find yourself in the build directory of the program.
 
 ```bash
-cd testing
+cd build/testing
 ```
 
 ```bash
