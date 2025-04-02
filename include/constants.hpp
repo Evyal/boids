@@ -13,14 +13,14 @@ namespace constants {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Window constanst
-inline constexpr long windowWidth{1050};
-inline constexpr long windowHeight{750};
-inline constexpr int windowFrameRate{60};
+constexpr long windowWidth{1050};
+constexpr long windowHeight{750};
+constexpr int windowFrameRate{60};
 
 // Size of the field where the boids can fly
-inline constexpr float fieldSide{720.f};
-inline constexpr float marginSize{15.f};
-inline const sf::Color fieldColor{sf::Color{48, 48, 48}};
+constexpr float fieldSide{720.f};
+constexpr float marginSize{15.f};
+const sf::Color marginColor{sf::Color{48, 48, 48}};
 
 // A flock with 20 boids is generated at the beginning of the program.
 inline constexpr int initBoidNumber{20};
@@ -71,7 +71,7 @@ inline constexpr size_t maxFlockNumber{5};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Values for PARAMETERS
+// Values for INTERACTION PARAMETERS
 
 // MAXIMUM VALUES
 inline constexpr float maxSeparationStrength{1.f};
@@ -256,7 +256,7 @@ inline constexpr LabelsPar extraLabel{slidersPosX, 540, 18};
 
 inline constexpr LabelsPar frameRateLimitSliderLabel{slidersPosX, 575, 15};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// Buttons for different modes
 
 inline const std::string onToroidalButtonText{"Border Toroidal Mode"};
 inline const std::string offToroidalButtonText{"Border Mirror Mode"};

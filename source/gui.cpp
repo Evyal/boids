@@ -144,12 +144,14 @@ void Gui::drawInterface() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::drawMargin() {
-  sf::Color color{constants::fieldColor};
-
-  sf::RectangleShape topField(getRectangle(constants::topMargin, color));
-  sf::RectangleShape bottomField(getRectangle(constants::bottomMargin, color));
-  sf::RectangleShape leftField(getRectangle(constants::leftMargin, color));
-  sf::RectangleShape rightField(getRectangle(constants::rightMargin, color));
+  sf::RectangleShape topField(
+      getRectangle(constants::topMargin, constants::marginColor));
+  sf::RectangleShape bottomField(
+      getRectangle(constants::bottomMargin, constants::marginColor));
+  sf::RectangleShape leftField(
+      getRectangle(constants::leftMargin, constants::marginColor));
+  sf::RectangleShape rightField(
+      getRectangle(constants::rightMargin, constants::marginColor));
 
   window_.draw(topField);
   window_.draw(bottomField);
@@ -508,7 +510,6 @@ void Gui::repositionButtons() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::setupOpt1() {
-  
   graphicsButton_ = SwitchButton::create(constants::graphicsButton);
   // COLOR for the BACKGROUND and TEXT of the BUTTON are INVERTED for visibility
   const sf::Color &textOff{constants::onGraphicsButtonColor};
@@ -582,8 +583,9 @@ void Gui::createLabelOpt2(const LabelsPar &labelsPar) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::setLabelTextOpt2(size_t index, const std::string &text) {
-  option2Labels_[index]->setText(text + std::to_string(static_cast<int>(
-                                           option2Sliders_[index]->getValue())));
+  option2Labels_[index]->setText(
+      text +
+      std::to_string(static_cast<int>(option2Sliders_[index]->getValue())));
 
   option2Sliders_[index]->onValueChange([this, index, text]() {
     option2Labels_[index]->setText(
@@ -838,7 +840,8 @@ void Gui::setupOpt3() {
       [this]() { Flock::setInteractionRange(interactionSlider_->getValue()); });
 
   repelSlider_->onValueChange([this]() {
-    Flock::setRepelStrength(repelSlider_->getValue() / constants::scalingFactor);
+    Flock::setRepelStrength(repelSlider_->getValue() /
+                            constants::scalingFactor);
   });
 
   repelRangeSlider_->onValueChange(
@@ -856,7 +859,8 @@ void Gui::setupOpt3() {
 
   // Create switchbuttons and assign actions
   toroidalButton_ = SwitchButton::create(constants::toroidalButton);
-  toroidalButton_->setOffAction([]() -> void { Flock::setToroidalMode(false); });
+  toroidalButton_->setOffAction(
+      []() -> void { Flock::setToroidalMode(false); });
   toroidalButton_->setOnAction([]() -> void { Flock::setToroidalMode(true); });
 
   repulsiveClickButton_ =

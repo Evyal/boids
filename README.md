@@ -28,7 +28,7 @@ sudo apt install libtgui-1.0-dev
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/Evyal/boids.git
+git clone --depth=1 https://github.com/Evyal/boids.git
 cd boids
 ```
 
@@ -43,13 +43,13 @@ mkdir build && cd build
 2. Configure CMake in Release mode:
 
 ```bash
-cmake -S .. -B . - DCMAKE_BUILD_TYPE = Release
+cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release
 ```
 
 3. Build the project:
 
 ```bash
-cmake -- build . - j$ ( nproc )
+cmake -- build . -j$(nproc)
 ```
 
 ### Running the program
