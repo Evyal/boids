@@ -102,10 +102,16 @@ sudo apt install libtgui-1.0-dev
 \subsubsection{Clone the Repository}
 
 \begin{lstlisting}[style=codecolour, language=bash]
-git clone https://github.com/Evyal/boids.git
+git clone --depth=1 https://github.com/Evyal/boids.git
 \end{lstlisting}
 
 \subsubsection{Build the Project}
+
+Enter the project directory
+
+\begin{lstlisting}[style=codecolour, language=bash]
+cd boids
+\end{lstlisting}
 
 \begin{itemize}
     \item \title{\textbf{Create the build directory}}
@@ -140,11 +146,11 @@ cmake --build . -j$(nproc)
 
 \section{Struttura del programma}
 
-I file del progetto sono organizzati in sottocartelle, nello specifico i \texttt{.cpp} si trovano nella \texttt{/source}, mentre i rispettivi header sono situati nella \texttt{/include}. La directory \texttt{/testing} contiene i file di testing, e infine in \texttt{/assets} sono presenti alcuni file necessari per il corretto funzionamento del programma. 
+I file del progetto sono organizzati in sottocartelle, nello specifico i \texttt{.cpp} si trovano nella \texttt{/source}, mentre i rispettivi header sono situati nella \texttt{/include}. La directory \texttt{/testing} contiene i file di testing, e infine in \texttt{/assets} è presente il font utilizzato nell'interfaccia grafica. 
 
 \subsection{Regole di volo}
 
-I \textit{boids} si seguono delle regole di volo, che ne determinano il comportamento. Ad ogni istante, il programma modifica le velocità e le posizioni dei \textit{boids} attraverso le seguenti formule:
+I \textit{boids} seguono delle regole di volo, che ne determinano il comportamento. Ad ogni istante, il programma modifica le velocità e le posizioni dei \textit{boids} attraverso le seguenti formule:
 
 \begin{equation*}
     \vec{v}_{bi} = \vec{v}_{bi} + \vec{v}_S + \vec{v}_A + \vec{v}_C + \vec{v}_R
@@ -156,49 +162,48 @@ I \textit{boids} si seguono delle regole di volo, che ne determinano il comporta
 
 Dove $k$ è un fattore di scala, mentre $\vec{v}_S$, $\vec{v}_A$, $\vec{v}_C$, e $\vec{v}_R$ sono rispettivamente:
 
-\subsubsection{Separazione}
-
+\textbf{Separazione}
 \begin{equation*}
     \vec{v}_S = -s \sum_{j \neq i} (\vec{x}_{b_j} - \vec{x}_{b_i}) \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < d_s
 \end{equation*}
 
-\subsubsection{Allineamento}
+\textbf{Allineamento}
 
 \begin{equation*}
-    \vec{v}_A = a \left( \frac{1}{n-1} \sum_{j \neq i} \vec{v}_{b_j} - \vec{v}_{b_i} \right) \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < i
-\end{equation*}
+    \vec{v}_A = a \left[ \frac{1}{n} \sum_{j \neq i} (\vec{v}_{b_j} - \vec{v}_{b_i}) \right] \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < i
+\end{equation*} 
 
-\subsubsection{Coesione}
-
-\begin{equation*}
-    \vec{x}_c = \frac{1}{n-1} \sum_{j \neq i} \vec{x}_{b_j} \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < i
-\end{equation*}
+\textbf{Coesione} 
 
 \begin{equation*}
-    \vec{v}_C = c (\vec{x}_{c} - \vec{x}_{b_j})
+    \vec{x_{c_i}} = \frac{1}{n} \sum_{j \neq i} \vec{x}_{b_j} \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < i
 \end{equation*}
 
-Dove $n-1$ assume valori dipendenti dal numero di boid nel range di interazione, e non è un valore fisso dipendente dal numero di boids nello stormo.
+\begin{equation*}
+    \vec{v}_C = c (\vec{x}_{c_i} - \vec{x}_{b_j})
+\end{equation*}
 
-E $s, ds, a, c, i$ sono parametri della simulazione, e nel progetto sono indicati con i nomi di \textit{separationStrength}, \textit{separationRange}, \textit{alignmentStrength}, \textit{cohesionStrength} e \textit{interactionRange}.
+Dove $n$ è numero di \textit{boids} dello stormo nel range di interazione di ciascun \textit{boid}, e non è un valore fisso.
 
-\subsubsection{Repulsione}
+E $s, ds, a, c, i$ sono parametri della simulazione, e nel progetto sono indicati con i nomi di \textit{separationStrength}, \textit{separationRange}, \textit{alignmentStrength}, \textit{cohesionStrength} e \textit{interactionRange}. \\
 
-Questa regola in termini di formula è analoga a quella della separazione e determina l'allontanamento tra \textit{boids} di stormi differenti introducendo due nuovi parametri $r, dr$, che nel progetto sono indicati con i nomi di \textit{repelStrength} e \textit{repelRange}.
+\textbf{Repulsione} \\
 
-\subsubsection{Interazione \textit{On Click}}
+La formulazione matematica di questa regola è analoga a quella della separazione e determina l'allontanamento tra \textit{boids} di stormi differenti introducendo due nuovi parametri $r, dr$, che nel progetto sono indicati con i nomi di \textit{repelStrength} e \textit{repelRange}. \\
+
+\textbf{Interazione \textit{On Click}} \\
 
 \begin{equation*}
     \vec{v} = \pm p \sum_{j} (\vec{x}_{b_j} - \vec{x}) \quad \text{se} \quad \left| \vec{x}_{b_j} - \vec{x} \right| < i
 \end{equation*}
 
-Anche questa regola ha una formula analoga a quella della separazione e permette all'utente di interagire con i boids. Il $\pm$ è dovuto al fatto che questa interazione può essere sia attrattiva che repulsiva mentre $\vec{x}$ è il punto in cui l'utente ha cliccato. Il parametro che determina l'intensità di questa interazione prende il nome di \textit{clickStrength} all'interno del progetto.
+Anche questa regola ha una formula analoga a quella della separazione e permette all'utente di interagire con i \textit{boids}. Il $\pm$ è dovuto al fatto che questa interazione può essere sia attrattiva che repulsiva mentre $\vec{x}$ è il punto in cui l'utente ha cliccato. Il parametro che determina l'intensità di questa interazione prende il nome di \textit{clickStrength} all'interno del progetto.
 
 \newpage
 
 \subsection{Files}
 
-Tutti i file del progetto sono stati inseriti nel namespace \texttt{ev::}.
+Tutti i file del progetto sono stati inseriti nel namespace \texttt{ev}.
 
 \subsubsection{\texttt{constants.hpp}}
 
@@ -210,11 +215,11 @@ Header contenente la definizione di alcune \texttt{struct} designate prevalentem
 
 \subsubsection{\texttt{boid.hpp/cpp}}
 
-File che si occupa dell'implementazione della classe \texttt{Boid} e di tutte le funzioni ausiliari necessarie per gestirne il comportamento. Oltre alle variabili private che contengono posizione e velocita dei \textit{boids}, sotto forma di \texttt{sf::Vector2f}, sono presenti funzioni membro come \textit{getters} e \textit{setters} per accedere a quest'ultime. Vi sono anche funzioni esterne alla classe, che lavorano su elementi della classe, come per esempio \texttt{distance} che calcola la distanza fra \textit{boids} o \texttt{checkMinimumSpeed} che ha il compito di assicurarsi che il boid in questione abbia una velocità compresa all'interno dei limiti prestabiliti, ed eventualmente modificarla. È importante sottolineare che la velocità limite non è stata intesa all'interno del progetto come un'invariante di classe, ma semplicemente un limite imposto durante la simulazione per assicurarsi un comportamento ordinato, infatti non è vietato che un \textit{boid} possieda una velocità superiore al limite prestabilito, in quanto questo non invalida nessuna delle funzioni che lo utilizzano.
+File che si occupa dell'implementazione della classe \texttt{Boid} e di tutte le funzioni ausiliari necessarie per gestirne il comportamento. Oltre alle variabili private che contengono posizione e velocita dei \textit{boids}, sotto forma di \texttt{sf::Vector2f}, sono presenti funzioni membro come \textit{getters} e \textit{setters} per accedere a quest'ultime. Vi sono anche funzioni esterne alla classe, che lavorano su elementi della classe, come per esempio \texttt{distance} che calcola la distanza fra \textit{boids} o \texttt{checkMinimumSpeed} che ha il compito di assicurarsi che il \textit{boid} in questione abbia una velocità compresa all'interno dei limiti prestabiliti, ed eventualmente modificarla. È importante sottolineare che la velocità limite non è stata intesa all'interno del progetto come un'invariante di classe, ma semplicemente un limite imposto durante la simulazione per assicurarsi un comportamento ordinato, infatti non è vietato che un \textit{boid} possieda una velocità superiore al limite prestabilito, in quanto questo non invalida nessuna delle funzioni che lo utilizzano.
 
 \subsubsection{\texttt{flock.hpp/cpp}}
 
-File di implementazione della classe \texttt{Flock} che determina la struttura collettiva dei \textit{boids} all'interno di uno stormo. La classe presenta numerose variabili statiche, condivise da tutti gli stormi, che costituiscono i parametri dell'interazione tra \textit{boids}, e due variabili membro private, la prima un vettore di boids, in cui sono contenuti i boid che compongono lo stormo, e l'altra che determina il colore dello stormo. Il vettore di boids deve contenere almeno due elementi, e se si cerca di inizializzare un'istanza appartenente alla classe \texttt{Flock} con meno di due elementi, questo risulterà in un errore a \textit{compile-time}. Per assicurarsi che la classe non permetta l'utilizzo dei suoi metodi su stormi con meno di due \textit{boids}, sono stati inseriti multipli \texttt{assert()} all'interno del corpo di quest'ultimi in modo da evitare che si verifichino comportamenti indesiderati. La parte restante della classe è designata all'implementazione delle regole che determinano il comportamento degli stormi, e della funzione \texttt{updateFlock()} che si occupa di aggiornare lo stato dello stormo. Quest'ultima funzione ne ha una \texttt{overloaded}, in grado di prendere come argomento le velocità da sommare dovute alla repulsione con altri stormi.
+File di implementazione della classe \texttt{Flock} che determina la struttura collettiva dei \textit{boids} all'interno di uno stormo. La classe presenta numerose variabili statiche, condivise da tutti gli stormi, che costituiscono i parametri dell'interazione tra \textit{boids}, e due variabili membro private, la prima un vettore di \textit{boids}, in cui sono contenuti i \textit{boid} che compongono lo stormo, e l'altra che determina il colore dello stormo. Il vettore di \textit{boids} deve contenere almeno due elementi, e se si cerca di inizializzare un'istanza appartenente alla classe \texttt{Flock} con meno di due elementi, questo risulterà in un errore a \textit{compile-time}. Per assicurarsi che la classe non permetta l'utilizzo dei suoi metodi su stormi con meno di due \textit{boids}, sono stati inseriti multipli \texttt{assert()} all'interno del corpo di quest'ultimi in modo da evitare che si verifichino comportamenti indesiderati. La parte restante della classe è designata all'implementazione delle regole che determinano il comportamento degli stormi, e della funzione \texttt{updateFlock()} che si occupa di aggiornare lo stato dello stormo. Quest'ultima funzione ne ha una \texttt{overloaded}, in grado di prendere come argomento le velocità da sommare dovute alla repulsione con altri stormi.
 
 \subsubsection{\texttt{random.hpp/cpp}}
 
@@ -243,7 +248,7 @@ In ultima analisi, la classe \texttt{Gui} è responsabile del generale funzionam
 \section{Interfaccia della simulazione}
 %descrizione del formato di input e di output, possibilmente con degli esempi
 
-Anche questa parte derivante in parte dal README.md del progetto.
+Anche questa parte derivante parzialmente dal README.md del progetto.
 
 % \begin{center}
 %     \includegraphics[width=1.0\textwidth]{images/interface.png}
@@ -269,9 +274,11 @@ Anche questa parte derivante in parte dal README.md del progetto.
 
 \maketitle{\textbf{Features}}
 
-- Real-time statistics display for each flock \\
+- Random generation of flocks at the beginning of the simulation \\
+- Different modes for behaviour at borders \\
+- Statistics display for each active flock \\
 - Interactive controls for adding or removing flocks \\
-- Adjustable parameters for interactions between boids \\
+- Adjustable parameters for interactions between \textit{boids} \\
 
 \begin{center}
     \includegraphics[width=0.32\textwidth]{../images/option1.png}
@@ -309,18 +316,18 @@ Anche questa parte derivante in parte dal README.md del progetto.
 
 Tutti i file incaricati dell'implementazione di parte della logica del programma hanno un corrispettivo file di testing. Più precisamente, sono presenti i seguenti: \texttt{testboid.cpp}, \texttt{testflock.cpp}, \texttt{testrandom.cpp} e \texttt{teststatistics.cpp}. 
 
-Attraverso i test si è cercato di controllare che le classi, i metodi delle classi e le funzioni introdotte fossero esenti da errori e mostrassero il comportamento atteso. Sono stati eseguiti test in casi semplici per poter stabilire il funzionamento corretto del codice, e anche in alcuni casi particolari quando ritenuto necessario.
+Attraverso i test si è cercato di controllare che i metodi delle classi e le funzioni introdotte fossero esenti da errori e mostrassero il comportamento atteso. Sono stati eseguiti test in casi semplici per poter stabilire il funzionamento corretto del codice, e anche in alcuni casi particolari quando ritenuto necessario.
 
-Il framework che si è utilizzato per creare le testing unit è doctest.h, il cui file è incluso nella cartella nel progetto (\texttt{/assets/doctest.h}). Questa libreria è in grado di generare autonomamente un main e permette l'esecuzione dei test semplicemente includendo il file sopracitato.
+Il framework che si è utilizzato per creare le testing unit è doctest, il cui file è incluso nella cartella nel progetto (\texttt{/include/doctest.h}). Questa libreria è in grado di generare autonomamente un main e permette l'esecuzione dei test semplicemente includendo il file sopracitato.
 
 Un altro strumento utilizzato per controllare lo svolgimento corretto del programma sono degli \texttt{assert()}, prontamente inseriti all'interno di alcune funzioni per assicurarsi che determinate condizioni fossero verificate.
 
 \subsection{Eseguire i test}
 
-Per potere eseguire i test è necessario trovarsi nella cartella dove vengono prodotti gli eseguibili dei file precedentemente menzionati. Immaginando di trovarsi nella cartella principale dov'è contenuto il progetto, sarà sufficiente eseguire i seguenti comandi da terminale:
+Per potere eseguire i test è necessario trovarsi nella cartella dove vengono prodotti gli eseguibili dei file precedentemente menzionati. Immaginando di trovarsi nella cartella build del progetto, sarà sufficiente eseguire i seguenti comandi da terminale:
 
-\begin{lstlisting}
-    cd build/testing
+\begin{lstlisting}[style=codecolour, language=bash]
+    cd testing
 \end{lstlisting}
 
 E digitare il comando corrispondente al test che si vuole eseguire: 
@@ -332,7 +339,7 @@ E digitare il comando corrispondente al test che si vuole eseguire:
     ./teststatistics
 \end{lstlisting}
 
-O eventualmente è possibile eseguirli tutti in una volta utilizzando il seguente comando
+O eventualmente è possibile controllare che i test vadano a buon fine tutti in una volta utilizzando il seguente comando
 
 \begin{lstlisting}[style=codecolour, language=bash]
     ctest
@@ -346,7 +353,7 @@ O eventualmente è possibile eseguirli tutti in una volta utilizzando il seguent
 
 Diversamente accade nel caso della modalità a specchio (\textit{mirror mode}). Infatti, i \textit{boids} una volta ai bordi sono soggetti a un boost conferito dopo il rimbalzo, che provoca una temporanea variabilità sia delle posizioni che delle velocità e delle relative deviazioni standard.
 
-La modificazione dei parametri di volo permette all'utente anche di creare ulteriori comportamenti collettivi più o meno caotici che tuttavia non rispecchiano il movimento desiderato nella simulazione. Nonostante con i valori impostati di default si sia cercato di parametrizzare delle interazioni che danno luogo a comportamenti emergenti analoghi allo spostamento di uno stormo, questo non è riuscito alla perfezione, e probabilmente vi sono combinazioni di valori che realizzano un effetto migliore. 
+La modifica dei parametri di volo permette all'utente di creare ulteriori comportamenti collettivi più o meno caotici che tuttavia non rispecchiano il movimento desiderato nella simulazione. Nonostante con i valori impostati di default si sia cercato di parametrizzare delle interazioni che danno luogo a comportamenti emergenti analoghi allo spostamento di uno stormo, potrebbero esserci delle combinazioni di valori che realizzano un effetto migliore. 
 
 \section{Links}
 

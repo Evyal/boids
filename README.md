@@ -84,13 +84,15 @@ Or eventually, it is possible to check if the tests are successful all at once u
 ctest
 ```
 
-## Features
+## Interface
+
+### Features
 
 - Random generation of flocks at the beginning of the simulation 
 - Different modes for behaviour at borders
 - Statistics display for each active flock
 - Interactive controls for adding or removing flocks
-- Adjustable parameters for interactions between \textit{boids}
+- Adjustable parameters for interactions between *boids*
 
 <p align="center">
 <img src="images/interface.png" alt="Interface">
@@ -109,10 +111,10 @@ ctest
 
 ### Option 2: Create Flocks
 
-- **Number of boids slider**: Selects the number of boids for a new flock.
+- **Number of boids slider**: Selects the number of *boids* for a new flock.
 - **Center of spawn sliders**: Select the spawn location of a new flock.
 - **RGB sliders**: Select the color of a new flock. (Creating a white or black flock is disallowed because it would be invisible)
-- **Create flock button**: Creates a new flock if there is enough space. (Max 250 boids; Max 5 flocks)
+- **Create flock button**: Creates a new flock if there is enough space. (Max 250 *boids*; Max 5 flocks)
 
 ### Option 3: Simulation Parameters
 
@@ -122,5 +124,5 @@ ctest
 
 ### Key Controls
 
-- **Left Click**: Interact with boids, attracting or repelling them to cursor.
+- **Left Click**: Interact with *boids*, attracting or repelling them to cursor.
 - **Space Bar**: Pause/Resume simulation.

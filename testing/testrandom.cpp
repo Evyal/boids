@@ -4,12 +4,13 @@
 #include <iostream>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "../include/boid.hpp"
-#include "../include/constants.hpp"
-#include "../include/random.hpp"
-#include "../assets/doctest.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
+
+#include "../include/boid.hpp"
+#include "../include/constants.hpp"
+#include "../include/doctest.h"
+#include "../include/random.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +21,6 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
   //////////////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING RANDOM INT and RANDOM FLOAT") {
-
     size_t sumInt{};
     for (size_t i{0}; i < n; i++) {
       size_t a{ev::randomInt(0, 100)};
@@ -45,7 +45,6 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
   //////////////////////////////////////////////////////////////////////////////////////////
 
   SUBCASE("TESTING RANDOM BOID GENERATION") {
-
     sf::Vector2f center{100, 100};
     for (size_t i{0}; i < n; i++) {
       sf::Vector2f pos{ev::randomBoidPosition(center)};

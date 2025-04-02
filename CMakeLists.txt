@@ -32,8 +32,6 @@ file(GLOB SOURCES "source/*.cpp")
 # Executable
 add_executable(boids ${SOURCES})
 
-# add_executable(boids egui.cpp switchbutton.cpp statistics.cpp graphics.cpp random.cpp boid.cpp flock.cpp main.cpp)
-
 # Link SFML and TGUI
 target_link_libraries(boids sfml-graphics sfml-window sfml-system TGUI::TGUI)
 

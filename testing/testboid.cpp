@@ -5,7 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../assets/doctest.h"
+#include "../include/doctest.h"
 #include "../include/boid.hpp"
 #include "../include/constants.hpp"
 

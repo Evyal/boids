@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
-#include "../assets/doctest.h"
+#include "../include/doctest.h"
 #include "../include/statistics.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////
