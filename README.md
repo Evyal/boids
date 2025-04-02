@@ -29,10 +29,15 @@ sudo apt install libtgui-1.0-dev
 
 ```bash
 git clone --depth=1 https://github.com/Evyal/boids.git
-cd boids
 ```
 
 ### Build the Project
+
+Enter in the folder of the project
+
+```bash
+cd boids
+```
 
 1. Create a build directory:
 
@@ -40,7 +45,7 @@ cd boids
 mkdir build && cd build
 ```
 
-2. Configure CMake in Release mode:
+2. Configure CMake in release mode:
 
 ```bash
 cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release
@@ -63,7 +68,7 @@ cmake -- build . -j$(nproc)
 Supposing you find yourself in the build directory of the program.
 
 ```bash
-cd build/testing
+cd testing
 ```
 
 ```bash
@@ -73,7 +78,7 @@ cd build/testing
 ./teststatistics
 ```
 
-Or eventually it is possible to run all of them at once
+Or eventually, it is possible to check if the tests are successful all at once using the following command
 
 ```bash
 ctest
