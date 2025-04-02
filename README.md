@@ -33,7 +33,7 @@ git clone --depth=1 https://github.com/Evyal/boids.git
 
 ### Build the Project
 
-Enter in the folder of the project
+Enter the project directory
 
 ```bash
 cd boids
