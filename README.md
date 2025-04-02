@@ -54,7 +54,7 @@ cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release
 3. Build the project:
 
 ```bash
-cmake -- build . -j$(nproc)
+cmake --build . -j$(nproc)
 ```
 
 ### Running the program
@@ -65,7 +65,7 @@ cmake -- build . -j$(nproc)
 
 ### Running the tests
 
-Supposing you find yourself in the build directory of the program.
+Assuming you are in the program's build directory
 
 ```bash
 cd testing

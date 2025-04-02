@@ -228,7 +228,7 @@ void Gui::createThreeWaySwitch(const TguiPar &button1, const TguiPar &button2,
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::toggleButtons(tgui::Button::Ptr pressedButton) {
-  // Set all buttons to "off" (gray background)
+  // Set all buttons to "off"
   option1_->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
   option2_->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);
   option3_->getRenderer()->setBackgroundColor(constants::offThreeWayBGColor);

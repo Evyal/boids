@@ -239,8 +239,8 @@ void Flock::updateFlock() {
 
     flock_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i]);
 
-    checkMinimumSpeed(flock_[i]);
-    checkMaximumSpeed(flock_[i]);
+    minimumSpeedControl(flock_[i]);
+    maximumSpeedControl(flock_[i]);
 
     if (toroidal_) {
       toroidalBorders(flock_[i]);
@@ -273,8 +273,8 @@ void Flock::updateFlock(const std::vector<sf::Vector2f> &repelSpeed) {
     flock_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i] +
                   repelSpeed[i]);
 
-    checkMinimumSpeed(flock_[i]);
-    checkMaximumSpeed(flock_[i]);
+    minimumSpeedControl(flock_[i]);
+    maximumSpeedControl(flock_[i]);
 
     if (toroidal_) {
       toroidalBorders(flock_[i]);

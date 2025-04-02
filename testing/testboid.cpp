@@ -133,8 +133,8 @@ TEST_CASE("TESTING FUNCTIONS") {
     b1.setVelocity({400, 0});
     b2.setVelocity({1, 0});
 
-    checkMaximumSpeed(b1);
-    checkMinimumSpeed(b2);
+    maximumSpeedControl(b1);
+    minimumSpeedControl(b2);
 
     CHECK(b1.getVelocity().x == ev::constants::maxBoidSpeed);
     CHECK(b1.getVelocity().y == 0.f);
@@ -145,8 +145,8 @@ TEST_CASE("TESTING FUNCTIONS") {
     b1.setVelocity({300, 400});
     b2.setVelocity({30, 40});
 
-    checkMaximumSpeed(b1);
-    checkMinimumSpeed(b2);
+    maximumSpeedControl(b1);
+    minimumSpeedControl(b2);
 
     CHECK(b1.getVelocity().x == 300 * ev::constants::maxBoidSpeed / 500);
     CHECK(b1.getVelocity().y == 400 * ev::constants::maxBoidSpeed / 500);
@@ -162,7 +162,7 @@ TEST_CASE("TESTING FUNCTIONS") {
 
     b2.setVelocity({0, 0});
 
-    checkMinimumSpeed(b2);
+    minimumSpeedControl(b2);
 
     CHECK(b2.getVelocity().x == 0.f);
     CHECK(b2.getVelocity().y == 0.f);

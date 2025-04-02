@@ -6,6 +6,8 @@
 
 namespace ev {
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Parameters for a generic TGUI object
 struct TguiPar {
   float posX{};
   float posY{};
@@ -31,6 +33,8 @@ struct LabelsPar {
   unsigned textSize{};
 };
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Parameters to create a sf::Rectangle
 struct RectanglePar {
   float posX{};
   float posY{};
@@ -38,6 +42,8 @@ struct RectanglePar {
   float height{};
 };
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Parameters for flocks' interactions.
 struct FlockPar {
   float separationStrength{};
   float separationRange{};

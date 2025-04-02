@@ -39,6 +39,7 @@ class Gui {
   sf::Font sans_;
 
   ////////////////////////////////////////////////////////////////////////////////
+  // Pause the simulation
 
   bool pause_{false};
 
@@ -163,7 +164,7 @@ class Gui {
   ////////////////////////////////////////////////////////////////////////////////
   // FLOCKS and DRAWING
 
-  void addFlock(size_t n = 20, sf::Vector2f center = {360, 360},
+  void addFlock(size_t n, sf::Vector2f center = constants::fieldCenter,
                 sf::Color color = sf::Color::Black);
   void deleteFlock(size_t i);
   void evolveFlocks();

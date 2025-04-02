@@ -94,7 +94,7 @@ float toroidalDistance(const sf::Vector2f &a, const sf::Vector2f &b) {
 //////////////////////////////////////////////////////////////////////////////////////////
 // CHECK SPEED
 
-void checkMinimumSpeed(Boid &boid) {
+void minimumSpeedControl(Boid &boid) {
   float speed = boid.getSpeed();
   if (speed > 0 && speed < constants::minBoidSpeed) {
     boid.setVelocity({boid.getVelocity().x * constants::minBoidSpeed / speed,
@@ -104,7 +104,7 @@ void checkMinimumSpeed(Boid &boid) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-void checkMaximumSpeed(Boid &boid) {
+void maximumSpeedControl(Boid &boid) {
   float speed = boid.getSpeed();
   if (speed > constants::maxBoidSpeed) {
     boid.setVelocity({boid.getVelocity().x * constants::maxBoidSpeed / speed,
@@ -120,7 +120,7 @@ void Boid::operator+=(const sf::Vector2f &velocity) { velocity_ += velocity; }
 // CHECK BORDERS
 
 void toroidalBorders(Boid &boid) {
-  // this makes fmod output only positive numbers
+  // this use of fmod makes it output only positive numbers
   boid.setPositionX(
       std::fmod(std::fmod(boid.getPosition().x, constants::fieldSide) +
                     constants::fieldSide,
@@ -157,7 +157,7 @@ void mirrorBorders(Boid &boid) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
-// BUILD
+// CREATE BOIDS
 
 Boid createBoid(sf::Vector2f center, float a) {
   return {{randomBoidPosition(center)}, {randomBoidSpeed(a)}};

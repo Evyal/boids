@@ -13,18 +13,15 @@ namespace constants {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Window constanst
-constexpr long windowWidth{1050};
-constexpr long windowHeight{750};
-constexpr int windowFrameRate{60};
+inline constexpr long windowWidth{1050};
+inline constexpr long windowHeight{750};
+inline constexpr int windowFrameRate{60};
 
 // Size of the field where the boids can fly
-constexpr float fieldSide{720.f};
-constexpr float marginSize{15.f};
-const sf::Color marginColor{sf::Color{48, 48, 48}};
-
-// A flock with 20 boids is generated at the beginning of the program.
-inline constexpr int initBoidNumber{20};
-inline constexpr int initFlockNumber{1};
+inline constexpr float fieldSide{720.f};
+inline const sf::Vector2f fieldCenter{fieldSide / 2.f, fieldSide / 2.f};
+inline constexpr float marginSize{15.f};
+inline const sf::Color marginColor{sf::Color{48, 48, 48}};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +61,7 @@ inline constexpr float randomAngleRange{0.002f};
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // FLOCKS CONSTANTS
 
-// maximum boids in a flock, and maximum number of flocks
+// maximum and minimum boids in a flock, and maximum number of flocks
 inline constexpr size_t maxFlockSize{100};
 inline constexpr size_t minFlockSize{5};
 inline constexpr size_t maxFlockNumber{5};
