@@ -23,9 +23,6 @@ string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-o
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 find_package(TGUI 1 REQUIRED)
 
-# Include directories
-include_directories(include)
-
 # Source files
 file(GLOB SOURCES "source/*.cpp")
 
