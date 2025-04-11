@@ -20,7 +20,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
-  SUBCASE("TESTING RANDOM INT and RANDOM FLOAT") {
+  SUBCASE("TESTING RANDOM INT, RANDOM FLOAT and RANDOM ANGLE") {
     size_t sumInt{};
     for (size_t i{0}; i < n; i++) {
       size_t a{ev::randomInt(0, 100)};
@@ -40,6 +40,12 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
     }
 
     std::cout << sumFloat / static_cast<float>(n) << '\n';
+
+    for (size_t i{0}; i < n; i++) {
+      float a{ev::randomAngle()};
+      CHECK(a >= 0.f);
+      CHECK(a <= 2 * 3.1416);
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////

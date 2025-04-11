@@ -6,16 +6,15 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <random>
 #include <vector>
 
 #include "../include/boid.hpp"
 #include "../include/constants.hpp"
 #include "../include/structs.hpp"
+#include "../include/random.hpp"
+
 
 namespace ev {
-
-extern std::default_random_engine rng;
 
 FlockPar Flock::parameters_ = constants::defaultFlockParameters;
 bool Flock::toroidal_ = false;
@@ -391,8 +390,7 @@ std::vector<sf::Vector2f> repel(const std::vector<Flock> &flockstack,
 // CREATE FLOCK
 
 Flock createFlock(size_t n, sf::Vector2f center, sf::Color color) {
-  std::uniform_real_distribution angleCenter(0.f, 2.f * M_PIf);
-  float a{angleCenter(rng)};
+  float a{ev::randomAngle()};
 
   std::vector<Boid> flock;
   for (size_t i{}; i < n; i++) {

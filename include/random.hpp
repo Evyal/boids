@@ -3,17 +3,15 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
-#include <random>
 
 namespace ev {
-
-extern std::default_random_engine rng;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Random for generating NUMBERS
 
 size_t randomInt(size_t min, size_t max);
 float randomFloat(float min, float max);
+float randomAngle();
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Random for generating BOIDS
