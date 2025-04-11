@@ -23,7 +23,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
   SUBCASE("TESTING RANDOM INT, RANDOM FLOAT and RANDOM ANGLE") {
     size_t sumInt{};
     for (size_t i{0}; i < n; i++) {
-      size_t a{ev::randomInt(0, 100)};
+      size_t a{randomGen::randomInt<size_t>(0, 100)};
       CHECK(a >= 0);
       CHECK(a <= 100);
       sumInt += a;
@@ -33,7 +33,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
 
     float sumFloat{};
     for (size_t i{0}; i < n; i++) {
-      float a{ev::randomFloat(0, 100)};
+      float a{randomGen::randomReal(0.f, 100.f)};
       CHECK(a >= 0.f);
       CHECK(a <= 100.f);
       sumFloat += a;

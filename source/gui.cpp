@@ -52,15 +52,20 @@ void Gui::setup() {
 
   // GENERATE FLOCKS at the BEGINNING
 
-  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
+  addFlock(randomGen::randomInt<size_t>(10, 50),
+           {ev::randomVec2f(0.f, constants::fieldSide)},
            sf::Color{255, 0, 127});  // PINK
-  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
+  addFlock(randomGen::randomInt<size_t>(10, 50),
+           {ev::randomVec2f(0.f, constants::fieldSide)},
            sf::Color{255, 0, 0});  // RED
-  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
+  addFlock(randomGen::randomInt<size_t>(10, 50),
+           {ev::randomVec2f(0.f, constants::fieldSide)},
            sf::Color{255, 204, 0});  // YELLOW
-  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
+  addFlock(randomGen::randomInt<size_t>(10, 50),
+           {ev::randomVec2f(0.f, constants::fieldSide)},
            sf::Color{153, 255, 51});  // GREEN
-  addFlock(randomInt(10, 50), {randomFloat(0, 720), randomFloat(0, 720)},
+  addFlock(randomGen::randomInt<size_t>(10, 50),
+           {ev::randomVec2f(0.f, constants::fieldSide)},
            sf::Color{0, 204, 204});  // CYAN
 
   // OPTION 1

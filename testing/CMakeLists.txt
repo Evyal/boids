@@ -7,7 +7,6 @@ include_directories(${CMAKE_SOURCE_DIR}/testing/doctest)
 # Collect only the source files needed for testing
 file(GLOB TEST_SOURCES
     ${CMAKE_SOURCE_DIR}/source/boid.cpp
-    ${CMAKE_SOURCE_DIR}/source/random.cpp
     ${CMAKE_SOURCE_DIR}/source/flock.cpp
     ${CMAKE_SOURCE_DIR}/source/statistics.cpp
 )
