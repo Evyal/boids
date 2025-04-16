@@ -35,7 +35,7 @@ void SwitchButton::init(const SwitchButtonPar &par) {
   getRenderer()->setBackgroundColorHover(offColor_);
   getRenderer()->setBackgroundColorDown(offColor_);
 
-  onPress([this]() { toggle(); });
+  onPress([this]() -> void { toggle(); });
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

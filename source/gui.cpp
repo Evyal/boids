@@ -150,19 +150,10 @@ void Gui::drawInterface() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void Gui::drawMargin() {
-  sf::RectangleShape topField(
-      getRectangle(constants::topMargin, constants::marginColor));
-  sf::RectangleShape bottomField(
-      getRectangle(constants::bottomMargin, constants::marginColor));
-  sf::RectangleShape leftField(
-      getRectangle(constants::leftMargin, constants::marginColor));
-  sf::RectangleShape rightField(
-      getRectangle(constants::rightMargin, constants::marginColor));
-
-  window_.draw(topField);
-  window_.draw(bottomField);
-  window_.draw(leftField);
-  window_.draw(rightField);
+  window_.draw(getRectangle(constants::topMargin, constants::marginColor));
+  window_.draw(getRectangle(constants::bottomMargin, constants::marginColor));
+  window_.draw(getRectangle(constants::leftMargin, constants::marginColor));
+  window_.draw(getRectangle(constants::rightMargin, constants::marginColor));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

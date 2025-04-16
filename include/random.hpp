@@ -12,10 +12,10 @@
 namespace randomGen {
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Global random engine.
-// Using inline variables so that this header can be included in multiple
-// translation units
+// Seed
 inline std::random_device rd{};
+
+// Global random engine (Mersenne Twister).
 inline std::mt19937 engine{rd()};
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ typename std::enable_if<std::is_integral<I>::value, I>::type randomInt(I a,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Template function to generate a random real numbers in the range (a,b].
+// Template function to generate a random real numbers in the range [a,b).
 template <typename T>
 typename std::enable_if<std::is_floating_point<T>::value, T>::type randomReal(
     T a, T b) {

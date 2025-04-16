@@ -14,6 +14,7 @@ namespace ev {
 std::vector<float> calculateDistances(
     const std::vector<sf::Vector2f> &positions) {
   std::vector<float> distances;
+  // distances.reserve(positions.size() * positions.size() / 2);
 
   // iterate over all the possible pairs
   for (size_t i{0}; i < positions.size(); ++i) {
@@ -29,6 +30,7 @@ std::vector<float> calculateDistances(
 std::vector<float> calculateToroidalDistances(
     const std::vector<sf::Vector2f> &positions) {
   std::vector<float> distances;
+  // distances.reserve(positions.size() * positions.size() / 2);
 
   // iterate over all the possible pairs
   for (size_t i{0}; i < positions.size(); ++i) {
@@ -58,6 +60,10 @@ float calculateStandardDeviation(const std::vector<float> &distances,
   if (distances.size() < 2) {
     return 0.0;
   }
+
+  // auto lambda = [mean](float acc, float distance) {
+  //   return acc + powf(distance - mean, 2.f);
+  // };
 
   float variance = std::accumulate(distances.begin(), distances.end(), 0.0f,
                                    [mean](float acc, float distance) {
