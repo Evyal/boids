@@ -1,9 +1,6 @@
 # Enable testing support
 enable_testing()
 
-# Add doctest header directory
-include_directories(${CMAKE_SOURCE_DIR}/testing/doctest)
-
 # Collect only the source files needed for testing
 file(GLOB TEST_SOURCES
     ${CMAKE_SOURCE_DIR}/source/boid.cpp
