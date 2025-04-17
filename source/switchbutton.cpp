@@ -64,6 +64,13 @@ void SwitchButton::toggle() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void SwitchButton::setState(bool state) {
+  if (isOn_ != state) toggle();
+}
+bool SwitchButton::getState() const { return isOn_; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Add further functionality when switched to ON
 
 void SwitchButton::setOnAction(std::function<void()> &&action) {

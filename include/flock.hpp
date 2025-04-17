@@ -7,8 +7,8 @@
 #include <cstddef>
 #include <vector>
 
-#include "boid.hpp"
-#include "structs.hpp"
+#include "../include/boid.hpp"
+#include "../include/structs.hpp"
 
 namespace ev {
 class Flock {
@@ -41,7 +41,7 @@ class Flock {
 
   std::vector<sf::Vector2f> getFlockPositions() const;
   std::vector<sf::Vector2f> getFlockVelocities() const;
-  std::vector<float> getSpeedVector() const;
+  std::vector<float> getFlockSpeeds() const;
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // GETTERS for STATIC VARIABLES

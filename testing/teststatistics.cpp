@@ -16,74 +16,64 @@ TEST_CASE("Test distance calculations with 5 points on a line") {
   std::vector<sf::Vector2f> points = {
       {0.f, 0.f}, {1.f, 0.f}, {2.f, 0.f}, {3.f, 0.f}, {4.f, 0.f}};
 
-  std::vector<float> distances = ev::calculateDistances(points);
-
-  // function calculateDistances calculates like this:
-  // [0] -> others,
-  // [1] -> others
-  // [2] -> others
-  // [3] -> [4]
-
-  // so for example the first 4 elements are distances [0][1], [0][2], [0][3],
-  // [0][4].
-
-  // CHECK there are N*(N-1)/2, 5*4/2 = 10 pairs
-  CHECK(distances.size() == 10);
-
-  CHECK(distances[0] == 1.f);
-  CHECK(distances[1] == 2.f);
-  CHECK(distances[2] == 3.f);
-  CHECK(distances[3] == 4.f);
-  CHECK(distances[4] == 1.f);
-  CHECK(distances[5] == 2.f);
-  CHECK(distances[6] == 3.f);
-  CHECK(distances[7] == 1.f);
-  CHECK(distances[8] == 2.f);
-  CHECK(distances[9] == 1.f);
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // Test calculateMean
-
-  float mean = ev::calculateMean(distances);
+  float mean = ev::distanceStatistics(points).mean;
+  float sigma = ev::distanceStatistics(points).sigma;
 
   CHECK(mean == doctest::Approx(2.f));
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // Test calculateStandardDeviation.
-  // Variance is calculated with N - 1 = 9
-  // deviation is sqrt(10/9) = 1.05409...
-  float stddev = ev::calculateStandardDeviation(distances, mean);
-  CHECK(stddev == doctest::Approx(sqrtf(10.f / 9.f)));
+  CHECK(sigma == doctest::Approx(sqrtf(10.f / 9.f)));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("Test calculateMean with empty vector") {
-  std::vector<float> distances;
-  CHECK(ev::calculateMean(distances) == 0.f);
+  std::vector<sf::Vector2f> positions;
+  CHECK(ev::distanceStatistics(positions).sigma == 0.f);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("Test calculateStandardDeviation with one element") {
-  std::vector<float> distances = {1.f};
+  std::vector<float> speeds = {1.f};
 
-  CHECK(ev::calculateMean(distances) == doctest::Approx(1.f));
+  CHECK(ev::speedStatistics(speeds).mean == doctest::Approx(1.f));
 
   // With only one distance, standard deviation should be 0.
-  CHECK(ev::calculateStandardDeviation(distances, 1.f) == 0.f);
+  CHECK(ev::speedStatistics(speeds).sigma == 0.f);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("Test toroidal distances") {
-  std::vector<sf::Vector2f> positions{{360, 100}, {360, 700}};
-  CHECK(ev::calculateToroidalDistances(positions)[0] == doctest::Approx(120.f));
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Case 1: exactly two points
+
+  std::vector<sf::Vector2f> positions1{{360, 100}, {360, 700}};
+  auto stats1 = ev::toroidalDistanceStatistics(positions1);
+
+  // expected toroidal distance: 120, sigma = 0.
+  CHECK(stats1.mean == doctest::Approx(120.0f));
+  CHECK(stats1.sigma == doctest::Approx(0.0f));
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Case 2: three points
 
   std::vector<sf::Vector2f> positions2{{20, 20}, {-20, -10}, {0, 0}};
-  CHECK(ev::calculateToroidalDistances(positions2)[0] == doctest::Approx(50.f));
-  CHECK(ev::calculateToroidalDistances(positions2)[1] ==
-        doctest::Approx(sqrtf(800.f)));
-  CHECK(ev::calculateToroidalDistances(positions2)[2] ==
-        doctest::Approx(sqrtf(500)));
+  auto stats2 = ev::toroidalDistanceStatistics(positions2);
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // manually compute expected mean
+  const float d1 = 50.0f;
+  const float d2 = std::sqrt(800.0f);
+  const float d3 = std::sqrt(500.0f);
+  const float expectedMean = (d1 + d2 + d3) / 3.0f;
+  CHECK(stats2.mean == doctest::Approx(expectedMean));
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // sample standard deviation (divide by N–1 = 2)
+  const float var = ((d1 - expectedMean) * (d1 - expectedMean) +
+                     (d2 - expectedMean) * (d2 - expectedMean) +
+                     (d3 - expectedMean) * (d3 - expectedMean)) /
+                    2.0f;  // N-1
+  const float expectedSigma = std::sqrt(var);
+  CHECK(stats2.sigma == doctest::Approx(expectedSigma));
 }

@@ -42,23 +42,29 @@ cd boids
 1. Create a build directory:
 
 ```bash
-mkdir build && cd build
+mkdir build
 ```
 
 2. Configure CMake in release mode:
 
 ```bash
-cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 ```
 
 3. Build the project:
 
 ```bash
-cmake --build . -j$(nproc)
+cmake --build build -j$(nproc)
 ```
 
 ### Running the program
 
+Enter the directory
+```bash
+cd build
+```
+
+Run the program
 ```bash
 ./boids
 ```

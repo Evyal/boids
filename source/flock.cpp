@@ -88,7 +88,7 @@ std::vector<sf::Vector2f> Flock::getFlockVelocities() const {
 //////////////////////////////////////////////////////////////////////////////////////////
 // Returns a vector with a speed for every boid of the flock
 
-std::vector<float> Flock::getSpeedVector() const {
+std::vector<float> Flock::getFlockSpeeds() const {
   std::vector<float> speeds;
   assert((flock_.size() > 1));
 
@@ -322,16 +322,16 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
       sf::Vector2f tempMassCenter{};
 
       // CHECK for TOROIDAL GEOMETRY
-      if (distanceX(flock_[j], flock_[i]) > constants::fieldSide / 2) {
+      if (deltaX(flock_[j], flock_[i]) > constants::fieldSide / 2) {
         tempMassCenter.x += (flock_[j].getPosition().x - constants::fieldSide);
-      } else if (distanceX(flock_[j], flock_[i]) < -constants::fieldSide / 2) {
+      } else if (deltaX(flock_[j], flock_[i]) < -constants::fieldSide / 2) {
         tempMassCenter.x += (flock_[j].getPosition().x + constants::fieldSide);
       } else {
         tempMassCenter.x += (flock_[j].getPosition().x);
       }
-      if (distanceY(flock_[j], flock_[i]) > constants::fieldSide / 2) {
+      if (deltaY(flock_[j], flock_[i]) > constants::fieldSide / 2) {
         tempMassCenter.y += (flock_[j].getPosition().y - constants::fieldSide);
-      } else if (distanceY(flock_[j], flock_[i]) < -constants::fieldSide / 2) {
+      } else if (deltaY(flock_[j], flock_[i]) < -constants::fieldSide / 2) {
         tempMassCenter.y += (flock_[j].getPosition().y + constants::fieldSide);
       } else {
         tempMassCenter.y += (flock_[j].getPosition().y);

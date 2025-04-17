@@ -54,6 +54,14 @@ struct FlockPar {
   float repelRange{};
   float clickStrength{};
 };
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Struct for keeping MEAN and STD DEV
+
+struct StatsPar {
+  float mean{};
+  float sigma{};
+};
 }  // namespace ev
 
 #endif

@@ -2,75 +2,86 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
-#include <numeric>
 #include <vector>
 
 #include "../include/boid.hpp"
+#include "../include/structs.hpp"
 
 namespace ev {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<float> calculateDistances(
-    const std::vector<sf::Vector2f> &positions) {
-  std::vector<float> distances;
-  // distances.reserve(positions.size() * positions.size() / 2);
+StatsPar distanceStatistics(const std::vector<sf::Vector2f>& positions) {
+  const size_t N = positions.size();
+  const size_t count = N * (N - 1) / 2;
 
-  // iterate over all the possible pairs
-  for (size_t i{0}; i < positions.size(); ++i) {
-    for (size_t j{i + 1}; j < positions.size(); ++j) {
-      distances.push_back(distance(positions[i], positions[j]));
+  if (count == 0) return StatsPar{0.f, 0.f};
+  if (count == 1) return StatsPar{distance(positions[0], positions[1]), 0.f};
+
+  float sum = 0.f;
+  float sumSquared = 0.f;
+  for (size_t i = 0; i < N; ++i) {
+    for (size_t j = i + 1; j < N; ++j) {
+      float d = distance(positions[i], positions[j]);
+      sum += d;
+      sumSquared += d * d;
     }
   }
-  return distances;
+
+  const float countF = static_cast<float>(count);
+  const float mean = sum / countF;
+  const float stdDev =
+      sqrtf((sumSquared - countF * mean * mean) / (countF - 1.f));
+  return StatsPar{mean, stdDev};
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-std::vector<float> calculateToroidalDistances(
-    const std::vector<sf::Vector2f> &positions) {
-  std::vector<float> distances;
-  // distances.reserve(positions.size() * positions.size() / 2);
+StatsPar toroidalDistanceStatistics(
+    const std::vector<sf::Vector2f>& positions) {
+  const size_t N = positions.size();
+  const size_t count = N * (N - 1) / 2;
 
-  // iterate over all the possible pairs
-  for (size_t i{0}; i < positions.size(); ++i) {
-    for (size_t j{i + 1}; j < positions.size(); ++j) {
-      distances.push_back(toroidalDistance(positions[i], positions[j]));
+  if (count == 0) return StatsPar{0.f, 0.f};
+  if (count == 1)
+    return StatsPar{toroidalDistance(positions[0], positions[1]), 0.f};
+
+  float sum = 0.f;
+  float sumSquared = 0.f;
+  for (size_t i = 0; i < N; ++i) {
+    for (size_t j = i + 1; j < N; ++j) {
+      float d = toroidalDistance(positions[i], positions[j]);
+      sum += d;
+      sumSquared += d * d;
     }
   }
-  return distances;
+
+  const float countF = static_cast<float>(count);
+  const float mean = sum / countF;
+  const float stdDev =
+      sqrtf((sumSquared - countF * mean * mean) / (countF - 1.f));
+  return StatsPar{mean, stdDev};
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-float calculateMean(const std::vector<float> &distances) {
-  if (distances.empty()) {
-    return 0.0;
+StatsPar speedStatistics(const std::vector<float>& speeds) {
+  const size_t N = speeds.size();
+  if (N == 0) return StatsPar{0.f, 0.f};
+  if (N == 1) return StatsPar{speeds[0], 0.f};
+
+  float sum = 0.f;
+  float sumSquared = 0.f;
+  for (float v : speeds) {
+    sum += v;
+    sumSquared += v * v;
   }
 
-  float totalDistance =
-      std::accumulate(distances.begin(), distances.end(), 0.0f);
-  return totalDistance / static_cast<float>(distances.size());
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-float calculateStandardDeviation(const std::vector<float> &distances,
-                                 float mean) {
-  if (distances.size() < 2) {
-    return 0.0;
-  }
-
-  // auto lambda = [mean](float acc, float distance) {
-  //   return acc + powf(distance - mean, 2.f);
-  // };
-
-  float variance = std::accumulate(distances.begin(), distances.end(), 0.0f,
-                                   [mean](float acc, float distance) {
-                                     return acc + powf(distance - mean, 2.f);
-                                   }) /
-                   static_cast<float>(distances.size() - 1);
-  return std::sqrt(variance);
+  const float countF = static_cast<float>(N);
+  const float mean = sum / countF;
+  const float stdDev =
+      sqrtf((sumSquared - countF * mean * mean) / (countF - 1.f));
+  return StatsPar{mean, stdDev};
 }
 
 }  // namespace ev

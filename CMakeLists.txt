@@ -32,6 +32,9 @@ add_executable(boids ${SOURCES})
 # Link SFML and TGUI
 target_link_libraries(boids sfml-graphics sfml-window sfml-system TGUI::TGUI)
 
+# Link INCLUDE
+target_include_directories(boids PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
 # Optionally enable tests
 option(BUILD_TESTS "Build the tests executable" ON)
 if(BUILD_TESTS)

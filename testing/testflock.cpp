@@ -73,8 +73,8 @@ TEST_CASE("TESTING CLASS FLOCK") {
     CHECK(flock4.getFlockVelocities().at(2).x == 50.f);
     CHECK(flock4.getFlockVelocities().at(2).y == 120.f);
 
-    CHECK(flock4.getSpeedVector().at(0) == 250.f);
-    CHECK(flock4.getSpeedVector().at(2) == 130.f);
+    CHECK(flock4.getFlockSpeeds().at(0) == 250.f);
+    CHECK(flock4.getFlockSpeeds().at(2) == 130.f);
   }
 }
 

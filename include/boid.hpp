@@ -4,14 +4,14 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 
-#include "constants.hpp"
+#include "../include/constants.hpp"
 
 namespace ev {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 // CLASS BOID
-class Boid {
+struct Boid {
  private:
   sf::Vector2f position_{};
   sf::Vector2f velocity_{};
@@ -33,8 +33,8 @@ class Boid {
   //////////////////////////////////////////////////////////////////////////////////////////
   // SETTERS
 
-  void setPosition(const sf::Vector2f &position);
-  void setVelocity(const sf::Vector2f &velocity);
+  void setPosition(const sf::Vector2f &pos);
+  void setVelocity(const sf::Vector2f &vel);
   void setPositionX(float x);
   void setPositionY(float y);
   void setVelocityX(float v_x);
@@ -53,8 +53,8 @@ class Boid {
 //////////////////////////////////////////////////////////////////////////////////////////
 // DISTANCE
 
-float distanceX(const Boid &boid1, const Boid &boid2);
-float distanceY(const Boid &boid1, const Boid &boid2);
+float deltaX(const Boid &boid1, const Boid &boid2);
+float deltaY(const Boid &boid1, const Boid &boid2);
 float distance(const Boid &boid1, const Boid &boid2);
 float distance(const sf::Vector2f &a, const sf::Vector2f &b);
 float toroidalDistance(const sf::Vector2f &a, const sf::Vector2f &b);

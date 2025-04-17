@@ -46,13 +46,13 @@ void Boid::setVelocityY(float v_y) { velocity_.y = v_y; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-float distanceX(const Boid &boid1, const Boid &boid2) {
+float deltaX(const Boid &boid1, const Boid &boid2) {
   return boid1.getPosition().x - boid2.getPosition().x;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-float distanceY(const Boid &boid1, const Boid &boid2) {
+float deltaY(const Boid &boid1, const Boid &boid2) {
   return boid1.getPosition().y - boid2.getPosition().y;
 }
 
@@ -60,8 +60,8 @@ float distanceY(const Boid &boid1, const Boid &boid2) {
 // Distance function between 2D boids
 
 float distance(const Boid &boid1, const Boid &boid2) {
-  float dx = distanceX(boid1, boid2);
-  float dy = distanceY(boid1, boid2);
+  float dx = deltaX(boid1, boid2);
+  float dy = deltaY(boid1, boid2);
   return std::sqrt(dx * dx + dy * dy);
 }
 

@@ -5,7 +5,7 @@
 #include <TGUI/TGUI.hpp>
 #include <memory>
 
-#include "structs.hpp"
+#include "../include/structs.hpp"
 
 namespace ev {
 
@@ -40,8 +40,8 @@ class SwitchButton : public tgui::Button {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   // SETTER and GETTER for the STATE
-  // void setState(bool state);
-  // bool getState() const;
+  void setState(bool state);
+  bool getState() const;
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   // SETTERS to implement specific action for a button to perform

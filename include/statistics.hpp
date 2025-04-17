@@ -5,16 +5,14 @@
 #include <cmath>
 #include <vector>
 
+#include "../include/structs.hpp"
+
 namespace ev {
 
-std::vector<float> calculateDistances(
-    const std::vector<sf::Vector2f> &positions);
-std::vector<float> calculateToroidalDistances(
-    const std::vector<sf::Vector2f> &positions);
-    
-float calculateMean(const std::vector<float> &distances);
-float calculateStandardDeviation(const std::vector<float> &distances,
-                                 float mean);
+StatsPar distanceStatistics(const std::vector<sf::Vector2f> &positions);
+StatsPar toroidalDistanceStatistics(const std::vector<sf::Vector2f> &positions);
+
+StatsPar speedStatistics(const std::vector<float> &speeds);
 
 }  // namespace ev
 
