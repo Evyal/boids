@@ -5,7 +5,7 @@
 #include <cmath>
 #include <cstdlib>
 
-#include "../include/gui.hpp"
+#include "gui.hpp"
 
 int main() {
   ev::Gui program;

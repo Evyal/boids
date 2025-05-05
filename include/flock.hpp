@@ -7,8 +7,8 @@
 #include <cstddef>
 #include <vector>
 
-#include "../include/boid.hpp"
-#include "../include/structs.hpp"
+#include "boid.hpp"
+#include "structs.hpp"
 
 namespace ev {
 class Flock {

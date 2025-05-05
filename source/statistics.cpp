@@ -1,11 +1,11 @@
-#include "../include/statistics.hpp"
+#include "statistics.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <vector>
 
-#include "../include/boid.hpp"
-#include "../include/structs.hpp"
+#include "boid.hpp"
+#include "structs.hpp"
 
 namespace ev {
 

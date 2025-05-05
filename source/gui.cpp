@@ -1,4 +1,4 @@
-#include "../include/gui.hpp"
+#include "gui.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
@@ -15,13 +15,13 @@
 #include <string>
 #include <vector>
 
-#include "../include/constants.hpp"
-#include "../include/flock.hpp"
-#include "../include/graphics.hpp"
-#include "../include/random.hpp"
-#include "../include/statistics.hpp"
-#include "../include/structs.hpp"
-#include "../include/switchbutton.hpp"
+#include "constants.hpp"
+#include "flock.hpp"
+#include "graphics.hpp"
+#include "random.hpp"
+#include "statistics.hpp"
+#include "structs.hpp"
+#include "switchbutton.hpp"
 
 namespace ev {
 

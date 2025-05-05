@@ -7,7 +7,7 @@
 #include <random>
 #include <type_traits>
 
-#include "../include/constants.hpp"
+#include "constants.hpp"
 
 namespace randomGen {
 

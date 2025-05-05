@@ -5,8 +5,8 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <cmath>
-#include "../include/structs.hpp"
-#include "../include/boid.hpp"
+#include "structs.hpp"
+#include "boid.hpp"
 
 namespace ev {
 

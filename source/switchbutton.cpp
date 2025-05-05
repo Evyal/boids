@@ -1,6 +1,6 @@
-#include "../include/switchbutton.hpp"
+#include "switchbutton.hpp"
 
-#include "../include/structs.hpp"
+#include "structs.hpp"
 
 namespace ev {
 

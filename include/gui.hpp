@@ -10,9 +10,9 @@
 #include <string>
 #include <vector>
 
-#include "../include/flock.hpp"
-#include "../include/structs.hpp"
-#include "../include/switchbutton.hpp"
+#include "flock.hpp"
+#include "structs.hpp"
+#include "switchbutton.hpp"
 
 namespace ev {
 

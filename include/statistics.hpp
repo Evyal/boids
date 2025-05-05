@@ -5,7 +5,7 @@
 #include <cmath>
 #include <vector>
 
-#include "../include/structs.hpp"
+#include "structs.hpp"
 
 namespace ev {
 

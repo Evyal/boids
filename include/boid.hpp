@@ -4,7 +4,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 
-#include "../include/constants.hpp"
+#include "constants.hpp"
 
 namespace ev {
 

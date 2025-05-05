@@ -6,10 +6,10 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
-#include "../include/doctest.h"
-#include "../include/boid.hpp"
-#include "../include/constants.hpp"
-#include "../include/flock.hpp"
+#include "doctest.h"
+#include "boid.hpp"
+#include "constants.hpp"
+#include "flock.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////

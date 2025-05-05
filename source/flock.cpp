@@ -1,4 +1,4 @@
-#include "../include/flock.hpp"
+#include "flock.hpp"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -8,10 +8,10 @@
 #include <cstddef>
 #include <vector>
 
-#include "../include/boid.hpp"
-#include "../include/constants.hpp"
-#include "../include/structs.hpp"
-#include "../include/random.hpp"
+#include "boid.hpp"
+#include "constants.hpp"
+#include "structs.hpp"
+#include "random.hpp"
 
 
 namespace ev {

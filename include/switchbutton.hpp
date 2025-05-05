@@ -5,7 +5,7 @@
 #include <TGUI/TGUI.hpp>
 #include <memory>
 
-#include "../include/structs.hpp"
+#include "structs.hpp"
 
 namespace ev {
 

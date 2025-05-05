@@ -1,11 +1,11 @@
-#include "../include/boid.hpp"
+#include "boid.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <cstdlib>
 
-#include "../include/constants.hpp"
-#include "../include/random.hpp"
+#include "constants.hpp"
+#include "random.hpp"
 
 namespace ev {
 

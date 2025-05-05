@@ -7,10 +7,10 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
-#include "../include/boid.hpp"
-#include "../include/constants.hpp"
-#include "../include/doctest.h"
-#include "../include/random.hpp"
+#include "boid.hpp"
+#include "constants.hpp"
+#include "doctest.h"
+#include "random.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
