@@ -10,9 +10,8 @@
 
 #include "boid.hpp"
 #include "constants.hpp"
-#include "structs.hpp"
 #include "random.hpp"
-
+#include "structs.hpp"
 
 namespace ev {
 
@@ -25,15 +24,17 @@ bool Flock::repulsiveClick_ = false;
 // CONSTRUCTORS
 
 Flock::Flock(const std::vector<Boid> &flock)
-    : flock_{flock}, color_{sf::Color::Black} {
-  if (flock_.size() < 2) {
+    : boids_{flock}, color_{sf::Color::Black} {
+  // Enforcing class invariant: a Flock must contain at least 2 boids.
+  if (std::size(boids_) < 2) {
     throw std::invalid_argument("Flock must have at least 2 boids.");
   }
 }
 
 Flock::Flock(const std::vector<Boid> &flock, const sf::Color &color)
-    : flock_{flock}, color_{color} {
-  if (flock_.size() < 2) {
+    : boids_{flock}, color_{color} {
+  // Enforcing class invariant: a Flock must contain at least 2 boids.
+  if (std::size(boids_) < 2) {
     throw std::invalid_argument("Flock must have at least 2 boids.");
   }
 }
@@ -43,32 +44,32 @@ Flock::Flock(const std::vector<Boid> &flock, const sf::Color &color)
 // GETTERS
 
 Boid Flock::getBoid(size_t i) const {
-  assert(flock_.size() > i);
-  return flock_[i];
+  assert(boids_.size() > i);
+  return boids_[i];
 }
-size_t Flock::getSize() const { return flock_.size(); }
+size_t Flock::getSize() const { return boids_.size(); }
 sf::Color Flock::getFlockColor() const { return color_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 float Flock::getMeanSpeed() const {
-  assert((flock_.size() > 1));
+  assert((boids_.size() > 1));
 
   float meanSpeed{0};
-  for (size_t j{0}; j < flock_.size(); j++) {
-    meanSpeed += (flock_[j].getSpeed());
+  for (size_t j{0}; j < boids_.size(); j++) {
+    meanSpeed += (boids_[j].getSpeed());
   }
-  return meanSpeed / (static_cast<float>(flock_.size()));
+  return meanSpeed / (static_cast<float>(boids_.size()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
 std::vector<sf::Vector2f> Flock::getFlockPositions() const {
   std::vector<sf::Vector2f> positions;
-  assert((flock_.size() > 1));
+  assert((boids_.size() > 1));
 
-  for (size_t i{0}; i < flock_.size(); i++) {
-    positions.emplace_back(flock_[i].getPosition());
+  for (size_t i{0}; i < boids_.size(); i++) {
+    positions.emplace_back(boids_[i].getPosition());
   }
   return positions;
 }
@@ -77,10 +78,10 @@ std::vector<sf::Vector2f> Flock::getFlockPositions() const {
 
 std::vector<sf::Vector2f> Flock::getFlockVelocities() const {
   std::vector<sf::Vector2f> velocities;
-  assert((flock_.size() > 1));
+  assert((boids_.size() > 1));
 
-  for (size_t i{0}; i < flock_.size(); i++) {
-    velocities.emplace_back(flock_[i].getVelocity());
+  for (size_t i{0}; i < boids_.size(); i++) {
+    velocities.emplace_back(boids_[i].getVelocity());
   }
   return velocities;
 }
@@ -90,10 +91,10 @@ std::vector<sf::Vector2f> Flock::getFlockVelocities() const {
 
 std::vector<float> Flock::getFlockSpeeds() const {
   std::vector<float> speeds;
-  assert((flock_.size() > 1));
+  assert((boids_.size() > 1));
 
-  for (size_t i{0}; i < flock_.size(); i++) {
-    speeds.emplace_back(flock_[i].getSpeed());
+  for (size_t i{0}; i < boids_.size(); i++) {
+    speeds.emplace_back(boids_[i].getSpeed());
   }
   return speeds;
 }
@@ -133,19 +134,19 @@ void Flock::setRepulsiveClick(bool p) { repulsiveClick_ = p; }
 
 std::vector<sf::Vector2f> Flock::separation() const {
   std::vector<sf::Vector2f> separationSpeed{};
-  assert((flock_.size() > 1));
-  separationSpeed.reserve(flock_.size());
+  assert((boids_.size() > 1));
+  separationSpeed.reserve(boids_.size());
 
-  for (size_t i{0}; i < flock_.size(); ++i) {
+  for (size_t i{0}; i < boids_.size(); ++i) {
     separationSpeed.emplace_back();
 
-    for (size_t j{0}; j < flock_.size(); ++j) {
+    for (size_t j{0}; j < boids_.size(); ++j) {
       if (j == i) {
         continue;
       }
-      if ((distance(flock_[j], flock_[i]) < parameters_.separationRange)) {
+      if ((distance(boids_[j], boids_[i]) < parameters_.separationRange)) {
         separationSpeed[i] +=
-            (flock_[j].getPosition() - flock_[i].getPosition()) *
+            (boids_[j].getPosition() - boids_[i].getPosition()) *
             -parameters_.separationStrength;
       }
     }
@@ -158,20 +159,20 @@ std::vector<sf::Vector2f> Flock::separation() const {
 
 std::vector<sf::Vector2f> Flock::alignment() const {
   std::vector<sf::Vector2f> alignSpeed{};
-  assert((flock_.size() > 1));
-  alignSpeed.reserve(flock_.size());
+  assert((boids_.size() > 1));
+  alignSpeed.reserve(boids_.size());
 
-  for (size_t i{0}; i < flock_.size(); ++i) {
+  for (size_t i{0}; i < boids_.size(); ++i) {
     alignSpeed.emplace_back();
     int count{0};  // amount of boid[j] interacting with boid[i]
 
-    for (size_t j{0}; j < flock_.size(); ++j) {
+    for (size_t j{0}; j < boids_.size(); ++j) {
       if (j == i) {
         continue;
       }
 
-      if (distance(flock_[i], flock_[j]) < parameters_.interactionRange) {
-        alignSpeed[i] += ((flock_[j].getVelocity() - flock_[i].getVelocity()) *
+      if (distance(boids_[i], boids_[j]) < parameters_.interactionRange) {
+        alignSpeed[i] += ((boids_[j].getVelocity() - boids_[i].getVelocity()) *
                           (parameters_.alignmentStrength));
         count++;
       }
@@ -189,27 +190,27 @@ std::vector<sf::Vector2f> Flock::alignment() const {
 
 std::vector<sf::Vector2f> Flock::cohesion() const {
   std::vector<sf::Vector2f> cohesionSpeed{};
-  assert((flock_.size() > 1));
-  cohesionSpeed.reserve(flock_.size());
+  assert((boids_.size() > 1));
+  cohesionSpeed.reserve(boids_.size());
 
-  for (size_t i{0}; i < flock_.size(); i++) {
+  for (size_t i{0}; i < boids_.size(); i++) {
     cohesionSpeed.emplace_back();
     sf::Vector2f massCenter{0, 0};
     int count{0};  // number of boid[j] interacting with boid[i]
 
-    for (size_t j{0}; j < flock_.size(); j++) {
+    for (size_t j{0}; j < boids_.size(); j++) {
       if (j == i) {
         continue;
       }
-      if (distance(flock_[i], flock_[j]) < parameters_.interactionRange) {
-        massCenter += (flock_[j].getPosition());
+      if (distance(boids_[i], boids_[j]) < parameters_.interactionRange) {
+        massCenter += (boids_[j].getPosition());
         count += 1;
       }
     }
 
     if (count) {
       cohesionSpeed[i] += ((massCenter / (static_cast<float>(count)) -
-                            flock_[i].getPosition()) *
+                            boids_[i].getPosition()) *
                            parameters_.cohesionStrength);
     }
   }
@@ -221,30 +222,30 @@ std::vector<sf::Vector2f> Flock::cohesion() const {
 // UPDATE
 
 void Flock::updateFlock() {
-  assert(flock_.size() > 1);
+  assert(boids_.size() > 1);
 
   const std::vector<sf::Vector2f> &separationSpeed{separation()};
   const std::vector<sf::Vector2f> &alignmentSpeed{alignment()};
   const std::vector<sf::Vector2f> &cohesionSpeed =
       toroidal_ ? toroidalCohesion() : cohesion();
 
-  assert(flock_.size() == separationSpeed.size());
-  assert(flock_.size() == alignmentSpeed.size());
-  assert(flock_.size() == cohesionSpeed.size());
+  assert(boids_.size() == separationSpeed.size());
+  assert(boids_.size() == alignmentSpeed.size());
+  assert(boids_.size() == cohesionSpeed.size());
 
-  for (size_t i{0}; i < flock_.size(); ++i) {
-    flock_[i].setPosition(flock_[i].getPosition() +
-                          flock_[i].getVelocity() / constants::speedScale);
+  for (size_t i{0}; i < boids_.size(); ++i) {
+    boids_[i].setPosition(boids_[i].getPosition() +
+                          boids_[i].getVelocity() / constants::speedScale);
 
-    flock_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i]);
+    boids_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i]);
 
-    minimumSpeedControl(flock_[i]);
-    maximumSpeedControl(flock_[i]);
+    minimumSpeedControl(boids_[i]);
+    maximumSpeedControl(boids_[i]);
 
     if (toroidal_) {
-      toroidalBorders(flock_[i]);
+      toroidalBorders(boids_[i]);
     } else {
-      mirrorBorders(flock_[i]);
+      mirrorBorders(boids_[i]);
     }
   }
 }
@@ -253,32 +254,32 @@ void Flock::updateFlock() {
 // Update with repel between flocks
 
 void Flock::updateFlock(const std::vector<sf::Vector2f> &repelSpeed) {
-  assert(flock_.size() > 1);
+  assert(boids_.size() > 1);
 
   const std::vector<sf::Vector2f> &separationSpeed{separation()};
   const std::vector<sf::Vector2f> &alignmentSpeed{alignment()};
   const std::vector<sf::Vector2f> &cohesionSpeed =
       toroidal_ ? toroidalCohesion() : cohesion();
 
-  assert(flock_.size() == separationSpeed.size());
-  assert(flock_.size() == alignmentSpeed.size());
-  assert(flock_.size() == cohesionSpeed.size());
-  assert(flock_.size() == repelSpeed.size());
+  assert(boids_.size() == separationSpeed.size());
+  assert(boids_.size() == alignmentSpeed.size());
+  assert(boids_.size() == cohesionSpeed.size());
+  assert(boids_.size() == repelSpeed.size());
 
-  for (size_t i{0}; i < flock_.size(); ++i) {
-    flock_[i].setPosition(flock_[i].getPosition() +
-                          flock_[i].getVelocity() / constants::speedScale);
+  for (size_t i{0}; i < boids_.size(); ++i) {
+    boids_[i].setPosition(boids_[i].getPosition() +
+                          boids_[i].getVelocity() / constants::speedScale);
 
-    flock_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i] +
+    boids_[i] += (separationSpeed[i] + alignmentSpeed[i] + cohesionSpeed[i] +
                   repelSpeed[i]);
 
-    minimumSpeedControl(flock_[i]);
-    maximumSpeedControl(flock_[i]);
+    minimumSpeedControl(boids_[i]);
+    maximumSpeedControl(boids_[i]);
 
     if (toroidal_) {
-      toroidalBorders(flock_[i]);
+      toroidalBorders(boids_[i]);
     } else {
-      mirrorBorders(flock_[i]);
+      mirrorBorders(boids_[i]);
     }
   }
 }
@@ -287,15 +288,15 @@ void Flock::updateFlock(const std::vector<sf::Vector2f> &repelSpeed) {
 // REPEL ON CLICK
 
 void Flock::repelOnClick(const sf::Vector2f &pos) {
-  assert((flock_.size() > 1));
+  assert((boids_.size() > 1));
 
-  for (size_t i{0}; i < flock_.size(); ++i) {
-    if (distance(flock_[i].getPosition(), pos) < parameters_.interactionRange) {
+  for (size_t i{0}; i < boids_.size(); ++i) {
+    if (distance(boids_[i].getPosition(), pos) < parameters_.interactionRange) {
       repulsiveClick_
-          ? flock_[i] +=
-            -((pos - flock_[i].getPosition()) * (parameters_.clickStrength))
-          : flock_[i] +=
-            ((pos - flock_[i].getPosition()) * (parameters_.clickStrength));
+          ? boids_[i] +=
+            -((pos - boids_[i].getPosition()) * (parameters_.clickStrength))
+          : boids_[i] +=
+            ((pos - boids_[i].getPosition()) * (parameters_.clickStrength));
     }
   }
 }
@@ -306,15 +307,15 @@ void Flock::repelOnClick(const sf::Vector2f &pos) {
 
 std::vector<sf::Vector2f> Flock::toroidalCohesion() {
   std::vector<sf::Vector2f> cohesionSpeed{};
-  assert((flock_.size() > 1));
-  cohesionSpeed.reserve(flock_.size());
+  assert((boids_.size() > 1));
+  cohesionSpeed.reserve(boids_.size());
 
-  for (size_t i{0}; i < flock_.size(); i++) {
+  for (size_t i{0}; i < boids_.size(); i++) {
     cohesionSpeed.emplace_back();
     sf::Vector2f massCenter{0, 0};
     int count{0};  // number of boid[j] interacting with boid[i]
 
-    for (size_t j{0}; j < flock_.size(); j++) {
+    for (size_t j{0}; j < boids_.size(); j++) {
       if (j == i) {
         continue;
       }
@@ -322,22 +323,22 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
       sf::Vector2f tempMassCenter{};
 
       // CHECK for TOROIDAL GEOMETRY
-      if (deltaX(flock_[j], flock_[i]) > constants::fieldSide / 2) {
-        tempMassCenter.x += (flock_[j].getPosition().x - constants::fieldSide);
-      } else if (deltaX(flock_[j], flock_[i]) < -constants::fieldSide / 2) {
-        tempMassCenter.x += (flock_[j].getPosition().x + constants::fieldSide);
+      if (deltaX(boids_[j], boids_[i]) > constants::fieldSide / 2) {
+        tempMassCenter.x += (boids_[j].getPosition().x - constants::fieldSide);
+      } else if (deltaX(boids_[j], boids_[i]) < -constants::fieldSide / 2) {
+        tempMassCenter.x += (boids_[j].getPosition().x + constants::fieldSide);
       } else {
-        tempMassCenter.x += (flock_[j].getPosition().x);
+        tempMassCenter.x += (boids_[j].getPosition().x);
       }
-      if (deltaY(flock_[j], flock_[i]) > constants::fieldSide / 2) {
-        tempMassCenter.y += (flock_[j].getPosition().y - constants::fieldSide);
-      } else if (deltaY(flock_[j], flock_[i]) < -constants::fieldSide / 2) {
-        tempMassCenter.y += (flock_[j].getPosition().y + constants::fieldSide);
+      if (deltaY(boids_[j], boids_[i]) > constants::fieldSide / 2) {
+        tempMassCenter.y += (boids_[j].getPosition().y - constants::fieldSide);
+      } else if (deltaY(boids_[j], boids_[i]) < -constants::fieldSide / 2) {
+        tempMassCenter.y += (boids_[j].getPosition().y + constants::fieldSide);
       } else {
-        tempMassCenter.y += (flock_[j].getPosition().y);
+        tempMassCenter.y += (boids_[j].getPosition().y);
       }
 
-      if (distance(tempMassCenter, flock_[i].getPosition()) <
+      if (distance(tempMassCenter, boids_[i].getPosition()) <
           parameters_.interactionRange) {
         count++;
         massCenter += tempMassCenter;
@@ -346,7 +347,7 @@ std::vector<sf::Vector2f> Flock::toroidalCohesion() {
 
     if (count) {
       cohesionSpeed[i] +=
-          ((massCenter / static_cast<float>(count) - flock_[i].getPosition()) *
+          ((massCenter / static_cast<float>(count) - boids_[i].getPosition()) *
            parameters_.cohesionStrength);
     }
   }

@@ -13,7 +13,7 @@
 namespace ev {
 class Flock {
  private:
-  std::vector<Boid> flock_{};
+  std::vector<Boid> boids_{};
   sf::Color color_{sf::Color::Black};
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -28,8 +28,8 @@ class Flock {
   // CONSTRUCTORS
 
   Flock() = delete;
-  Flock(const std::vector<Boid> &flock);
-  Flock(const std::vector<Boid> &flock, const sf::Color &color);
+  Flock(const std::vector<Boid> &boids);
+  Flock(const std::vector<Boid> &boids, const sf::Color &color);
 
   //////////////////////////////////////////////////////////////////////////////////////////
   // GETTERS
