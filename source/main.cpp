@@ -4,6 +4,7 @@
 #include <TGUI/Widgets/ChatBox.hpp>
 #include <cmath>
 #include <cstdlib>
+#include <random.hpp>
 
 #include "gui.hpp"
 

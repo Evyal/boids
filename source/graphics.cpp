@@ -21,10 +21,10 @@ sf::CircleShape getTriangleBoid(const Boid &boid, const sf::Color &color) {
   boidBody.setOrigin(constants::boidSize, constants::boidSize);
   sf::Vector2f offSet{constants::marginSize, constants::marginSize};
 
-  boidBody.setPosition(boid.getPosition() + offSet);
+  boidBody.setPosition(boid.position + offSet);
 
   boidBody.rotate(
-      180 * std::atan2(boid.getVelocity().x, -boid.getVelocity().y) / M_PIf);
+      180 * std::atan2(boid.velocity.x, -boid.velocity.y) / M_PIf);
   return boidBody;
 }
 

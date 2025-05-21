@@ -53,20 +53,20 @@ void Gui::setup() {
 
   // GENERATE FLOCKS at the BEGINNING
 
-  addFlock(randomGen::randomInt<size_t>(10, 50),
-           {ev::randomVec2f(0.f, constants::fieldSide)},
+  addFlock(randomGen::randomSizeType(10, 50, engine_),
+           {ev::randomVec2f(0.f, constants::fieldSide, engine_)},
            sf::Color{255, 0, 127});  // PINK
-  addFlock(randomGen::randomInt<size_t>(10, 50),
-           {ev::randomVec2f(0.f, constants::fieldSide)},
+  addFlock(randomGen::randomSizeType(10, 50, engine_),
+           {ev::randomVec2f(0.f, constants::fieldSide, engine_)},
            sf::Color{255, 0, 0});  // RED
-  addFlock(randomGen::randomInt<size_t>(10, 50),
-           {ev::randomVec2f(0.f, constants::fieldSide)},
+  addFlock(randomGen::randomSizeType(10, 50, engine_),
+           {ev::randomVec2f(0.f, constants::fieldSide, engine_)},
            sf::Color{255, 204, 0});  // YELLOW
-  addFlock(randomGen::randomInt<size_t>(10, 50),
-           {ev::randomVec2f(0.f, constants::fieldSide)},
+  addFlock(randomGen::randomSizeType(10, 50, engine_),
+           {ev::randomVec2f(0.f, constants::fieldSide, engine_)},
            sf::Color{153, 255, 51});  // GREEN
-  addFlock(randomGen::randomInt<size_t>(10, 50),
-           {ev::randomVec2f(0.f, constants::fieldSide)},
+  addFlock(randomGen::randomSizeType(10, 50, engine_),
+           {ev::randomVec2f(0.f, constants::fieldSide, engine_)},
            sf::Color{0, 204, 204});  // CYAN
 
   // OPTION 1
@@ -871,7 +871,7 @@ void Gui::setVisibleOpt3(bool visible) {
 
 void Gui::addFlock(size_t n, sf::Vector2f center, sf::Color color) {
   if (flockStack_.size() < constants::maxFlockNumber) {
-    flockStack_.emplace_back(createFlock(n, center, color));
+    flockStack_.emplace_back(randomFlock(n, center, color, engine_));
     createDeleteFlockButton(flockStack_.size() - 1);
     addFlockButtonLabel_->setText(
         "Number of flocks: " + std::to_string(flockStack_.size()) + "/5");

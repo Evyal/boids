@@ -5,6 +5,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <cstddef>
+#include <random>
 #include <vector>
 
 #include "boid.hpp"
@@ -94,7 +95,8 @@ std::vector<sf::Vector2f> repel(const std::vector<Flock> &flockstack, size_t i);
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE FLOCKS
 
-Flock createFlock(size_t n, sf::Vector2f center, sf::Color color);
+Flock randomFlock(size_t n, sf::Vector2f center, const sf::Color &color,
+                  std::mt19937 &engine);
 
 }  // namespace ev
 

@@ -3,6 +3,7 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
+#include <random>
 
 #include "constants.hpp"
 
@@ -12,55 +13,28 @@ namespace ev {
 //////////////////////////////////////////////////////////////////////////////////////////
 // CLASS BOID
 struct Boid {
- private:
-  sf::Vector2f position_{};
-  sf::Vector2f velocity_{};
-
- public:
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // CONSTRUCTORS
-
-  Boid(const sf::Vector2f &position = constants::defaultBoidPosition,
-       const sf::Vector2f &velocity = constants::defaultBoidVelocity);
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // GETTERS
-
-  sf::Vector2f getPosition() const;
-  sf::Vector2f getVelocity() const;
-  float getSpeed() const;
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // SETTERS
-
-  void setPosition(const sf::Vector2f &pos);
-  void setVelocity(const sf::Vector2f &vel);
-  void setPositionX(float x);
-  void setPositionY(float y);
-  void setVelocityX(float v_x);
-  void setVelocityY(float v_y);
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // OPERATORS
-
-  void operator+=(const sf::Vector2f &velocity);
+  sf::Vector2f position = constants::defaultBoidPosition;
+  sf::Vector2f velocity = constants::defaultBoidVelocity;
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 // FUNCTIONS
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// DISTANCE
+// DISTANCE for BOIDS
 
 float deltaX(const Boid &boid1, const Boid &boid2);
 float deltaY(const Boid &boid1, const Boid &boid2);
 float distance(const Boid &boid1, const Boid &boid2);
+
+// DISTANCE for sf::Vector2f
 float distance(const sf::Vector2f &a, const sf::Vector2f &b);
 float toroidalDistance(const sf::Vector2f &a, const sf::Vector2f &b);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // SPEED CONTROL
+
+float getSpeed(const Boid &boid);
 
 void minimumSpeedControl(Boid &boid);
 void maximumSpeedControl(Boid &boid);
@@ -74,7 +48,8 @@ void mirrorBorders(Boid &boid);
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE BOIDS
 
-Boid createBoid(sf::Vector2f center = {360, 360}, float angle = 0.f);
+Boid randomBoid(std::mt19937 &engine, sf::Vector2f center = {360, 360},
+                float angle = 0.f);
 
 }  // namespace ev
 #endif

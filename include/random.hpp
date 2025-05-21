@@ -5,50 +5,40 @@
 #include <cassert>
 #include <cmath>
 #include <random>
-#include <type_traits>
 
 #include "constants.hpp"
 
 namespace randomGen {
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Seed
-inline std::random_device rd{};
-
-// Global random engine (Mersenne Twister).
-inline std::mt19937 engine{rd()};
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Function to generate a random integer within the closed interval [a, b].
-inline int randomInt(int a, int b) {
-  assert(a <= b && "For randomInt, a must be less than or equal to b.");
-  std::uniform_int_distribution<int> dist(a, b);
+
+// inline int randomInt(int min, int max, std::mt19937& engine) {
+//   assert(min <= max && "For randomInt, min must be less than or equal to
+//   max."); std::uniform_int_distribution<int> dist(min, max); return
+//   dist(engine);
+// }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Function to generate size_t integral types.
+inline std::size_t randomSizeType(std::size_t min, std::size_t max,
+                                  std::mt19937& engine) {
+  assert(min <= max && "For randomInt, min must be less than or equal to max.");
+  std::uniform_int_distribution<std::size_t> dist(min, max);
   return dist(engine);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Overload for other integral types using a template.
-template <typename I>
-typename std::enable_if<std::is_integral<I>::value, I>::type randomInt(I a,
-                                                                       I b) {
-  assert(a <= b && "For randomInt, a must be less than or equal to b.");
-  std::uniform_int_distribution<I> dist(a, b);
-  return dist(engine);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Template function to generate a random real numbers in the range [a,b).
-template <typename T>
-typename std::enable_if<std::is_floating_point<T>::value, T>::type randomReal(
-    T a, T b) {
-  assert(a < b && "For randomReal, a must be less than b.");
-  std::uniform_real_distribution<T> dist(a, b);
+// Function to generate a random real numbers in the range [a,b).
+inline float randomFloat(float min, float max, std::mt19937& engine) {
+  assert(min < max && "For randomFloat, min must be less than max.");
+  std::uniform_real_distribution<float> dist(min, max);
   return dist(engine);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Function to generate a random boolean value.
-inline bool randomBool() {
+inline bool randomBool(std::mt19937& engine) {
   std::bernoulli_distribution dist(0.5);
   return dist(engine);
 }
@@ -62,26 +52,34 @@ namespace ev {
 //////////////////////////////////////////////////////////////////////////////////////////
 // Generates a random angle in range [0,2Pi)
 
-inline float randomAngle() { return randomGen::randomReal(0.f, 2.f * M_PIf); }
+inline float randomAngle(std::mt19937& engine) {
+  return randomGen::randomFloat(0.f, 2.f * M_PIf, engine);
+}
 
-inline sf::Vector2f randomVec2f(float min, float max) {
+//////////////////////////////////////////////////////////////////////////////////////////
+// Generates a random sf::Vector2f in range [min, max)
+
+inline sf::Vector2f randomVec2f(float min, float max, std::mt19937& engine) {
   assert(min < max && "a must be less than b.");
-  return {randomGen::randomReal(min, max), randomGen::randomReal(min, max)};
+  return {randomGen::randomFloat(min, max, engine),
+          randomGen::randomFloat(min, max, engine)};
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Generates a random position for a boid, all the boids spawn around the same
 // center point
 
-inline sf::Vector2f randomBoidPosition(sf::Vector2f center) {
+inline sf::Vector2f randomBoidPosition(sf::Vector2f center,
+                                       std::mt19937& engine) {
   // Generate randomly until the boid spawns inside the margins
   bool b{true};
   sf::Vector2f position{};
   while (b) {
     position = center;
 
-    float angle{randomAngle()};
-    float step{randomGen::randomReal(0.f, constants::randomPositionRange)};
+    float angle{randomAngle(engine)};
+    float step{
+        randomGen::randomFloat(0.f, constants::randomPositionRange, engine)};
 
     position += {step * cosf(angle), step * sinf(angle)};
     if (position.x > constants::randomMinimumX &&
@@ -104,16 +102,12 @@ inline sf::Vector2f randomBoidPosition(sf::Vector2f center) {
 // Boids of the same flock are generated with their direction varying just a
 // little between each other
 
-inline sf::Vector2f randomBoidSpeed(float angleCenter) {
-  std::uniform_real_distribution angle(
-      angleCenter - constants::randomAngleRange,
-      angleCenter + constants::randomAngleRange);
-  std::uniform_real_distribution norm(constants::randomMinimumSpeed,
-                                      constants::randomMaximumSpeed);
-  float v{randomGen::randomReal(constants::randomMinimumSpeed,
-                                constants::randomMaximumSpeed)};
-  float a{randomGen::randomReal(angleCenter - constants::randomAngleRange,
-                                angleCenter + constants::randomAngleRange)};
+inline sf::Vector2f randomBoidSpeed(float angleCenter, std::mt19937& engine) {
+  float v{randomGen::randomFloat(constants::randomMinimumSpeed,
+                                 constants::randomMaximumSpeed, engine)};
+  float a{randomGen::randomFloat(angleCenter - constants::randomAngleRange,
+                                 angleCenter + constants::randomAngleRange,
+                                 engine)};
   return {cosf(a) * v, sinf(a) * v};
 }
 

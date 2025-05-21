@@ -6,13 +6,16 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
-#include "doctest.h"
 #include "boid.hpp"
 #include "constants.hpp"
+#include "doctest.h"
 #include "flock.hpp"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
+
+std::random_device rd{};
+std::mt19937 engine{rd()};
 
 TEST_CASE("TESTING CLASS FLOCK") {
   SUBCASE("TESTING CONSTRUCTORS and GETTERS") {
@@ -33,16 +36,16 @@ TEST_CASE("TESTING CLASS FLOCK") {
 
     ev::Flock flock3{{b1, b2, b3, b4, b5}, sf::Color::Red};
 
-    CHECK(flock3.getBoid(0).getPosition().x == 0.f);
-    CHECK(flock3.getBoid(0).getPosition().y == 0.f);
-    CHECK(flock3.getBoid(1).getPosition().x == 10.f);
-    CHECK(flock3.getBoid(1).getPosition().y == 10.f);
-    CHECK(flock3.getBoid(2).getPosition().x == 20.f);
-    CHECK(flock3.getBoid(2).getPosition().y == 10.f);
-    CHECK(flock3.getBoid(3).getPosition().x == 10.f);
-    CHECK(flock3.getBoid(3).getPosition().y == 20.f);
-    CHECK(flock3.getBoid(4).getPosition().x == 20.f);
-    CHECK(flock3.getBoid(4).getPosition().y == 20.f);
+    CHECK(flock3.getBoid(0).position.x == 0.f);
+    CHECK(flock3.getBoid(0).position.y == 0.f);
+    CHECK(flock3.getBoid(1).position.x == 10.f);
+    CHECK(flock3.getBoid(1).position.y == 10.f);
+    CHECK(flock3.getBoid(2).position.x == 20.f);
+    CHECK(flock3.getBoid(2).position.y == 10.f);
+    CHECK(flock3.getBoid(3).position.x == 10.f);
+    CHECK(flock3.getBoid(3).position.y == 20.f);
+    CHECK(flock3.getBoid(4).position.x == 20.f);
+    CHECK(flock3.getBoid(4).position.y == 20.f);
 
     CHECK(flock3.getSize() == 5);
     CHECK(flock3.getFlockColor() == sf::Color::Red);
@@ -118,11 +121,11 @@ TEST_CASE("TESTING RULES") {
 
     {
       // boid 1: b2 and b3 contribute.
-      const float expX = -((b2.getPosition().x - b1.getPosition().x) +
-                           (b3.getPosition().x - b1.getPosition().x)) *
+      const float expX = -((b2.position.x - b1.position.x) +
+                           (b3.position.x - b1.position.x)) *
                          s;
-      const float expY = -((b2.getPosition().y - b1.getPosition().y) +
-                           (b3.getPosition().y - b1.getPosition().y)) *
+      const float expY = -((b2.position.y - b1.position.y) +
+                           (b3.position.y - b1.position.y)) *
                          s;
       CHECK(separation[0].x == doctest::Approx(expX));
       CHECK(separation[0].y == doctest::Approx(expY));
@@ -130,11 +133,11 @@ TEST_CASE("TESTING RULES") {
 
     {
       // boid 2: b1 and b3 contribute.
-      const float expX = -((b1.getPosition().x - b2.getPosition().x) +
-                           (b3.getPosition().x - b2.getPosition().x)) *
+      const float expX = -((b1.position.x - b2.position.x) +
+                           (b3.position.x - b2.position.x)) *
                          s;
-      const float expY = -((b1.getPosition().y - b2.getPosition().y) +
-                           (b3.getPosition().y - b2.getPosition().y)) *
+      const float expY = -((b1.position.y - b2.position.y) +
+                           (b3.position.y - b2.position.y)) *
                          s;
       CHECK(separation[1].x == doctest::Approx(expX));
       CHECK(separation[1].y == doctest::Approx(expY));
@@ -142,13 +145,13 @@ TEST_CASE("TESTING RULES") {
 
     {
       // boid 3: b1, b2, and b4 contribute.
-      const float expX = -((b1.getPosition().x - b3.getPosition().x) +
-                           (b2.getPosition().x - b3.getPosition().x) +
-                           (b4.getPosition().x - b3.getPosition().x)) *
+      const float expX = -((b1.position.x - b3.position.x) +
+                           (b2.position.x - b3.position.x) +
+                           (b4.position.x - b3.position.x)) *
                          s;
-      const float expY = -((b1.getPosition().y - b3.getPosition().y) +
-                           (b2.getPosition().y - b3.getPosition().y) +
-                           (b4.getPosition().y - b3.getPosition().y)) *
+      const float expY = -((b1.position.y - b3.position.y) +
+                           (b2.position.y - b3.position.y) +
+                           (b4.position.y - b3.position.y)) *
                          s;
       CHECK(separation[2].x == doctest::Approx(expX));
       CHECK(separation[2].y == doctest::Approx(expY));
@@ -156,11 +159,11 @@ TEST_CASE("TESTING RULES") {
 
     {
       // boid 4: b3 and b5 contribute.
-      const float expX = -((b3.getPosition().x - b4.getPosition().x) +
-                           (b5.getPosition().x - b4.getPosition().x)) *
+      const float expX = -((b3.position.x - b4.position.x) +
+                           (b5.position.x - b4.position.x)) *
                          s;
-      const float expY = -((b3.getPosition().y - b4.getPosition().y) +
-                           (b5.getPosition().y - b4.getPosition().y)) *
+      const float expY = -((b3.position.y - b4.position.y) +
+                           (b5.position.y - b4.position.y)) *
                          s;
       CHECK(separation[3].x == doctest::Approx(expX));
       CHECK(separation[3].y == doctest::Approx(expY));
@@ -168,8 +171,8 @@ TEST_CASE("TESTING RULES") {
 
     {
       // boid 5: Only b4 contributes.
-      const float expX = -(b4.getPosition().x - b5.getPosition().x) * s;
-      const float expY = -(b4.getPosition().y - b5.getPosition().y) * s;
+      const float expX = -(b4.position.x - b5.position.x) * s;
+      const float expY = -(b4.position.y - b5.position.y) * s;
       CHECK(separation[4].x == doctest::Approx(expX));
       CHECK(separation[4].y == doctest::Approx(expY));
     }
@@ -204,16 +207,16 @@ TEST_CASE("TESTING RULES") {
       // Alignment Vector Checks
       {
         // boid 1:
-        const float sumX = (b2.getVelocity().x - b1.getVelocity().x) +
-                           (b3.getVelocity().x - b1.getVelocity().x) +
-                           (b4.getVelocity().x - b1.getVelocity().x) +
-                           (b5.getVelocity().x - b1.getVelocity().x) +
-                           (b6.getVelocity().x - b1.getVelocity().x);
-        const float sumY = (b2.getVelocity().y - b1.getVelocity().y) +
-                           (b3.getVelocity().y - b1.getVelocity().y) +
-                           (b4.getVelocity().y - b1.getVelocity().y) +
-                           (b5.getVelocity().y - b1.getVelocity().y) +
-                           (b6.getVelocity().y - b1.getVelocity().y);
+        const float sumX = (b2.velocity.x - b1.velocity.x) +
+                           (b3.velocity.x - b1.velocity.x) +
+                           (b4.velocity.x - b1.velocity.x) +
+                           (b5.velocity.x - b1.velocity.x) +
+                           (b6.velocity.x - b1.velocity.x);
+        const float sumY = (b2.velocity.y - b1.velocity.y) +
+                           (b3.velocity.y - b1.velocity.y) +
+                           (b4.velocity.y - b1.velocity.y) +
+                           (b5.velocity.y - b1.velocity.y) +
+                           (b6.velocity.y - b1.velocity.y);
         const float expX = a * (sumX / 5.f);
         const float expY = a * (sumY / 5.f);
         CHECK(alignment[0].x == doctest::Approx(expX));
@@ -222,16 +225,16 @@ TEST_CASE("TESTING RULES") {
 
       {
         // boid 2:
-        const float sumX = (b1.getVelocity().x - b2.getVelocity().x) +
-                           (b3.getVelocity().x - b2.getVelocity().x) +
-                           (b4.getVelocity().x - b2.getVelocity().x) +
-                           (b5.getVelocity().x - b2.getVelocity().x) +
-                           (b6.getVelocity().x - b2.getVelocity().x);
-        const float sumY = (b1.getVelocity().y - b2.getVelocity().y) +
-                           (b3.getVelocity().y - b2.getVelocity().y) +
-                           (b4.getVelocity().y - b2.getVelocity().y) +
-                           (b5.getVelocity().y - b2.getVelocity().y) +
-                           (b6.getVelocity().y - b2.getVelocity().y);
+        const float sumX = (b1.velocity.x - b2.velocity.x) +
+                           (b3.velocity.x - b2.velocity.x) +
+                           (b4.velocity.x - b2.velocity.x) +
+                           (b5.velocity.x - b2.velocity.x) +
+                           (b6.velocity.x - b2.velocity.x);
+        const float sumY = (b1.velocity.y - b2.velocity.y) +
+                           (b3.velocity.y - b2.velocity.y) +
+                           (b4.velocity.y - b2.velocity.y) +
+                           (b5.velocity.y - b2.velocity.y) +
+                           (b6.velocity.y - b2.velocity.y);
         const float expX = a * (sumX / 5.f);
         const float expY = a * (sumY / 5.f);
         CHECK(alignment[1].x == doctest::Approx(expX));
@@ -240,16 +243,16 @@ TEST_CASE("TESTING RULES") {
 
       {
         // boid 3:
-        const float sumX = (b2.getVelocity().x - b3.getVelocity().x) +
-                           (b1.getVelocity().x - b3.getVelocity().x) +
-                           (b4.getVelocity().x - b3.getVelocity().x) +
-                           (b5.getVelocity().x - b3.getVelocity().x) +
-                           (b6.getVelocity().x - b3.getVelocity().x);
-        const float sumY = (b2.getVelocity().y - b3.getVelocity().y) +
-                           (b1.getVelocity().y - b3.getVelocity().y) +
-                           (b4.getVelocity().y - b3.getVelocity().y) +
-                           (b5.getVelocity().y - b3.getVelocity().y) +
-                           (b6.getVelocity().y - b3.getVelocity().y);
+        const float sumX = (b2.velocity.x - b3.velocity.x) +
+                           (b1.velocity.x - b3.velocity.x) +
+                           (b4.velocity.x - b3.velocity.x) +
+                           (b5.velocity.x - b3.velocity.x) +
+                           (b6.velocity.x - b3.velocity.x);
+        const float sumY = (b2.velocity.y - b3.velocity.y) +
+                           (b1.velocity.y - b3.velocity.y) +
+                           (b4.velocity.y - b3.velocity.y) +
+                           (b5.velocity.y - b3.velocity.y) +
+                           (b6.velocity.y - b3.velocity.y);
         const float expX = a * (sumX / 5.f);
         const float expY = a * (sumY / 5.f);
         CHECK(alignment[2].x == doctest::Approx(expX));
@@ -258,16 +261,16 @@ TEST_CASE("TESTING RULES") {
 
       {
         // boid 4:
-        const float sumX = (b2.getVelocity().x - b4.getVelocity().x) +
-                           (b3.getVelocity().x - b4.getVelocity().x) +
-                           (b1.getVelocity().x - b4.getVelocity().x) +
-                           (b5.getVelocity().x - b4.getVelocity().x) +
-                           (b6.getVelocity().x - b4.getVelocity().x);
-        const float sumY = (b2.getVelocity().y - b4.getVelocity().y) +
-                           (b3.getVelocity().y - b4.getVelocity().y) +
-                           (b1.getVelocity().y - b4.getVelocity().y) +
-                           (b5.getVelocity().y - b4.getVelocity().y) +
-                           (b6.getVelocity().y - b4.getVelocity().y);
+        const float sumX = (b2.velocity.x - b4.velocity.x) +
+                           (b3.velocity.x - b4.velocity.x) +
+                           (b1.velocity.x - b4.velocity.x) +
+                           (b5.velocity.x - b4.velocity.x) +
+                           (b6.velocity.x - b4.velocity.x);
+        const float sumY = (b2.velocity.y - b4.velocity.y) +
+                           (b3.velocity.y - b4.velocity.y) +
+                           (b1.velocity.y - b4.velocity.y) +
+                           (b5.velocity.y - b4.velocity.y) +
+                           (b6.velocity.y - b4.velocity.y);
         const float expX = a * (sumX / 5.f);
         const float expY = a * (sumY / 5.f);
         CHECK(alignment[3].x == doctest::Approx(expX));
@@ -276,16 +279,16 @@ TEST_CASE("TESTING RULES") {
 
       {
         // boid 5:
-        const float sumX = (b2.getVelocity().x - b5.getVelocity().x) +
-                           (b3.getVelocity().x - b5.getVelocity().x) +
-                           (b4.getVelocity().x - b5.getVelocity().x) +
-                           (b1.getVelocity().x - b5.getVelocity().x) +
-                           (b6.getVelocity().x - b5.getVelocity().x);
-        const float sumY = (b2.getVelocity().y - b5.getVelocity().y) +
-                           (b3.getVelocity().y - b5.getVelocity().y) +
-                           (b4.getVelocity().y - b5.getVelocity().y) +
-                           (b1.getVelocity().y - b5.getVelocity().y) +
-                           (b6.getVelocity().y - b5.getVelocity().y);
+        const float sumX = (b2.velocity.x - b5.velocity.x) +
+                           (b3.velocity.x - b5.velocity.x) +
+                           (b4.velocity.x - b5.velocity.x) +
+                           (b1.velocity.x - b5.velocity.x) +
+                           (b6.velocity.x - b5.velocity.x);
+        const float sumY = (b2.velocity.y - b5.velocity.y) +
+                           (b3.velocity.y - b5.velocity.y) +
+                           (b4.velocity.y - b5.velocity.y) +
+                           (b1.velocity.y - b5.velocity.y) +
+                           (b6.velocity.y - b5.velocity.y);
         const float expX = a * (sumX / 5.f);
         const float expY = a * (sumY / 5.f);
         CHECK(alignment[4].x == doctest::Approx(expX));
@@ -294,16 +297,16 @@ TEST_CASE("TESTING RULES") {
 
       {
         // boid 6:
-        const float sumX = (b2.getVelocity().x - b6.getVelocity().x) +
-                           (b3.getVelocity().x - b6.getVelocity().x) +
-                           (b4.getVelocity().x - b6.getVelocity().x) +
-                           (b5.getVelocity().x - b6.getVelocity().x) +
-                           (b1.getVelocity().x - b6.getVelocity().x);
-        const float sumY = (b2.getVelocity().y - b6.getVelocity().y) +
-                           (b3.getVelocity().y - b6.getVelocity().y) +
-                           (b4.getVelocity().y - b6.getVelocity().y) +
-                           (b5.getVelocity().y - b6.getVelocity().y) +
-                           (b1.getVelocity().y - b6.getVelocity().y);
+        const float sumX = (b2.velocity.x - b6.velocity.x) +
+                           (b3.velocity.x - b6.velocity.x) +
+                           (b4.velocity.x - b6.velocity.x) +
+                           (b5.velocity.x - b6.velocity.x) +
+                           (b1.velocity.x - b6.velocity.x);
+        const float sumY = (b2.velocity.y - b6.velocity.y) +
+                           (b3.velocity.y - b6.velocity.y) +
+                           (b4.velocity.y - b6.velocity.y) +
+                           (b5.velocity.y - b6.velocity.y) +
+                           (b1.velocity.y - b6.velocity.y);
         const float expX = a * (sumX / 5.f);
         const float expY = a * (sumY / 5.f);
         CHECK(alignment[5].x == doctest::Approx(expX));
@@ -317,68 +320,68 @@ TEST_CASE("TESTING RULES") {
       {
         // boid 1, compute center of mass for boids 2,3,4,5,6.
         sf::Vector2f center =
-            (b2.getPosition() + b3.getPosition() + b4.getPosition() +
-             b5.getPosition() + b6.getPosition()) /
+            (b2.position + b3.position + b4.position +
+             b5.position + b6.position) /
             5.f;
         CHECK(cohesion[0].x ==
-              doctest::Approx(c * (center.x - b1.getPosition().x)));
+              doctest::Approx(c * (center.x - b1.position.x)));
         CHECK(cohesion[0].y ==
-              doctest::Approx(c * (center.y - b1.getPosition().y)));
+              doctest::Approx(c * (center.y - b1.position.y)));
       }
       {
         // boid 2, center of mass for boids 1,3,4,5,6.
         sf::Vector2f center =
-            (b1.getPosition() + b3.getPosition() + b4.getPosition() +
-             b5.getPosition() + b6.getPosition()) /
+            (b1.position + b3.position + b4.position +
+             b5.position + b6.position) /
             5.f;
         CHECK(cohesion[1].x ==
-              doctest::Approx(c * (center.x - b2.getPosition().x)));
+              doctest::Approx(c * (center.x - b2.position.x)));
         CHECK(cohesion[1].y ==
-              doctest::Approx(c * (center.y - b2.getPosition().y)));
+              doctest::Approx(c * (center.y - b2.position.y)));
       }
       {
         // boid 3, center of mass for boids 1,2,4,5,6.
         sf::Vector2f center =
-            (b1.getPosition() + b2.getPosition() + b4.getPosition() +
-             b5.getPosition() + b6.getPosition()) /
+            (b1.position + b2.position + b4.position +
+             b5.position + b6.position) /
             5.f;
         CHECK(cohesion[2].x ==
-              doctest::Approx(c * (center.x - b3.getPosition().x)));
+              doctest::Approx(c * (center.x - b3.position.x)));
         CHECK(cohesion[2].y ==
-              doctest::Approx(c * (center.y - b3.getPosition().y)));
+              doctest::Approx(c * (center.y - b3.position.y)));
       }
       {
         // boid 4, center of mass for boids 1,2,3,5,6.
         sf::Vector2f center =
-            (b1.getPosition() + b2.getPosition() + b3.getPosition() +
-             b5.getPosition() + b6.getPosition()) /
+            (b1.position + b2.position + b3.position +
+             b5.position + b6.position) /
             5.f;
         CHECK(cohesion[3].x ==
-              doctest::Approx(c * (center.x - b4.getPosition().x)));
+              doctest::Approx(c * (center.x - b4.position.x)));
         CHECK(cohesion[3].y ==
-              doctest::Approx(c * (center.y - b4.getPosition().y)));
+              doctest::Approx(c * (center.y - b4.position.y)));
       }
       {
         // boid 5, center of mass for boids 1,2,3,4,6.
         sf::Vector2f center =
-            (b1.getPosition() + b2.getPosition() + b3.getPosition() +
-             b4.getPosition() + b6.getPosition()) /
+            (b1.position + b2.position + b3.position +
+             b4.position + b6.position) /
             5.f;
         CHECK(cohesion[4].x ==
-              doctest::Approx(c * (center.x - b5.getPosition().x)));
+              doctest::Approx(c * (center.x - b5.position.x)));
         CHECK(cohesion[4].y ==
-              doctest::Approx(c * (center.y - b5.getPosition().y)));
+              doctest::Approx(c * (center.y - b5.position.y)));
       }
       {
         // boid 6, center of mass for boids 1,2,3,4,5.
         sf::Vector2f center =
-            (b1.getPosition() + b2.getPosition() + b3.getPosition() +
-             b4.getPosition() + b5.getPosition()) /
+            (b1.position + b2.position + b3.position +
+             b4.position + b5.position) /
             5.f;
         CHECK(cohesion[5].x ==
-              doctest::Approx(c * (center.x - b6.getPosition().x)));
+              doctest::Approx(c * (center.x - b6.position.x)));
         CHECK(cohesion[5].y ==
-              doctest::Approx(c * (center.y - b6.getPosition().y)));
+              doctest::Approx(c * (center.y - b6.position.y)));
       }
     }
   }
@@ -410,7 +413,7 @@ TEST_CASE("TESTING PARAMETERS") {
     CHECK(ev::Flock::getParameters().clickStrength ==
           ev::constants::defaultClickStrenght);
 
-          ev::Flock::setParameters({1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f});
+    ev::Flock::setParameters({1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f});
 
     CHECK(ev::Flock::getParameters().separationStrength == 1.f);
     CHECK(ev::Flock::getParameters().separationRange == 2.f);
@@ -500,10 +503,10 @@ TEST_CASE("TESTING RULES on SPECIAL CASES") {
     CHECK(alignment[0].x == 0.f);
     CHECK(alignment[0].y == 0.f);
 
-    CHECK(alignment[1].x == a * (b3.getVelocity().x - b2.getVelocity().x));
-    CHECK(alignment[1].y == a * (b3.getVelocity().y - b2.getVelocity().y));
-    CHECK(alignment[2].x == a * (b2.getVelocity().x - b3.getVelocity().x));
-    CHECK(alignment[2].y == a * (b2.getVelocity().y - b3.getVelocity().y));
+    CHECK(alignment[1].x == a * (b3.velocity.x - b2.velocity.x));
+    CHECK(alignment[1].y == a * (b3.velocity.y - b2.velocity.y));
+    CHECK(alignment[2].x == a * (b2.velocity.x - b3.velocity.x));
+    CHECK(alignment[2].y == a * (b2.velocity.y - b3.velocity.y));
 
     CHECK(alignment[1].x == doctest::Approx(-0.6f));
     CHECK(alignment[1].y == doctest::Approx(+0.9f));
@@ -539,26 +542,32 @@ TEST_CASE("TESTING UPDATE FUNCTION") {
 
     flock.updateFlock();
 
-    CHECK(flock.getBoid(0).getPosition().x ==
-          doctest::Approx(100.f + b1.getVelocity().x / ev::constants::speedScale));
-    CHECK(flock.getBoid(0).getPosition().y ==
-          doctest::Approx(500.f + b1.getVelocity().y / ev::constants::speedScale));
-    CHECK(flock.getBoid(0).getVelocity().x == doctest::Approx(200.f));
-    CHECK(flock.getBoid(0).getVelocity().y == doctest::Approx(200.f));
+    CHECK(flock.getBoid(0).position.x ==
+          doctest::Approx(100.f +
+                          b1.velocity.x / ev::constants::speedScale));
+    CHECK(flock.getBoid(0).position.y ==
+          doctest::Approx(500.f +
+                          b1.velocity.y / ev::constants::speedScale));
+    CHECK(flock.getBoid(0).velocity.x == doctest::Approx(200.f));
+    CHECK(flock.getBoid(0).velocity.y == doctest::Approx(200.f));
 
-    CHECK(flock.getBoid(1).getPosition().x ==
-          doctest::Approx(150.f + b2.getVelocity().x / ev::constants::speedScale));
-    CHECK(flock.getBoid(1).getPosition().y ==
-          doctest::Approx(300.f + b2.getVelocity().y / ev::constants::speedScale));
-    CHECK(flock.getBoid(1).getVelocity().x == doctest::Approx(210.9f));
-    CHECK(flock.getBoid(1).getVelocity().y == doctest::Approx(150.9f));
+    CHECK(flock.getBoid(1).position.x ==
+          doctest::Approx(150.f +
+                          b2.velocity.x / ev::constants::speedScale));
+    CHECK(flock.getBoid(1).position.y ==
+          doctest::Approx(300.f +
+                          b2.velocity.y / ev::constants::speedScale));
+    CHECK(flock.getBoid(1).velocity.x == doctest::Approx(210.9f));
+    CHECK(flock.getBoid(1).velocity.y == doctest::Approx(150.9f));
 
-    CHECK(flock.getBoid(2).getPosition().x ==
-          doctest::Approx(250.f + b3.getVelocity().x / ev::constants::speedScale));
-    CHECK(flock.getBoid(2).getPosition().y ==
-          doctest::Approx(300.f + b3.getVelocity().y / ev::constants::speedScale));
-    CHECK(flock.getBoid(2).getVelocity().x == doctest::Approx(189.1f));
-    CHECK(flock.getBoid(2).getVelocity().y == doctest::Approx(179.1f));
+    CHECK(flock.getBoid(2).position.x ==
+          doctest::Approx(250.f +
+                          b3.velocity.x / ev::constants::speedScale));
+    CHECK(flock.getBoid(2).position.y ==
+          doctest::Approx(300.f +
+                          b3.velocity.y / ev::constants::speedScale));
+    CHECK(flock.getBoid(2).velocity.x == doctest::Approx(189.1f));
+    CHECK(flock.getBoid(2).velocity.y == doctest::Approx(179.1f));
 
     std::cout << ev::distance({200, 200}, {150, 300}) << " "
               << ev::distance({200, 200}, {250, 300}) << '\n';
@@ -570,16 +579,18 @@ TEST_CASE("TESTING UPDATE FUNCTION") {
     ev::Flock::setRepulsiveClick(false);
     flock.repelOnClick({200, 200});
 
-    CHECK(flock.getBoid(0).getVelocity().x == doctest::Approx(200.f));
-    CHECK(flock.getBoid(0).getVelocity().y == doctest::Approx(200.f));
-    CHECK(flock.getBoid(1).getVelocity().x ==
+    CHECK(flock.getBoid(0).velocity.x == doctest::Approx(200.f));
+    CHECK(flock.getBoid(0).velocity.y == doctest::Approx(200.f));
+    CHECK(flock.getBoid(1).velocity.x ==
           doctest::Approx(210.f + 50 * ev::constants::defaultClickStrenght));
-    CHECK(flock.getBoid(1).getVelocity().y ==
-          doctest::Approx(150.f + (-100) * ev::constants::defaultClickStrenght));
-    CHECK(flock.getBoid(2).getVelocity().x ==
+    CHECK(
+        flock.getBoid(1).velocity.y ==
+        doctest::Approx(150.f + (-100) * ev::constants::defaultClickStrenght));
+    CHECK(flock.getBoid(2).velocity.x ==
           doctest::Approx(190.f + (-50) * ev::constants::defaultClickStrenght));
-    CHECK(flock.getBoid(2).getVelocity().y ==
-          doctest::Approx(180.f + (-100) * ev::constants::defaultClickStrenght));
+    CHECK(
+        flock.getBoid(2).velocity.y ==
+        doctest::Approx(180.f + (-100) * ev::constants::defaultClickStrenght));
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -588,18 +599,18 @@ TEST_CASE("TESTING UPDATE FUNCTION") {
     ev::Flock::setRepulsiveClick(true);
     flock.repelOnClick({200, 200});
 
-    CHECK(flock.getBoid(0).getVelocity().x == doctest::Approx(200.f));
-    CHECK(flock.getBoid(0).getVelocity().y == doctest::Approx(200.f));
-    CHECK(flock.getBoid(1).getVelocity().x ==
+    CHECK(flock.getBoid(0).velocity.x == doctest::Approx(200.f));
+    CHECK(flock.getBoid(0).velocity.y == doctest::Approx(200.f));
+    CHECK(flock.getBoid(1).velocity.x ==
           doctest::Approx(210.f + (-50) * ev::constants::defaultClickStrenght));
-    CHECK(flock.getBoid(1).getVelocity().y ==
+    CHECK(flock.getBoid(1).velocity.y ==
           doctest::Approx(150.f + (100) * ev::constants::defaultClickStrenght));
-    CHECK(flock.getBoid(2).getVelocity().x ==
+    CHECK(flock.getBoid(2).velocity.x ==
           doctest::Approx(190.f + (50) * ev::constants::defaultClickStrenght));
-    CHECK(flock.getBoid(2).getVelocity().y ==
+    CHECK(flock.getBoid(2).velocity.y ==
           doctest::Approx(180.f + (100) * ev::constants::defaultClickStrenght));
 
-          ev::Flock::setRepulsiveClick(false);
+    ev::Flock::setRepulsiveClick(false);
   }
 }
 
@@ -648,28 +659,28 @@ TEST_CASE("TESTING RULES on TOROIDAL MODE") {
     // boid 1:
     //   Position: (700,360) + (150/150, 0) = (701,360)
     //   Velocity: (150,0) + cohesion (0.6,0) = (150.6,0)
-    CHECK(boid0.getPosition().x == doctest::Approx(701.f));
-    CHECK(boid0.getPosition().y == doctest::Approx(360.f));
-    CHECK(boid0.getVelocity().x == doctest::Approx(150.6f));
-    CHECK(boid0.getVelocity().y == doctest::Approx(0.f));
+    CHECK(boid0.position.x == doctest::Approx(701.f));
+    CHECK(boid0.position.y == doctest::Approx(360.f));
+    CHECK(boid0.velocity.x == doctest::Approx(150.6f));
+    CHECK(boid0.velocity.y == doctest::Approx(0.f));
 
     // boid 2:
     //   Position: (20,360) + (150/150, 0) = (21,360)
     //   Velocity: (150,0) + (-0.6,0) = (149.4,0),
     //             checkMinimumSpeed leaves it to (150,0)
-    CHECK(boid1.getPosition().x == doctest::Approx(21.f));
-    CHECK(boid1.getPosition().y == doctest::Approx(360.f));
-    CHECK(boid1.getVelocity().x ==
+    CHECK(boid1.position.x == doctest::Approx(21.f));
+    CHECK(boid1.position.y == doctest::Approx(360.f));
+    CHECK(boid1.velocity.x ==
           doctest::Approx(150.f));  // adjusted from 149.4f to 150.f
-    CHECK(boid1.getVelocity().y == doctest::Approx(0.f));
+    CHECK(boid1.velocity.y == doctest::Approx(0.f));
 
     // boid 3:
     //   Position: (360,360) + (150/150, 0) = (361,360)
     //   Velocity: (150,0) + (0,0) = (150,0)
-    CHECK(boid2.getPosition().x == doctest::Approx(361.f));
-    CHECK(boid2.getPosition().y == doctest::Approx(360.f));
-    CHECK(boid2.getVelocity().x == doctest::Approx(150.f));
-    CHECK(boid2.getVelocity().y == doctest::Approx(0.f));
+    CHECK(boid2.position.x == doctest::Approx(361.f));
+    CHECK(boid2.position.y == doctest::Approx(360.f));
+    CHECK(boid2.velocity.x == doctest::Approx(150.f));
+    CHECK(boid2.velocity.y == doctest::Approx(0.f));
   }
 
   ev::Flock::setToroidalMode(false);
@@ -736,7 +747,7 @@ TEST_CASE("TESTING REPEL") {
 TEST_CASE("TESTING CREATE FLOCK") {
   sf::Vector2f center{20, 20};
 
-  ev::Flock flock{ev::createFlock(10, center, sf::Color::Green)};
+  ev::Flock flock{ev::randomFlock(10, center, sf::Color::Green, engine)};
 
   CHECK(flock.getFlockColor() == sf::Color::Green);
   CHECK(flock.getSize() == 10);

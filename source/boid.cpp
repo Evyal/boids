@@ -3,6 +3,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <cstdlib>
+#include <random>
 
 #include "constants.hpp"
 #include "random.hpp"
@@ -10,50 +11,18 @@
 namespace ev {
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// CONSTRUCTORS
-
-Boid::Boid(const sf::Vector2f &position, const sf::Vector2f &velocity)
-    : position_{position}, velocity_{velocity} {}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// GETTERS
-
-sf::Vector2f Boid::getPosition() const { return position_; }
-sf::Vector2f Boid::getVelocity() const { return velocity_; }
-float Boid::getSpeed() const {
-  return sqrtf(powf(velocity_.x, 2) + powf(velocity_.y, 2));
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// SETTERS
-
-void Boid::setPosition(const sf::Vector2f &position) {
-  position_.x = position.x;
-  position_.y = position.y;
-}
-void Boid::setVelocity(const sf::Vector2f &velocity) {
-  velocity_.x = velocity.x;
-  velocity_.y = velocity.y;
-}
-void Boid::setPositionX(float x) { position_.x = x; }
-void Boid::setPositionY(float y) { position_.y = y; }
-void Boid::setVelocityX(float v_x) { velocity_.x = v_x; }
-void Boid::setVelocityY(float v_y) { velocity_.y = v_y; }
-
-//////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
 // FUNCTIONS related to BOIDS
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 float deltaX(const Boid &boid1, const Boid &boid2) {
-  return boid1.getPosition().x - boid2.getPosition().x;
+  return boid1.position.x - boid2.position.x;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 float deltaY(const Boid &boid1, const Boid &boid2) {
-  return boid1.getPosition().y - boid2.getPosition().y;
+  return boid1.position.y - boid2.position.y;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -92,66 +61,60 @@ float toroidalDistance(const sf::Vector2f &a, const sf::Vector2f &b) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
-// CHECK SPEED
+// SPEED CONTROL
+
+float getSpeed(const Boid &boid) {
+  float vx = boid.velocity.x;
+  float vy = boid.velocity.y;
+  return std::sqrt(vx * vx + vy * vy);
+}
 
 void minimumSpeedControl(Boid &boid) {
-  float speed = boid.getSpeed();
+  float speed = getSpeed(boid);
   if (speed > 0 && speed < constants::minBoidSpeed) {
-    boid.setVelocity({boid.getVelocity().x * constants::minBoidSpeed / speed,
-                      boid.getVelocity().y * constants::minBoidSpeed / speed});
+    boid.velocity *= (constants::minBoidSpeed / speed);
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void maximumSpeedControl(Boid &boid) {
-  float speed = boid.getSpeed();
+  float speed = getSpeed(boid);
   if (speed > constants::maxBoidSpeed) {
-    boid.setVelocity({boid.getVelocity().x * constants::maxBoidSpeed / speed,
-                      boid.getVelocity().y * constants::maxBoidSpeed / speed});
+    boid.velocity *= (constants::maxBoidSpeed / speed);
   }
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-void Boid::operator+=(const sf::Vector2f &velocity) { velocity_ += velocity; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // CHECK BORDERS
 
 void toroidalBorders(Boid &boid) {
   // this use of fmod makes it output only positive numbers
-  boid.setPositionX(
-      std::fmod(std::fmod(boid.getPosition().x, constants::fieldSide) +
-                    constants::fieldSide,
-                constants::fieldSide));
-  boid.setPositionY(
-      std::fmod(std::fmod(boid.getPosition().y, constants::fieldSide) +
-                    constants::fieldSide,
-                constants::fieldSide));
+  boid.position.x = (std::fmod(
+      std::fmod(boid.position.x, constants::fieldSide) + constants::fieldSide,
+      constants::fieldSide));
+  boid.position.y = (std::fmod(
+      std::fmod(boid.position.y, constants::fieldSide) + constants::fieldSide,
+      constants::fieldSide));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 void mirrorBorders(Boid &boid) {
-  if (boid.getPosition().x < 0.f) {
-    boid.setVelocityX(std::abs(boid.getVelocity().x) +
-                      constants::speedBoostMirror);
-    boid.setPositionX(0);
-  } else if (boid.getPosition().x > constants::fieldSide) {
-    boid.setVelocityX(-std::abs(boid.getVelocity().x) -
-                      constants::speedBoostMirror);
-    boid.setPositionX(constants::fieldSide);
+  if (boid.position.x < 0.f) {
+    boid.velocity.x = (std::abs(boid.velocity.x) + constants::speedBoostMirror);
+    boid.position.x = 0;
+  } else if (boid.position.x > constants::fieldSide) {
+    boid.velocity.x = -std::abs(boid.velocity.x) - constants::speedBoostMirror;
+    boid.position.x = constants::fieldSide;
   }
 
-  if (boid.getPosition().y < 0.f) {
-    boid.setVelocityY(std::abs(boid.getVelocity().y) +
-                      constants::speedBoostMirror);
-    boid.setPositionY(0);
-  } else if (boid.getPosition().y > constants::fieldSide) {
-    boid.setVelocityY(-std::abs(boid.getVelocity().y) -
-                      constants::speedBoostMirror);
-    boid.setPositionY(constants::fieldSide);
+  if (boid.position.y < 0.f) {
+    boid.velocity.y = (std::abs(boid.velocity.y) + constants::speedBoostMirror);
+    boid.position.y = 0;
+  } else if (boid.position.y > constants::fieldSide) {
+    boid.velocity.y = -std::abs(boid.velocity.y) - constants::speedBoostMirror;
+    boid.position.y = constants::fieldSide;
   }
 }
 
@@ -159,8 +122,8 @@ void mirrorBorders(Boid &boid) {
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE BOIDS
 
-Boid createBoid(sf::Vector2f center, float a) {
-  return {{randomBoidPosition(center)}, {randomBoidSpeed(a)}};
+Boid randomBoid(std::mt19937 &engine, sf::Vector2f center, float a) {
+  return {{randomBoidPosition(center, engine)}, {randomBoidSpeed(a, engine)}};
 }
 
 }  // namespace ev

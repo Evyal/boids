@@ -15,6 +15,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
+std::random_device rd{};
+std::mt19937 engine{rd()};
+
 TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
   size_t n{1000};
 
@@ -23,7 +26,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
   SUBCASE("TESTING RANDOM INT, RANDOM FLOAT and RANDOM ANGLE") {
     size_t sumInt{};
     for (size_t i{0}; i < n; i++) {
-      size_t a{randomGen::randomInt<size_t>(0, 100)};
+      size_t a{randomGen::randomSizeType(0, 100, engine)};
       CHECK(a >= 0);
       CHECK(a <= 100);
       sumInt += a;
@@ -33,7 +36,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
 
     float sumFloat{};
     for (size_t i{0}; i < n; i++) {
-      float a{randomGen::randomReal(0.f, 100.f)};
+      float a{randomGen::randomFloat(0.f, 100.f, engine)};
       CHECK(a >= 0.f);
       CHECK(a <= 100.f);
       sumFloat += a;
@@ -42,7 +45,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
     std::cout << sumFloat / static_cast<float>(n) << '\n';
 
     for (size_t i{0}; i < n; i++) {
-      float a{ev::randomAngle()};
+      float a{ev::randomAngle(engine)};
       CHECK(a >= 0.f);
       CHECK(a <= 2 * 3.1416);
     }
@@ -53,7 +56,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
   SUBCASE("TESTING RANDOM BOID GENERATION") {
     sf::Vector2f center{100, 100};
     for (size_t i{0}; i < n; i++) {
-      sf::Vector2f pos{ev::randomBoidPosition(center)};
+      sf::Vector2f pos{ev::randomBoidPosition(center, engine)};
       CHECK(ev::distance(center, pos) <= 50.f);
       CHECK(pos.x >= 0.f);
       CHECK(pos.x <= 720.f);
@@ -63,7 +66,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
 
     float angle{0.5f};
     for (size_t i{0}; i < n; i++) {
-      sf::Vector2f vel{ev::randomBoidSpeed(angle)};
+      sf::Vector2f vel{ev::randomBoidSpeed(angle, engine)};
       CHECK(ev::distance(vel, {0, 0}) >= ev::constants::minBoidSpeed);
       CHECK(ev::distance(vel, {0, 0}) <= ev::constants::maxBoidSpeed);
 
