@@ -4,7 +4,7 @@
 \usepackage{graphicx}
 
 \usepackage[margin=19mm]{geometry}
-\parskip 4.0pt
+\parskip 6.4pt
 
 \usepackage{amsmath}
 \usepackage{mathtools}
@@ -22,30 +22,35 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\lstdefinestyle{codecolour}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
+% --- GitHub-Inspired Colors ---
+\definecolor{github-bg}{HTML}{F6F8FA}      % Light gray background
+\definecolor{github-border}{HTML}{E1E4E8}  % Subtle border color
+
+% --- GitHub-Like Style for Bash Without Colors ---
+\lstdefinestyle{github-bash}{
+  backgroundcolor=\color{github-bg},
+  rulecolor=\color{github-border},
+  frame=single,
+  % 'keywordstyle' is for normal C++ keywords (if, for, while, int, etc.)
+  basicstyle=\ttfamily\small,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=10pt,
+  tabsize=2,
+  breaklines=true,
+  breakatwhitespace=true,
+  captionpos=b,
+  xleftmargin=0.05\textwidth,
+  xrightmargin=0.05\textwidth,
 }
 
-% \lstset{style=mystyle, language= C++}
+\lstset{style=github-bash}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title{Relazione Progetto Boids}
 \author{Francesco Bartoli}
@@ -60,16 +65,14 @@
 
 \setlength{\parindent}{0pt}
 
-
+\parskip 1.6pt
 \section{Introduzione}
 \subsection{Scopo}
-Il programma ha come obiettivo quello di simulare in uno spazio bidimensionale il comportamento di stormi di uccelli in volo, che verranno indicati con il nome di \textit{boids}. 
+Il programma ha come obiettivo quello di simulare in uno spazio bidimensionale il comportamento di stormi di uccelli in volo, che verranno indicati con il nome di \textit{boids}.
 
 \subsection{Installazione}
 
 Le istruzioni su come compilare, testare, eseguire sono presentate nel README.md del progetto, riportato qui sotto:
-
-\par\noindent\rule{\textwidth}{0.4pt}
 
 Build instructions are for \textbf{Ubuntu 22.04}.
 
@@ -82,13 +85,13 @@ Build instructions are for \textbf{Ubuntu 22.04}.
 
 Install SFML:
 
-\begin{lstlisting}[style=codecolour, language=bash]
+\begin{lstlisting}[style=github-bash]
 sudo apt install libsfml-dev
 \end{lstlisting}
 
 Install TGUI:
 
-\begin{lstlisting}[style=codecolour, language=bash]
+\begin{lstlisting}[style=github-bash]
 sudo add-apt-repository ppa:texus/tgui
 sudo apt update
 sudo apt install libtgui-1.0-dev
@@ -96,7 +99,7 @@ sudo apt install libtgui-1.0-dev
 
 \subsubsection{Clone the Repository}
 
-\begin{lstlisting}[style=codecolour, language=bash]
+\begin{lstlisting}[style=github-bash]
 git clone --depth=1 https://github.com/Evyal/boids.git
 \end{lstlisting}
 
@@ -104,44 +107,51 @@ git clone --depth=1 https://github.com/Evyal/boids.git
 
 Enter the project directory
 
-\begin{lstlisting}[style=codecolour, language=bash]
+\begin{lstlisting}[style=github-bash]
 cd boids
 \end{lstlisting}
 
 \begin{itemize}
     \item \title{\textbf{Create the build directory}}
 
-\begin{lstlisting}[style=codecolour, language=bash]
-mkdir build && cd build
+          \begin{lstlisting}[style=github-bash]
+mkdir build
 \end{lstlisting}
 
-\item \title{\textbf{Configure CMake in Release mode}}
+    \item \title{\textbf{Configure CMake in Release mode}}
 
-\begin{lstlisting}[style=codecolour, language=bash]
-cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release
+          \begin{lstlisting}[style=github-bash]
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 \end{lstlisting}
 
-\item \title{\textbf{Build the project}} 
+    \item \title{\textbf{Build the project}}
 
-\begin{lstlisting}[style=codecolour, language=bash]
-cmake --build . -j$(nproc)
+          \begin{lstlisting}[style=github-bash]
+cmake --build build -j$(nproc)
 \end{lstlisting}
 \end{itemize}
 
 
-\subsubsection{Running the program} 
+\subsubsection{Running the program}
 
-\begin{lstlisting}[style=codecolour, language=bash]
+Enter the build directory
+\begin{lstlisting}[style=github-bash]
+cd build
+\end{lstlisting}
+
+Run the program
+\begin{lstlisting}[style=github-bash]
 ./boids
 \end{lstlisting}
 
-\par\noindent\rule{\textwidth}{0.4pt}
 
 \newpage
 
+\parskip 6.4pt
+
 \section{Struttura del programma}
 
-I file del progetto sono organizzati in sottocartelle, nello specifico i \texttt{.cpp} si trovano nella \texttt{/source}, mentre i rispettivi header sono situati nella \texttt{/include}. La directory \texttt{/testing} contiene i file di testing, e infine in \texttt{/assets} è presente il font utilizzato nell'interfaccia grafica. 
+I file del progetto sono organizzati in sottocartelle, nello specifico i \texttt{.cpp} si trovano nella \texttt{/source}, mentre i rispettivi header sono situati nella \texttt{/include}. La directory \texttt{/testing} contiene i file di testing, e infine in \texttt{/assets} è presente il font utilizzato nell'interfaccia grafica.
 
 \subsection{Regole di volo}
 
@@ -157,22 +167,30 @@ I \textit{boids} seguono delle regole di volo, che ne determinano il comportamen
 
 Dove $k$ è un fattore di scala, mentre $\vec{v}_S$, $\vec{v}_A$, $\vec{v}_C$, e $\vec{v}_R$ sono rispettivamente:
 
+\vspace{2mm}
+
 \textbf{Separazione}
 \begin{equation*}
     \vec{v}_S = -s \sum_{j \neq i} (\vec{x}_{b_j} - \vec{x}_{b_i}) \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < d_s
 \end{equation*}
 
+\vspace{2mm}
+
 \textbf{Allineamento}
 
 \begin{equation*}
     \vec{v}_A = a \left[ \frac{1}{n} \sum_{j \neq i} (\vec{v}_{b_j} - \vec{v}_{b_i}) \right] \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < i
-\end{equation*} 
+\end{equation*}
 
-\textbf{Coesione} 
+\vspace{2mm}
+
+\textbf{Coesione}
 
 \begin{equation*}
     \vec{x_{c_i}} = \frac{1}{n} \sum_{j \neq i} \vec{x}_{b_j} \quad \text{se} \quad \left| \vec{x}_{b_i} - \vec{x}_{b_j} \right| < i
 \end{equation*}
+
+\vspace{2mm}
 
 \begin{equation*}
     \vec{v}_C = c (\vec{x}_{c_i} - \vec{x}_{b_j})
@@ -180,13 +198,17 @@ Dove $k$ è un fattore di scala, mentre $\vec{v}_S$, $\vec{v}_A$, $\vec{v}_C$, e
 
 Dove $n$ è numero di \textit{boids} dello stormo nel range di interazione di ciascun \textit{boid}, e non è un valore fisso.
 
-E $s, ds, a, c, i$ sono parametri della simulazione, e nel progetto sono indicati con i nomi di \textit{separationStrength}, \textit{separationRange}, \textit{alignmentStrength}, \textit{cohesionStrength} e \textit{interactionRange}. \\
+E $s, ds, a, c, i$ sono parametri della simulazione, e nel progetto sono indicati con i nomi di \textit{separationStrength}, \textit{separationRange}, \textit{alignmentStrength}, \textit{cohesionStrength} e \textit{interactionRange}.
 
-\textbf{Repulsione} \\
+\vspace{2mm}
 
-La formulazione matematica di questa regola è analoga a quella della separazione e determina l'allontanamento tra \textit{boids} di stormi differenti introducendo due nuovi parametri $r, dr$, che nel progetto sono indicati con i nomi di \textit{repelStrength} e \textit{repelRange}. \\
+\textbf{Repulsione}
 
-\textbf{Interazione \textit{On Click}} \\
+La formulazione matematica di questa regola è analoga a quella della separazione e determina l'allontanamento tra \textit{boids} di stormi differenti introducendo due nuovi parametri $r, dr$, che nel progetto sono indicati con i nomi di \textit{repelStrength} e \textit{repelRange}.
+
+\vspace{2mm}
+
+\textbf{Interazione \textit{On Click}}
 
 \begin{equation*}
     \vec{v} = \pm p \sum_{j} (\vec{x}_{b_j} - \vec{x}) \quad \text{se} \quad \left| \vec{x}_{b_j} - \vec{x} \right| < i
@@ -210,19 +232,19 @@ Header contenente la definizione di alcune \texttt{struct} designate prevalentem
 
 \subsubsection{\texttt{boid.hpp/cpp}}
 
-File che si occupa dell'implementazione della classe \texttt{Boid} e di tutte le funzioni ausiliari necessarie per gestirne il comportamento. Oltre alle variabili private che contengono posizione e velocita dei \textit{boids}, sotto forma di \texttt{sf::Vector2f}, sono presenti funzioni membro come \textit{getters} e \textit{setters} per accedere a quest'ultime. Vi sono anche funzioni esterne alla classe, che lavorano su elementi della classe, come per esempio \texttt{distance} che calcola la distanza fra \textit{boids} o \texttt{minimumSpeedControl()} che ha il compito di assicurarsi che il \textit{boid} in questione abbia una velocità compresa all'interno dei limiti prestabiliti, ed eventualmente modificarla. È importante sottolineare che la velocità limite non è stata intesa all'interno del progetto come un'invariante di classe, ma semplicemente un limite imposto durante la simulazione per assicurarsi un comportamento ordinato, infatti non è vietato che un \textit{boid} possieda una velocità superiore al limite prestabilito, in quanto questo non invalida nessuna delle funzioni che lo utilizzano.
+File che si occupa dell'implementazione della struct \texttt{Boid} e di tutte le funzioni ausiliari necessarie per gestirne il comportamento. Le variabili utilizzate all'interno dell'aggregato per descrive il comportamento dei \textit{boids} sono posizione e velocita, sotto forma di \texttt{sf::Vector2f} forniti da SFML. Inoltre sono presenti le funzioni che lavorano su elementi della classe, come per esempio \texttt{distance} che calcola la distanza fra \textit{boids} o \texttt{minimumSpeedControl()} che ha il compito di assicurarsi che il \textit{boid} in questione abbia una velocità compresa all'interno dei limiti prestabiliti, ed eventualmente modificarla. È importante sottolineare che la velocità limite non è stata intesa all'interno del progetto come un'invariante di classe, ma semplicemente un limite imposto durante la simulazione per assicurarsi un comportamento ordinato, infatti non è vietato che un \textit{boid} possieda una velocità superiore al limite prestabilito, in quanto questo non invalida nessuna delle funzioni che lo utilizzano.
 
 \subsubsection{\texttt{flock.hpp/cpp}}
 
 File di implementazione della classe \texttt{Flock} che determina la struttura collettiva dei \textit{boids} all'interno di uno stormo. La classe presenta numerose variabili statiche, condivise da tutti gli stormi, che costituiscono i parametri dell'interazione tra \textit{boids}, e due variabili membro private, la prima un vettore di \textit{boids}, in cui sono contenuti i \textit{boid} che compongono lo stormo, e l'altra che determina il colore dello stormo. Il vettore di \textit{boids} deve contenere almeno due elementi, e se si cerca di inizializzare un'istanza appartenente alla classe \texttt{Flock} con meno di due elementi, questo risulterà in un errore a \textit{compile-time}. Per assicurarsi che la classe non permetta l'utilizzo dei suoi metodi su stormi con meno di due \textit{boids}, sono stati inseriti multipli \texttt{assert()} all'interno del corpo di quest'ultimi in modo da evitare che si verifichino comportamenti indesiderati. La parte restante della classe è designata all'implementazione delle regole che determinano il comportamento degli stormi, e della funzione \texttt{updateFlock()} che si occupa di aggiornare lo stato dello stormo. Quest'ultima funzione ne ha una \texttt{overloaded}, in grado di prendere come argomento le velocità da sommare dovute alla repulsione con altri stormi.
 
-\subsubsection{\texttt{random.hpp/cpp}}
+\subsubsection{\texttt{random.hpp}}
 
-File che si occupa della generazione di numeri casuali. Sono presenti una funzioni base per generare numeri interi casuali di tipo \texttt{int} o \texttt{float}, e funzioni più complesse per generare posizioni e velocità dei \textit{boids} in range prestabiliti.
+File che si occupa della generazione di numeri casuali. Sono presenti una funzioni base per generare numeri interi casuali di tipo \texttt{size\_t} o \texttt{float}, e funzioni più complesse per generare posizioni e velocità dei \textit{boids} in range prestabiliti.
 
 \subsubsection{\texttt{statistics.hpp/cpp}}
 
-File che si occupa del calcolo delle statistiche restituite a schermo, riguardanti valori medi e deviazioni standard delle posizioni e velocità dei \textit{boids}. Ad esempio, la funzione \texttt{calculateDistances()} calcola le distanze tra tutte le coppie degli elementi di un vettore, mentre \texttt{calculateToroidalDistances()} fa lo stesso ma in geometria toroidale. Infine è presente una funzione per il calcolo della media e una per il calcolo delle deviazioni standard. 
+File che si occupa del calcolo delle statistiche restituite a schermo, riguardanti valori medi e deviazioni standard delle posizioni e velocità dei \textit{boids}. Ad esempio, la funzione \texttt{calculateDistances()} calcola le distanze tra tutte le coppie degli elementi di un vettore, mentre \texttt{calculateToroidalDistances()} fa lo stesso ma in geometria toroidale. Infine è presente una funzione per il calcolo della media e una per il calcolo delle deviazioni standard.
 
 \subsubsection{\texttt{graphics.hpp/cpp}}
 
@@ -281,7 +303,7 @@ Anche questa parte derivante parzialmente dal README.md del progetto.
     \includegraphics[width=0.32\textwidth]{../images/option3.png}
 \end{center}
 
-\subsection{Option 1: Graphics and statistics} 
+\subsection{Option 1: Graphics and statistics}
 
 - \textbf{Background color button}: Changes the colour of the background. (black and white) \\
 - \textbf{Red numbered buttons}: Delete the corresponding flock.
@@ -309,7 +331,7 @@ Anche questa parte derivante parzialmente dal README.md del progetto.
 \section{Testing}
 %strategia di test per verificare che quanto ottenuto sia ragionevolmente esente da errori
 
-Tutti i file incaricati dell'implementazione di parte della logica del programma hanno un corrispettivo file di testing. Più precisamente, sono presenti i seguenti: \texttt{testboid.cpp}, \texttt{testflock.cpp}, \texttt{testrandom.cpp} e \texttt{teststatistics.cpp}. 
+Tutti i file incaricati dell'implementazione di parte della logica del programma hanno un corrispettivo file di testing. Più precisamente, sono presenti i seguenti: \texttt{testboid.cpp}, \texttt{testflock.cpp}, \texttt{testrandom.cpp} e \texttt{teststatistics.cpp}.
 
 Attraverso i test si è cercato di controllare che i metodi delle classi e le funzioni introdotte fossero esenti da errori e mostrassero il comportamento atteso. Sono stati eseguiti test in casi semplici per poter stabilire il funzionamento corretto del codice, e anche in alcuni casi particolari quando ritenuto necessario.
 
@@ -321,13 +343,13 @@ Un altro strumento utilizzato per controllare lo svolgimento corretto del progra
 
 Per potere eseguire i test è necessario trovarsi nella cartella dove vengono prodotti gli eseguibili dei file precedentemente menzionati. Immaginando di trovarsi nella cartella build del progetto, sarà sufficiente eseguire i seguenti comandi da terminale:
 
-\begin{lstlisting}[style=codecolour, language=bash]
+\begin{lstlisting}[style=github-bash]
     cd testing
 \end{lstlisting}
 
-E digitare il comando corrispondente al test che si vuole eseguire: 
+E digitare il comando corrispondente al test che si vuole eseguire:
 
-\begin{lstlisting}[style=codecolour, language=bash]
+\begin{lstlisting}[style=github-bash]
     ./testboid
     ./testflock
     ./testrandom
@@ -336,7 +358,7 @@ E digitare il comando corrispondente al test che si vuole eseguire:
 
 O eventualmente è possibile controllare che i test vadano a buon fine tutti in una volta utilizzando il seguente comando
 
-\begin{lstlisting}[style=codecolour, language=bash]
+\begin{lstlisting}[style=github-bash]
     ctest
 \end{lstlisting}
 
@@ -344,11 +366,11 @@ O eventualmente è possibile controllare che i test vadano a buon fine tutti in 
 \section{Descrizione dei risultati}
 %interpretazione dei risultati ottenuti
 
- Nel caso della modalità toroidale ai bordi, i \textit{boids} si raggruppano nei rispettivi stormi e tendono ad assumere valori di distanza media proporzionali al numero di elementi che lo compongono, e lo stesso vale per la deviazione standard delle distanze. Anche per quanto riguarda le velocità, esse raggiungono valori stabili indipendentemente dalle dimensioni dello stormo.
+Nel caso della modalità toroidale ai bordi, i \textit{boids} si raggruppano nei rispettivi stormi e tendono ad assumere valori di distanza media proporzionali al numero di elementi che lo compongono, e lo stesso vale per la deviazione standard delle distanze. Anche per quanto riguarda le velocità, esse raggiungono valori stabili indipendentemente dalle dimensioni dello stormo.
 
 Diversamente accade nel caso della modalità a specchio (\textit{mirror mode}). Infatti, i \textit{boids} una volta ai bordi sono soggetti a un boost conferito dopo il rimbalzo, che provoca una temporanea variabilità sia delle posizioni che delle velocità e delle relative deviazioni standard.
 
-La modifica dei parametri di volo permette all'utente di creare ulteriori comportamenti collettivi più o meno caotici che tuttavia non rispecchiano il movimento desiderato nella simulazione. Nonostante con i valori impostati di default si sia cercato di parametrizzare delle interazioni che danno luogo a comportamenti emergenti analoghi allo spostamento di uno stormo, potrebbero esserci delle combinazioni di valori che realizzano un effetto migliore. 
+La modifica dei parametri di volo permette all'utente di creare ulteriori comportamenti collettivi più o meno caotici che tuttavia non rispecchiano il movimento desiderato nella simulazione. Nonostante con i valori impostati di default si sia cercato di parametrizzare delle interazioni che danno luogo a comportamenti emergenti analoghi allo spostamento di uno stormo, potrebbero esserci delle combinazioni di valori che realizzano un effetto migliore.
 
 \section{Links}
 
