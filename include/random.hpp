@@ -11,15 +11,6 @@
 namespace randomGen {
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// Function to generate a random integer within the closed interval [a, b].
-
-// inline int randomInt(int min, int max, std::mt19937& engine) {
-//   assert(min <= max && "For randomInt, min must be less than or equal to
-//   max."); std::uniform_int_distribution<int> dist(min, max); return
-//   dist(engine);
-// }
-
-//////////////////////////////////////////////////////////////////////////////////////////
 // Function to generate size_t integral types.
 inline std::size_t randomSizeType(std::size_t min, std::size_t max,
                                   std::mt19937& engine) {
@@ -102,7 +93,7 @@ inline sf::Vector2f randomBoidPosition(sf::Vector2f center,
 // Boids of the same flock are generated with their direction varying just a
 // little between each other
 
-inline sf::Vector2f randomBoidSpeed(float angleCenter, std::mt19937& engine) {
+inline sf::Vector2f randomBoidVelocity(float angleCenter, std::mt19937& engine) {
   float v{randomGen::randomFloat(constants::randomMinimumSpeed,
                                  constants::randomMaximumSpeed, engine)};
   float a{randomGen::randomFloat(angleCenter - constants::randomAngleRange,

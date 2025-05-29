@@ -57,6 +57,7 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
     sf::Vector2f center{100, 100};
     for (size_t i{0}; i < n; i++) {
       sf::Vector2f pos{ev::randomBoidPosition(center, engine)};
+      
       CHECK(ev::distance(center, pos) <= 50.f);
       CHECK(pos.x >= 0.f);
       CHECK(pos.x <= 720.f);
@@ -66,7 +67,8 @@ TEST_CASE("TESTING RANDOM NUMBER GENERATION") {
 
     float angle{0.5f};
     for (size_t i{0}; i < n; i++) {
-      sf::Vector2f vel{ev::randomBoidSpeed(angle, engine)};
+      sf::Vector2f vel{ev::randomBoidVelocity(angle, engine)};
+
       CHECK(ev::distance(vel, {0, 0}) >= ev::constants::minBoidSpeed);
       CHECK(ev::distance(vel, {0, 0}) <= ev::constants::maxBoidSpeed);
 

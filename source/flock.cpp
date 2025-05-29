@@ -15,6 +15,9 @@
 
 namespace ev {
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Initializing static member variables
+
 FlockPar Flock::parameters_ = constants::defaultFlockParameters;
 bool Flock::toroidal_ = false;
 bool Flock::repulsiveClick_ = false;
@@ -25,7 +28,7 @@ bool Flock::repulsiveClick_ = false;
 
 Flock::Flock(const std::vector<Boid> &flock)
     : boids_{flock}, color_{sf::Color::Black} {
-  // Enforcing class invariant: a Flock must contain at least 2 boids.
+  // Flock must contain at least 2 boids.
   if (std::size(boids_) < 2) {
     throw std::invalid_argument("Flock must have at least 2 boids.");
   }
@@ -33,7 +36,7 @@ Flock::Flock(const std::vector<Boid> &flock)
 
 Flock::Flock(const std::vector<Boid> &flock, const sf::Color &color)
     : boids_{flock}, color_{color} {
-  // Enforcing class invariant: a Flock must contain at least 2 boids.
+  // Flock must contain at least 2 boids.
   if (std::size(boids_) < 2) {
     throw std::invalid_argument("Flock must have at least 2 boids.");
   }
@@ -52,18 +55,6 @@ sf::Color Flock::getFlockColor() const { return color_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-float Flock::getMeanSpeed() const {
-  assert((boids_.size() > 1));
-
-  float meanSpeed{0};
-  for (size_t j{0}; j < boids_.size(); j++) {
-    meanSpeed += (getSpeed(boids_[j]));
-  }
-  return meanSpeed / (static_cast<float>(boids_.size()));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-
 std::vector<sf::Vector2f> Flock::getFlockPositions() const {
   std::vector<sf::Vector2f> positions;
   assert((boids_.size() > 1));
@@ -75,19 +66,7 @@ std::vector<sf::Vector2f> Flock::getFlockPositions() const {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-
-std::vector<sf::Vector2f> Flock::getFlockVelocities() const {
-  std::vector<sf::Vector2f> velocities;
-  assert((boids_.size() > 1));
-
-  for (size_t i{0}; i < boids_.size(); i++) {
-    velocities.emplace_back(boids_[i].velocity);
-  }
-  return velocities;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// Returns a vector with a speed for every boid of the flock
+// Returns a vector with the speed of every boid of the flock
 
 std::vector<float> Flock::getFlockSpeeds() const {
   std::vector<float> speeds;
@@ -391,8 +370,8 @@ std::vector<sf::Vector2f> repel(const std::vector<Flock> &flockstack,
 //////////////////////////////////////////////////////////////////////////////////////////
 // CREATE FLOCK
 
-Flock randomFlock(std::size_t n, sf::Vector2f center, const sf::Color &color,
-                  std::mt19937 &engine) {
+Flock randomFlock(std::size_t n, const sf::Vector2f &center,
+                  const sf::Color &color, std::mt19937 &engine) {
   float a{ev::randomAngle(engine)};
 
   std::vector<Boid> flock;

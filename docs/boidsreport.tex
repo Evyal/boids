@@ -15,7 +15,7 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{url}
-\usepackage[colorlinks=true, linkcolor=black, urlcolor=black, citecolor=black]{hyperref} % Links in words
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=black, citecolor=black]{hyperref} 
 
 \usepackage{subfiles}
 
@@ -25,15 +25,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % --- GitHub-Inspired Colors ---
-\definecolor{github-bg}{HTML}{F6F8FA}      % Light gray background
-\definecolor{github-border}{HTML}{E1E4E8}  % Subtle border color
+\definecolor{github-bg}{HTML}{F6F8FA}      
+\definecolor{github-border}{HTML}{E1E4E8}  
 
-% --- GitHub-Like Style for Bash Without Colors ---
 \lstdefinestyle{github-bash}{
   backgroundcolor=\color{github-bg},
   rulecolor=\color{github-border},
   frame=single,
-  % 'keywordstyle' is for normal C++ keywords (if, for, while, int, etc.)
   basicstyle=\ttfamily\small,
   showstringspaces=false,
   numbers=left,
@@ -64,6 +62,20 @@
 \tableofcontents
 
 \setlength{\parindent}{0pt}
+
+\section*{Cambiamenti}
+
+Di seguito sono elencati i cambiamenti all'interno del progetto intercorsi dall'ultima consegna.
+
+\begin{itemize}
+    \item La classe boid è ora una \texttt{struct}, in quanto non era presente nessun invariante di classe. 
+    \item I file di generazione di numeri casuali hanno avuto dei cambiamenti. In particolare, ora vi è solo l'header, e l'engine, non è più una variabile globale, ma è passato come parametro ad ogni singola funzione che ne facesse utilizzo.
+    \item Le funzioni di \texttt{statistics.hpp} sono state rivisitate in modo da produrre un codice molto più performante. Ora non vengono più utilizzati grandi vettori inutilmente per il calcolo delle statistiche degli stormi.
+\end{itemize}
+
+Anche la relazione è stata modificata in modo da rispecchiare i cambiamenti apportati, sia nella descrizione dei file che compongono il progetto, sia nelle istruzioni alla compilazione e all'installazione, ad esempio.
+
+\newpage
 
 \parskip 1.6pt
 \section{Introduzione}

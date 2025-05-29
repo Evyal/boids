@@ -50,12 +50,6 @@ TEST_CASE("TESTING CLASS FLOCK") {
     CHECK(flock3.getSize() == 5);
     CHECK(flock3.getFlockColor() == sf::Color::Red);
 
-    // CHECK(flock3.getMeanPosition().x == 12.f);
-    // CHECK(flock3.getMeanPosition().y == 12.f);
-    // CHECK(flock3.getMeanVelocity().x == 2.f);
-    // CHECK(flock3.getMeanVelocity().y == 5.f);
-    CHECK(flock3.getMeanSpeed() == 7.f);
-
     ev::Boid b6{{10.f, 50.f}, {200.f, 150.f}};
     ev::Boid b7{{20.f, 40.f}, {100.f, 250.f}};
     ev::Boid b8{{30.f, 60.f}, {50.f, 120.f}};
@@ -68,13 +62,6 @@ TEST_CASE("TESTING CLASS FLOCK") {
     CHECK(flock4.getFlockPositions().at(1).y == 40.f);
     CHECK(flock4.getFlockPositions().at(2).x == 30.f);
     CHECK(flock4.getFlockPositions().at(2).y == 60.f);
-
-    CHECK(flock4.getFlockVelocities().at(0).x == 200.f);
-    CHECK(flock4.getFlockVelocities().at(0).y == 150.f);
-    CHECK(flock4.getFlockVelocities().at(1).x == 100.f);
-    CHECK(flock4.getFlockVelocities().at(1).y == 250.f);
-    CHECK(flock4.getFlockVelocities().at(2).x == 50.f);
-    CHECK(flock4.getFlockVelocities().at(2).y == 120.f);
 
     CHECK(flock4.getFlockSpeeds().at(0) == 250.f);
     CHECK(flock4.getFlockSpeeds().at(2) == 130.f);

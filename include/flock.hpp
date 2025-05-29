@@ -38,10 +38,8 @@ class Flock {
   Boid getBoid(size_t i) const;
   size_t getSize() const;
   sf::Color getFlockColor() const;
-  float getMeanSpeed() const;
 
   std::vector<sf::Vector2f> getFlockPositions() const;
-  std::vector<sf::Vector2f> getFlockVelocities() const;
   std::vector<float> getFlockSpeeds() const;
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -93,9 +91,9 @@ class Flock {
 std::vector<sf::Vector2f> repel(const std::vector<Flock> &flockstack, size_t i);
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// CREATE FLOCKS
+// CREATE RANDOM FLOCKS
 
-Flock randomFlock(size_t n, sf::Vector2f center, const sf::Color &color,
+Flock randomFlock(size_t n, const sf::Vector2f &center, const sf::Color &color,
                   std::mt19937 &engine);
 
 }  // namespace ev

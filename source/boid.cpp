@@ -60,7 +60,6 @@ float toroidalDistance(const sf::Vector2f &a, const sf::Vector2f &b) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
 // SPEED CONTROL
 
 float getSpeed(const Boid &boid) {
@@ -119,11 +118,10 @@ void mirrorBorders(Boid &boid) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
-// CREATE BOIDS
+// CREATE RANDOM BOIDS
 
-Boid randomBoid(std::mt19937 &engine, sf::Vector2f center, float a) {
-  return {{randomBoidPosition(center, engine)}, {randomBoidSpeed(a, engine)}};
+Boid randomBoid(std::mt19937 &engine, const sf::Vector2f &center, float a) {
+  return {{randomBoidPosition(center, engine)}, {randomBoidVelocity(a, engine)}};
 }
 
 }  // namespace ev

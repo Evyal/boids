@@ -45,7 +45,7 @@ TEST_CASE("Test calculateStandardDeviation with one element") {
 
 TEST_CASE("Test toroidal distances") {
   //////////////////////////////////////////////////////////////////////////////////////////
-  // Case 1: exactly two points
+  // Case 1: two points
 
   std::vector<sf::Vector2f> positions1{{360, 100}, {360, 700}};
   auto stats1 = ev::toroidalDistanceStatistics(positions1);
@@ -61,7 +61,7 @@ TEST_CASE("Test toroidal distances") {
   auto stats2 = ev::toroidalDistanceStatistics(positions2);
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // manually compute expected mean
+  // expected mean
   const float d1 = 50.0f;
   const float d2 = std::sqrt(800.0f);
   const float d3 = std::sqrt(500.0f);
@@ -69,7 +69,7 @@ TEST_CASE("Test toroidal distances") {
   CHECK(stats2.mean == doctest::Approx(expectedMean));
 
   //////////////////////////////////////////////////////////////////////////////////////////
-  // sample standard deviation (divide by N–1 = 2)
+  // standard deviation
   const float var = ((d1 - expectedMean) * (d1 - expectedMean) +
                      (d2 - expectedMean) * (d2 - expectedMean) +
                      (d3 - expectedMean) * (d3 - expectedMean)) /
