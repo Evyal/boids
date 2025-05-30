@@ -35,7 +35,7 @@ Gui::Gui()
 void Gui::setup() {
   // THE ORDER in WHICH OPTIONS are SET UP is IMPORTANT!!!
 
-  sans_.loadFromFile("../assets/OpenSans-Regular.ttf");
+  sans_.loadFromFile("OpenSans-Regular.ttf");
 
   // CREATE OPTIONS
 

@@ -25,19 +25,14 @@ sudo apt update
 sudo apt install libtgui-1.0-dev
 ```
 
-### Clone the Repository
+### Cloning the Repository
 
 ```bash
 git clone --depth=1 https://github.com/Evyal/boids.git
+cd boids
 ```
 
 ### Build the Project
-
-Enter the project directory
-
-```bash
-cd boids
-```
 
 1. Create a build directory:
 
@@ -45,43 +40,53 @@ cd boids
 mkdir build
 ```
 
-2. Configure CMake in release mode:
+2. Configure CMake with Ninja Multi-Config:
 
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake -S . -B build -G "Ninja Multi-Config"
 ```
 
 3. Build the project:
 
+Debug Mode:
 ```bash
-cmake --build build -j$(nproc)
+cmake --build build --config Debug
+```
+
+Release Mode:
+```bash
+cmake --build build --config Release
 ```
 
 ### Running the program
 
-Enter the directory
+Enter the build directory
 ```bash
 cd build
 ```
-
-Run the program
+Debug Mode:
 ```bash
-./boids
+./Debug/boids
+```
+
+Release Mode:
+```bash
+./Release/boids
 ```
 
 ### Running the tests
 
-Assuming you are in the program's build directory
+Assuming you are in the program's build directory, enter the testing directory:
 
 ```bash
 cd testing
 ```
 
 ```bash
-./testboid
-./testflock
-./testrandom
-./teststatistics
+./Debug/testboid
+./Debug/testflock
+./Debug/testrandom
+./Debug/teststatistics
 ```
 
 Or eventually, it is possible to check if the tests are successful all at once using the following command

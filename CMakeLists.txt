@@ -46,6 +46,14 @@ target_link_libraries(boids sfml-graphics sfml-window sfml-system TGUI::TGUI)
 # Link INCLUDE
 target_include_directories(boids PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
+# copy font in build directory
+add_custom_command(
+        TARGET boids POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_SOURCE_DIR}/assets/OpenSans-Regular.ttf
+        ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/OpenSans-Regular.ttf
+        )
+
 # Optionally enable tests
 option(BUILD_TESTS "Build the tests executables" ON)
 if(BUILD_TESTS)
