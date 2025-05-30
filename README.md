@@ -77,7 +77,7 @@ cd build/Release
 Assuming you are in the program's build directory, enter the testing directory:
 
 ```bash
-cd testing/Debug
+cd testing/Release
 ```
 
 ```bash
@@ -87,7 +87,7 @@ cd testing/Debug
 ./teststatistics
 ```
 
-Or eventually, it is possible to check if the tests are successful all at once outside of the build directory using:
+Or eventually, it is possible to check if the tests are successful all at once, from the project's main directory, using:
 
 ```bash
 cmake --build build --config Debug --target test

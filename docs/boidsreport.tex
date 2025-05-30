@@ -147,15 +147,18 @@ cmake --build build --config Release
 
 \subsubsection{Running the program}
 
-Enter the build directory
-\begin{lstlisting}[style=github-bash]
-cd build
-\end{lstlisting}
-
-Run the program
-\begin{lstlisting}[style=github-bash]
+    Debug Mode:
+          \begin{lstlisting}[style=github-bash]
+cd build/Debug
 ./boids
 \end{lstlisting}
+
+Release Mode:
+          \begin{lstlisting}[style=github-bash]
+cd build/Release
+./boids
+\end{lstlisting}    
+
 
 
 \newpage
@@ -357,7 +360,7 @@ Un altro strumento utilizzato per controllare lo svolgimento corretto del progra
 Per potere eseguire i test è necessario trovarsi nella cartella dove vengono prodotti gli eseguibili dei file precedentemente menzionati. Immaginando di trovarsi nella cartella build del progetto, sarà sufficiente eseguire i seguenti comandi da terminale:
 
 \begin{lstlisting}[style=github-bash]
-    cd testing
+    cd testing/Release
 \end{lstlisting}
 
 E digitare il comando corrispondente al test che si vuole eseguire:
@@ -369,10 +372,11 @@ E digitare il comando corrispondente al test che si vuole eseguire:
     ./teststatistics
 \end{lstlisting}
 
-O eventualmente è possibile controllare che i test vadano a buon fine tutti in una volta utilizzando il seguente comando
+O eventualmente è possibile controllare che i test vadano a buon fine tutti in una volta, trovandosi nella cartella principale del programma, utilizzando uno dei seguenti comandi:
 
 \begin{lstlisting}[style=github-bash]
-    ctest
+    cmake --build build --config Debug --target test
+    cmake --build build --config Release --target test
 \end{lstlisting}
 
 
