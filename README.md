@@ -60,18 +60,16 @@ cmake --build build --config Release
 
 ### Running the program
 
-Enter the build directory
-```bash
-cd build
-```
 Debug Mode:
 ```bash
-./Debug/boids
+cd build/Debug
+./boids
 ```
 
 Release Mode:
 ```bash
-./Release/boids
+cd build/Release
+./boids
 ```
 
 ### Running the tests
@@ -79,20 +77,21 @@ Release Mode:
 Assuming you are in the program's build directory, enter the testing directory:
 
 ```bash
-cd testing
+cd testing/Debug
 ```
 
 ```bash
-./Debug/testboid
-./Debug/testflock
-./Debug/testrandom
-./Debug/teststatistics
+./testboid
+./testflock
+./testrandom
+./teststatistics
 ```
 
-Or eventually, it is possible to check if the tests are successful all at once using the following command
+Or eventually, it is possible to check if the tests are successful all at once outside of the build directory using:
 
 ```bash
-ctest
+cmake --build build --config Debug --target test
+cmake --build build --config Release --target test
 ```
 
 ## Interface

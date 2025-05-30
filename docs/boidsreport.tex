@@ -68,7 +68,7 @@
 Di seguito sono elencati i cambiamenti all'interno del progetto intercorsi dall'ultima consegna.
 
 \begin{itemize}
-    \item La classe boid è ora una \texttt{struct}, in quanto non era presente nessun invariante di classe. 
+    \item La classe boid è ora una \texttt{struct}, in quanto non era presente nessun invariante di classe.
     \item I file di generazione di numeri casuali hanno avuto dei cambiamenti. In particolare, ora vi è solo l'header, e l'engine, non è più una variabile globale, ma è passato come parametro ad ogni singola funzione che ne facesse utilizzo.
     \item Le funzioni di \texttt{statistics.hpp} sono state rivisitate in modo da produrre un codice molto più performante. Ora non vengono più utilizzati grandi vettori inutilmente per il calcolo delle statistiche degli stormi.
 \end{itemize}
@@ -113,15 +113,10 @@ sudo apt install libtgui-1.0-dev
 
 \begin{lstlisting}[style=github-bash]
 git clone --depth=1 https://github.com/Evyal/boids.git
+cd boids
 \end{lstlisting}
 
 \subsubsection{Build the Project}
-
-Enter the project directory
-
-\begin{lstlisting}[style=github-bash]
-cd boids
-\end{lstlisting}
 
 \begin{itemize}
     \item \title{\textbf{Create the build directory}}
@@ -130,17 +125,23 @@ cd boids
 mkdir build
 \end{lstlisting}
 
-    \item \title{\textbf{Configure CMake in Release mode}}
+    \item \title{\textbf{Configure CMake with Ninja Multi-Config:}}
 
           \begin{lstlisting}[style=github-bash]
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake -S . -B build -G "Ninja Multi-Config"
 \end{lstlisting}
 
     \item \title{\textbf{Build the project}}
 
+    Debug Mode:
           \begin{lstlisting}[style=github-bash]
-cmake --build build -j$(nproc)
+cmake --build build --config Debug
 \end{lstlisting}
+
+Release Mode:
+          \begin{lstlisting}[style=github-bash]
+cmake --build build --config Release
+\end{lstlisting}    
 \end{itemize}
 
 
