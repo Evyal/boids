@@ -121,7 +121,8 @@ void mirrorBorders(Boid &boid) {
 // CREATE RANDOM BOIDS
 
 Boid randomBoid(std::mt19937 &engine, const sf::Vector2f &center, float a) {
-  return {{randomBoidPosition(center, engine)}, {randomBoidVelocity(a, engine)}};
+  return {{randomBoidPosition(center, engine)},
+          {randomBoidVelocity(a, engine)}};
 }
 
 }  // namespace ev
