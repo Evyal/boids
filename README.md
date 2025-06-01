@@ -6,7 +6,7 @@ This project simulates the behavior of flocks in a bidimentional space. The simu
 
 ## Prerequisites
 
-Build instructions are for **Ubuntu 22.04**.
+Build instructions are for **Ubuntu 24.04**.
 
 Ensure you have the following installed:
 
