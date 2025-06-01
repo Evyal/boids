@@ -37,7 +37,7 @@ TEST_CASE("Test calculateStandardDeviation with one element") {
 
   CHECK(ev::speedStatistics(speeds).mean == doctest::Approx(1.f));
 
-  // With only one distance, standard deviation should be 0.
+  // Only one distance, standard deviation should be 0.
   CHECK(ev::speedStatistics(speeds).sigma == 0.f);
 }
 
@@ -60,7 +60,6 @@ TEST_CASE("Test toroidal distances") {
   std::vector<sf::Vector2f> positions2{{20, 20}, {-20, -10}, {0, 0}};
   auto stats2 = ev::toroidalDistanceStatistics(positions2);
 
-  //////////////////////////////////////////////////////////////////////////////////////////
   // expected mean
   const float d1 = 50.0f;
   const float d2 = std::sqrt(800.0f);
@@ -68,7 +67,6 @@ TEST_CASE("Test toroidal distances") {
   const float expectedMean = (d1 + d2 + d3) / 3.0f;
   CHECK(stats2.mean == doctest::Approx(expectedMean));
 
-  //////////////////////////////////////////////////////////////////////////////////////////
   // standard deviation
   const float var = ((d1 - expectedMean) * (d1 - expectedMean) +
                      (d2 - expectedMean) * (d2 - expectedMean) +
