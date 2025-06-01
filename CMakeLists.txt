@@ -6,6 +6,7 @@ include(CTest)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# request use of C++20 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -31,7 +32,7 @@ endif()
 string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined")
 
 # Find SFML and TGUI
-find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
+find_package(SFML 2.6 COMPONENTS graphics REQUIRED)
 find_package(TGUI 1 REQUIRED)
 
 # Source files

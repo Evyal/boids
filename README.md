@@ -10,7 +10,7 @@ Build instructions are for **Ubuntu 24.04**.
 
 Ensure you have the following installed:
 
-- [SFML](https://github.com/SFML/SFML) (2.5): Library for graphic representation.
+- [SFML](https://github.com/SFML/SFML) (2.6): Library for graphic representation.
 - [TGUI](https://github.com/texus/TGUI) (1.0): Library for graphic interface.
 
 ### SFML and TGUI Installation
